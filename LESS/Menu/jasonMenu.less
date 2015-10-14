@@ -1,0 +1,112 @@
+﻿@import "../jasonLessVariables";
+.jason-menu-container{
+    .jason-menu {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        /*outline: 1px solid red;*/
+        background-color:@jwMenuItemBgColor;
+        box-shadow: 10px 10px 5px #888;
+        li{
+            margin-right:10px;
+        }
+        ul {
+
+            margin: 0;
+            padding:0;
+            list-style-type: none;
+            li {
+                white-space:nowrap;
+            }
+        }
+    }
+}
+
+
+.jason-menu-item-container{
+    /*box-shadow: 10px 10px 5px #888;*/
+    background-color:@jwMenuItemBgColor;
+}
+.jason-menu-items-container{
+    border:1px solid @jwBorderColor;
+    background-color:@jwMenuItemBgColor;
+}
+
+
+
+.jason-menu.horizontal{
+    overflow-x:auto;
+    overflow-y:hidden;
+    white-space:nowrap;
+    > li{
+        display:inline-block;
+        width:auto;
+        float:left;
+        > .jason-menu-item-container{
+            .jason-menu-item-caption{
+            width:auto !important;
+                }
+            .jason-menu-item-icon{
+                    padding-left:5px;
+                }
+        }
+        
+    }
+}
+
+.jason-menu-item {
+    padding: 10px 0 10px 5px;
+    width:calc(~"100%" - 5px);
+    background-color:@jwMenuItemBgColor;
+    color:@jwFontDark;
+    line-height:18px;
+    cursor:default;
+    input[type=checkbox]{
+        vertical-align:middle;
+        cursor:pointer;
+        padding-right:2px;
+    }
+    > i {
+       margin-right:5px;
+       vertical-align:middle;
+    }
+}
+.jason-menu-item.clickable{
+    cursor:pointer;
+}
+.jason-menu-item.disabled{
+    cursor:not-allowed;
+}
+
+.jason-menu-item-caption{
+    line-height:18px;
+    height:20px;
+    .jason-menu-item-checkbox{
+        float:left;
+    }
+    .menu-caption{
+        float:left;
+    }
+    .menu-icon{
+        margin-right:5px;
+        float:left;
+        width:12px;
+    }
+    .menu-arrow{
+        float:right;
+        margin-left:5px;
+        margin-right:5px;
+        width:8px;
+    }
+}
+.jason-menu-item-content{
+    border-left:1px solid #c5c5c5;
+}
+.jason-menu-item-active{
+    background-color:@jwHoverDark;
+    color:@jwWhite;
+    .menu-content{
+        background-color:@jwMenuItemBgColor;
+        color:@jwFontDark;
+    }
+}

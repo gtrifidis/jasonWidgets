@@ -1,0 +1,102 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+.jason-menu-container .jason-menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  /*outline: 1px solid red;*/
+  background-color: #ffffff;
+  box-shadow: 10px 10px 5px #888;
+}
+.jason-menu-container .jason-menu li {
+  margin-right: 10px;
+}
+.jason-menu-container .jason-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.jason-menu-container .jason-menu ul li {
+  white-space: nowrap;
+}
+.jason-menu-item-container {
+  /*box-shadow: 10px 10px 5px #888;*/
+  background-color: #ffffff;
+}
+.jason-menu-items-container {
+  border: 1px solid #c9c9c9;
+  background-color: #ffffff;
+}
+.jason-menu.horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.jason-menu.horizontal > li {
+  display: inline-block;
+  width: auto;
+  float: left;
+}
+.jason-menu.horizontal > li > .jason-menu-item-container .jason-menu-item-caption {
+  width: auto !important;
+}
+.jason-menu.horizontal > li > .jason-menu-item-container .jason-menu-item-icon {
+  padding-left: 5px;
+}
+.jason-menu-item {
+  padding: 10px 0 10px 5px;
+  width: calc(100% - 5px);
+  background-color: #ffffff;
+  color: #222222;
+  line-height: 18px;
+  cursor: default;
+}
+.jason-menu-item input[type=checkbox] {
+  vertical-align: middle;
+  cursor: pointer;
+  padding-right: 2px;
+}
+.jason-menu-item > i {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.jason-menu-item.clickable {
+  cursor: pointer;
+}
+.jason-menu-item.disabled {
+  cursor: not-allowed;
+}
+.jason-menu-item-caption {
+  line-height: 18px;
+  height: 20px;
+}
+.jason-menu-item-caption .jason-menu-item-checkbox {
+  float: left;
+}
+.jason-menu-item-caption .menu-caption {
+  float: left;
+}
+.jason-menu-item-caption .menu-icon {
+  margin-right: 5px;
+  float: left;
+  width: 12px;
+}
+.jason-menu-item-caption .menu-arrow {
+  float: right;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 8px;
+}
+.jason-menu-item-content {
+  border-left: 1px solid #c5c5c5;
+}
+.jason-menu-item-active {
+  background-color: #555555;
+  color: #ffffff;
+}
+.jason-menu-item-active .menu-content {
+  background-color: #ffffff;
+  color: #222222;
+}
+/*# sourceMappingURL=jasonMenu.css.map */
