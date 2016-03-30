@@ -1,0 +1,18 @@
+﻿.jw-icon { background: url('thinline-sprites.png') no-repeat top left; width: 32px; height: 32px; display:inline-block;  } 
+.jw-icon.arrow-down { background-position: 0px 0px;  } 
+.jw-icon.arrow-left { background-position: 0px -42px;  } 
+.jw-icon.arrow-right { background-position: 0px -84px;  } 
+.jw-icon.arrow-up { background-position: 0px -126px;  } 
+.jw-icon.calendar { background-position: 0px -168px;  } 
+.jw-icon.chevron-down { background-position: 0px -210px;  } 
+.jw-icon.chevron-left { background-position: 0px -252px;  } 
+.jw-icon.chevron-right { background-position: 0px -294px;  } 
+.jw-icon.chevron-up { background-position: 0px -336px;  } 
+.jw-icon.circle-check { background-position: 0px -378px;  } 
+.jw-icon.circle-x { background-position: 0px -420px;  } 
+.jw-icon.clock { background-position: 0px -462px;  } 
+.jw-icon.columns { background-position: 0px -504px;  } 
+.jw-icon.menu { background-position: 0px -546px;  } 
+.jw-icon.search { background-position: 0px -588px;  } 
+.jw-icon.sort-desc { background-position: 0px -630px;  } 
+.jw-icon.sort-asc { background-position: 0px -672px;  } 

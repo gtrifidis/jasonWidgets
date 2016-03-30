@@ -1,0 +1,50 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import "../jasonLessVariables";
+.jw-tabcontrol-container{
+
+}
+
+.jw-tabcontrol-page-container{
+    border-color:@jwBorderColor !important;
+    border:1px solid;
+    overflow:auto;
+    padding:5px;
+    background-color:@jwWhite;
+}
+
+.jw-tabcontrol-list{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    li{
+        display:inline-block;
+        padding-right:10px;
+        cursor:pointer;
+        padding:10px 10px 0 10px;
+        border :1px solid;
+        border-width:1px 1px 0 1px; 
+        border-color:@jwBorderColor;
+        border-radius:4px 4px 0 0;
+        position:relative;
+        top:1px;
+    }
+    li:hover,
+    li:focus{
+        outline:0;
+        box-shadow:@jwBoxShadowDefault400;
+    }
+    li.jw-tab-active{
+        border-bottom-width:1px;
+        border-bottom-color:@jwWhite;
+        color:@jwFontDark;
+        font-weight:bold;
+    }
+    li.jw-tab-active:hover{
+        background-color:@jwWhite;
+        color:@jwFontDark;
+
+    }
+}

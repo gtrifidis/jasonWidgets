@@ -1,0 +1,18 @@
+﻿@import "../jasonLessVariables";
+.jw-date-picker{
+    color:@jwFontDark;
+    height:32px;
+    border:1px solid @jwBorderColor;
+    border-radius:@jwBorderRadius;
+    .jw-text-input{
+        width:calc(~"100%" - @jwButtonHeight);
+        width:-webkit-calc(~"100%" - @jwButtonHeight);
+    }
+    .jw-button{
+        width:32px;
+    }
+    .jw-text-input[readonly=true]{
+        cursor:pointer;
+    }
+    
+}

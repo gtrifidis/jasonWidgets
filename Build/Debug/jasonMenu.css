@@ -1,0 +1,126 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/*@jwBorderColorGrey:@jwDefault400;*/
+/*@jwGridContainerBGColor:@jwDefault50;
+@jwFooterContainerBGColor:@jwDefault50;
+@jwGridHeaderBGColor:@jwDefault50;*/
+.jw-menu-container {
+  /*position:absolute;*/
+}
+.jw-menu-container .jw-menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  /*outline: 1px solid red;*/
+  background-color: #FAFAFA;
+  box-shadow: 10px 10px 5px #888;
+  /*li{
+            margin-right:10px;
+        }*/
+}
+.jw-menu-container .jw-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.jw-menu-container .jw-menu ul li {
+  white-space: nowrap;
+}
+.jw-menu-item-container {
+  /*box-shadow: 10px 10px 5px #888;*/
+  background-color: #FAFAFA;
+}
+.jw-menu-items-container {
+  border: 1px solid #c9c9c9;
+  background-color: #FAFAFA;
+}
+.jw-menu.horizontal {
+  white-space: nowrap;
+}
+.jw-menu.horizontal > li {
+  display: inline-block;
+  width: auto;
+  float: left;
+}
+.jw-menu.horizontal > li > .jw-menu-item-container .jw-menu-item-caption {
+  width: auto !important;
+}
+.jw-menu.horizontal > li > .jw-menu-item-container .jw-menu-item-icon {
+  padding-left: 5px;
+}
+.jw-menu-item {
+  padding: 5px;
+  background-color: #FAFAFA;
+  color: #222222;
+  cursor: default;
+  min-width: 80px;
+}
+.jw-menu-item .jw-menu-item-caption {
+  display: inline-block;
+  vertical-align: middle;
+}
+.jw-menu-item .jw-menu-item-caption a {
+  text-decoration: none;
+  color: #333;
+}
+.jw-menu-item .jw-menu-item-caption.just-caption {
+  /*line-height:@jwInputHeight;*/
+}
+.jw-menu-item .jw-menu-item-caption.has-icon {
+  width: calc(100% - 32px);
+}
+.jw-menu-item .jw-menu-item-caption.has-checkbox {
+  width: calc(100% - 32px);
+}
+.jw-menu-item .jw-menu-item-caption.has-arrow {
+  width: calc(100% - 32px);
+}
+.jw-menu-item .jw-menu-item-caption.has-icon.has-arrow {
+  width: calc(100% - 64px);
+}
+.jw-menu-item .jw-menu-item-caption.has-icon.has-arrow.has-checkbox {
+  width: calc(100% - 96px);
+}
+.jw-menu-item .jw-menu-item-icon {
+  display: inline-block;
+  width: 32px;
+  vertical-align: middle;
+}
+.jw-menu-item .jw-menu-item-checkbox {
+  display: inline-block;
+  vertical-align: middle;
+  width: 32px;
+  line-height: 32px;
+}
+.jw-menu-item .jw-menu-item-arrow {
+  display: inline-block;
+  width: 32px;
+  vertical-align: middle;
+}
+.jw-menu-item.clickable {
+  cursor: pointer;
+}
+.jw-menu-item.disabled {
+  cursor: not-allowed;
+}
+.jw-menu-item.divider {
+  padding: 2px 0 2px 2px;
+}
+.jw-menu-item.divider hr {
+  margin: 0;
+}
+.jw-menu-item.divider .jw-menu-item-caption {
+  height: 16px;
+}
+.jw-menu-item-content {
+  border-left: 1px solid #c5c5c5;
+}
+.jw-menu-item-active {
+  background-color: #E0E0E0;
+  color: #fff;
+}
+.jw-menu-item-active .menu-content {
+  background-color: #FAFAFA;
+  color: #222222;
+}

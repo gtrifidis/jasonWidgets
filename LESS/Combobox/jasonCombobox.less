@@ -1,0 +1,65 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import "../jasonLessVariables";
+.jw-combobox{
+    color:@jwFontDark;
+    height:32px;
+    border:1px solid @jwBorderColor;
+    border-radius:@jwBorderRadius;
+    .jw-text-input{
+        width:calc(~"100%" - @jwButtonHeight);
+        width:-webkit-calc(~"100%" - @jwButtonHeight);
+    }
+    .jw-button{
+        width:32px;
+    }
+}
+.jw-combobox.drop-down-list {
+    background-color: @jwDefault50;
+    border: 1px solid;
+    border-radius: @jwBorderRadius;
+    border-color: @jwBorderColor;
+    z-index: 999;
+    min-height: 200px;
+    overflow: auto;
+    display: block;
+    padding: 1px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        text-indent:5px;
+        /*-moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;*/
+        li {
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        li:hover {
+            outline: 0;
+            box-shadow: @jwBoxShadowDefault500;
+            background-color: @jwHoverDefault200;
+        }
+
+        li:focus {
+            outline: 0;
+            background-color: @jwHoverDefault200;
+            color: @jwBlack;
+        }
+
+        li.selected {
+            background-color: @jwHoverDark;
+            color: @jwWhite;
+        }
+    }
+}
