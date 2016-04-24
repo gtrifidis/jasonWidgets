@@ -122,6 +122,7 @@ jasonMenuUIHelper.prototype.showMenu = function (invokableElement,left,top) {
         || document.body.clientWidth;
         //coordinates.Left = coordinates.Left > width ? width : coordinates.Left;
         this.menuContainer.style.left = left ? left + "px" : coordinates.left + this.menuContainer.offsetWidth >= width ? coordinates.left - (this.menuContainer.offsetWidth) + "px" : coordinates.left + "px";
+        this.menuContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.widget.triggerEvent(JW_EVENT_ON_MENU_SHOWN);
     }
 }
@@ -211,6 +212,7 @@ jasonMenuUIHelper.prototype.getMenuItemFromEvent = function (event) {
 
 jasonMenuUIHelper.prototype.onCheckboxClick = function (clickEvent) {
     this.toggleCheckBox(clickEvent);
+    clickEvent.stopPropagation();
 }
 /**
  * Toggle checkbox checked state
@@ -239,6 +241,7 @@ jasonMenuUIHelper.prototype.onItemClick = function (clickEvent) {
             this.widget.triggerEvent(JW_EVENT_ON_MENU_ITEM_CLICKED, { event: clickEvent, item: menuItem, uiHelper: this });
         }
     }
+    clickEvent.stopPropagation();
 }
 /**
  * Triggered when a menu item is touched.
@@ -267,7 +270,7 @@ jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
  */
 jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
     if (menuItem) {
-        var menuElement = menuItem.element;
+        var menuElement = menuItem.htmlElement;
         if (!menuElement.getAttribute(MENU_ITEM_NO_HIGHLIGHT_ATTR) && menuItem.enabled)
             menuElement.classList.add(MENU_ITEM_CLASS_ACTIVE);
 
@@ -286,7 +289,7 @@ jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
  */
 jasonMenuUIHelper.prototype.hideMenuItemContents = function (menuItem) {
     if (menuItem) {
-        var menuElement = menuItem.element;
+        var menuElement = menuItem.htmlElement;
         if (!this.options._debug && !this.disableMouseEvents) {
             if (menuElement._jasonMenuItemsContainer && this.canHideSubMenu) {
                 menuElement._jasonMenuItemsContainer.style.display = "none";
@@ -344,7 +347,7 @@ jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContain
         var width = window.innerWidth
         || document.documentElement.clientWidth
         || document.body.clientWidth;
-        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
         menuItemsContainer.style.left = leftPosition + "px";
     }
 }

@@ -15,17 +15,16 @@ jasonTimePicker.prototype.constructor = jasonTimePicker;
  * @augments Common.jasonWidgetOptions
  * @property {string}   [displayFormat=browser locale format] - Defines the display format of the widget.
  * @property {string}   [placeholder=""]   - Defines the placeholder text value.
- * @property {boolean}  [readOnly=false]      - If true does not allow typing.
+ * @property {boolean}  [readOnly=false]      - If true, does not allow typing.
  * @property {date}     [time=now]          - Time value.
  * @property {number}   [interval=15]      - Minute interval of which the time picker will display the items.
  */
 
 /**
- * @class
- * @name jasonTimePickerEvents
- * @description List of events for the TimePicker.
- * @memberOf Date/Time
- * @property {function} onChange - function(value : date)
+ * @event Date/Time.jasonTimePicker#onChange
+ * @type {object}
+ * @property {Date/Time.jasonTimePicker} sender - The time picker instance.
+ * @property {date} value - The new time.
  */
 
 /**
@@ -36,6 +35,7 @@ jasonTimePicker.prototype.constructor = jasonTimePicker;
  * @param {HTMLElement} htmlElement - DOM element that will contain the time picker.
  * @param {Date/Time.jasonTimePickerOptions} options - jasonTimePicker options.
  * @property {date} time - Time value of the widget.
+ * @fires Date/Time.jasonTimePicker#event:onChange
  */
 function jasonTimePicker(htmlElement, options) {
     this.defaultOptions = {
@@ -47,13 +47,14 @@ function jasonTimePicker(htmlElement, options) {
     };
     jasonWidgets.common.extendObject(this.defaultOptions, options);
     this.prepareData(options);
-    jasonCombobox.call(this, htmlElement, options);
+    jasonCombobox.call(this, htmlElement, options,"jasonTimePicker");
     this._hasKeyStroke = false;
     this._time = jasonWidgets.common.timeOf(this.options.time ? this.options.time : new Date());
     this.cmbInputOnBlur = this.cmbInputOnBlur.bind(this);
     this.cmbInputKeyDown = this.cmbInputKeyDown.bind(this);
     this.eventManager.addEventListener(this.ui.comboboxInput, BLUR_EVENT, this.cmbInputOnBlur);
     this.eventManager.addEventListener(this.ui.comboboxInput, KEY_DOWN_EVENT, this.cmbInputKeyDown);
+    this.addEventListener(JW_EVENT_ON_SELECT_ITEM, this.onTimePickerSelectItem);
     //this.ui.comboboxButtonIcon.className = JW_ICON_CLOCK;
 }
 
@@ -119,7 +120,16 @@ jasonTimePicker.prototype._setTime = function (newTime) {
     }
 }
 /**
+ * @ignore
+ */
+jasonTimePicker.prototype.onTimePickerSelectItem = function (sender,value) {
+    if (value.selectedItem) {
+        sender.time = value.selectedItem.time;
+    }
+}
+/**
  * Sets the selected and selecteditemindex from a time value if found.
+ * @ignore
  */
 jasonTimePicker.prototype._selectItemFromTime = function (newTime) {
     var timeItem = null;
@@ -157,7 +167,7 @@ jasonTimePicker.prototype.parseTimeValue = function (timeStringValue) {
     var seconds = null;
     var newTime = null;
     for (var i = 0; i <= splittedFormat.length - 1; i++) {
-        if (splittedFormat[i].indexOf("h") >= 0) {
+        if (splittedFormat[i].indexOf("h") >= 0 || splittedFormat[i].indexOf("H") >= 0) {
             hours = parseInt(splittedValue[i]);
             if (jw.localizationManager.isTwelveHourClock && isAM)
                 hours = hours > 12 ? hours - 12 : hours;

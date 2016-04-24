@@ -18,7 +18,7 @@ var
  * @description Configuration for the tab control widget.
  * @memberOf Containers
  * @augments Common.jasonWidgetOptions
- * @property {number}   pageHeight - Tab page height.No default.
+ * @property {number}   pageHeight - Tab page height. No default.
  */
 
 /**

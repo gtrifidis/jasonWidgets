@@ -17,7 +17,7 @@
     }
 }
 .jw-combobox.drop-down-list {
-    background-color: @jwDefault50;
+    background-color: @jwWhite;
     border: 1px solid;
     border-radius: @jwBorderRadius;
     border-color: @jwBorderColor;
@@ -47,18 +47,19 @@
 
         li:hover {
             outline: 0;
-            box-shadow: @jwBoxShadowDefault500;
-            background-color: @jwHoverDefault200;
+            /*box-shadow: @jwBoxShadowDefault500;*/
+            background-color: @jwDefault700;
+            color:@jwWhite;
         }
 
         li:focus {
             outline: 0;
-            background-color: @jwHoverDefault200;
-            color: @jwBlack;
+            background-color: @jwDefault700;
+            color:@jwWhite;
         }
 
         li.selected {
-            background-color: @jwHoverDark;
+            background-color: @jwDefault700;
             color: @jwWhite;
         }
     }

@@ -12,10 +12,10 @@
  * @name jasonDataSourceSorting
  * @description Datasource sorting configuration item.
  * @memberOf Data
- * @description Object representation of a datasource sorting configuration. A datasource supports have multiple sorting configurations.
- * @property {string} name - field name for the sort
- * @property {boolean} reverse - false = asc , true = desc
- * @property {function} primer - if set, it will be used to convert the field value to another data type, suitable for comparison.
+ * @description Object representation of a datasource sorting configuration. A datasource supports multiple sorting configurations.
+ * @property {string} name - field name for the sort.
+ * @property {boolean} reverse - false = asc , true = desc.
+ * @property {function} primer - if set, it will be used to convert the field value to another data type suitable for comparison.
  */
 function jasonDataSourceSorting(name,reverse,primer) {
     this.name = name;
@@ -25,7 +25,7 @@ function jasonDataSourceSorting(name,reverse,primer) {
 
 /**
  * @constructor
- * @description Data wrapper that provides search,filter and sorting capabilities over a data array.
+ * @description Data wrapper that provides search, filter and sorting capabilities over a data array.
  * @memberOf Data
  * @param {array} data - Any array of data,either prime type array or object array.
  */
@@ -148,7 +148,7 @@ jasonDataSource.prototype.valueContains = function (fieldValue, filterValue) {
     return fieldValue.indexOf(filterValue) >= 0;
 }
 /**
- * Extending data properties if underlying data is an object array
+ * Extends data properties if underlying data is an object array.
  * @param {array} data - Array of data.
  */
 jasonDataSource.prototype.processData = function (data) {
@@ -164,7 +164,7 @@ jasonDataSource.prototype.processData = function (data) {
     }
 }
 /**
- * Default sort comparison function
+ * Default sort comparison function.
  * @param {any} value1 - value to compare.
  * @param {any} value2 - value to compare against.
  * @returns {boolean} 
@@ -174,12 +174,12 @@ jasonDataSource.prototype.defaultSortComparison = function (value1, value2) {
     return value1 < value2 ? -1 : 1;
 }
 /**
- * Default sort comparison function with data type conversion. It will use the {@link jasonDataSource#defaultSortComparison} to perform the actual comparison
+ * Default sort comparison function with data type conversion. It will use the {@link Data.jasonDataSource#defaultSortComparison} to perform the actual comparison
  * but will convert parameter using a data conversion function if provided. Can also dictate the direction of the comparison, asc or desc.
  * 
  * @param {function} primer - function that will convert passed in value to a data type.
- * @param {boolean} [reverse=false] - if true it will sort descending.
- * @returns {function} Returns function that does sort comparison and if applicable data type conversion.
+ * @param {boolean} [reverse=false] - if true, it will sort descending.
+ * @returns {function} Returns function that does sort comparison and if applicable, data type conversion.
  */
 jasonDataSource.prototype.dataTypeSortComparison = function (primer,reverse) {
     var defaultSort = this.defaultSortComparison;
@@ -198,7 +198,7 @@ jasonDataSource.prototype.dataTypeSortComparison = function (primer,reverse) {
 }
 /**
  * Adds sorting configuration to the datasource.
- * @property {Data.jasonDataSourceSorting} sortingConfiguration - sorting to add
+ * @property {Data.jasonDataSourceSorting} sortingConfiguration - sorting to add.
  * @property {boolean} [sort=false] - if true, sort now.
  * @returns {object[]|void}
  */
@@ -216,7 +216,7 @@ jasonDataSource.prototype.addSorting = function (sortingConfiguration, sortNow) 
 }
 /**
  * Removes sorting for a field.
- * @param {string} fieldName - Fieldname to remove sorting for.
+ * @param {string} fieldName - Fieldname of which to remove sorting.
  */
 jasonDataSource.prototype.removeSorting = function (fieldName) {
     var existingSorting = this.sorting.filter(function (sortingField) {
@@ -239,7 +239,7 @@ jasonDataSource.prototype.applySort = function () {
     this.sort();
 }
 /**
- * Clears all sorting
+ * Clears all sorting.
  */
 jasonDataSource.prototype.clearSorting = function () {
     this.sorting = [];
@@ -251,8 +251,8 @@ jasonDataSource.prototype.clearSorting = function () {
 /**
  * Returns a sorted array of data based on fields to sort. Supports multiple field sorting with the possibility to apply separate sorting
  * directions per sorting field. Default field sort direction is asc.
- * @param {array} fieldsToSort - Elements can be field names or objects defining sorting direction and/or data type converting function. See {@link jasonDataSource#dataTypeSortComparison}
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {array} fieldsToSort - Elements can be field names or objects defining sorting direction and/or data type converting function. See {@link Data.jasonDataSource#dataTypeSortComparison}
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @returns {object[]}
  */
 jasonDataSource.prototype.sort = function (fieldsToSort,data) {
@@ -298,10 +298,10 @@ jasonDataSource.prototype.sort = function (fieldsToSort,data) {
     return this.currentDataView;
 }
 /**
- * Filter values for a specific field. Retuns an array containing the data matching the filter parameters
+ * Filter values for a specific field. Retuns an array containing the data matching the filter parameters.
  * @param {array} filterValues - Array of objects containing value to filter plus logical connection operators and evaluator operators.
  * @param {string} filterField - Fieldname to filter.
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -365,14 +365,14 @@ jasonDataSource.prototype.filter = function (filterValues, filterField,data, cas
         return this.currentDataView;
 }
 /**
- * Add a filter
+ * Add a filter.
  * @param {string} filterField - Field to filter.
  * @param {string} filterValues - Filter values.
  * @param {boolean} [filterNow=false] - If true, it will apply filter.
  * @returns {object[]|void}
  */
 jasonDataSource.prototype.addFilter = function (filterField, filterValues, filterNow) {
-    filterNow = filterNow == void 0 ? true : filterNow;
+    filterNow = filterNow == void 0 ? false : filterNow;
     var existingFilter = this.filters.filter(function (filter) { return filter.filterField == filterField; })[0];
     var dataToFilter = this.data;
     if (!existingFilter) {
@@ -387,8 +387,8 @@ jasonDataSource.prototype.addFilter = function (filterField, filterValues, filte
         return this.filter(filterValues, filterField, dataToFilter);
 }
 /**
- * Removes filter.
- * @param {string} filterField - field to remove filtering for.
+ * Removes applied filter for the field.
+ * @param {string} filterField - Field name.
  */
 jasonDataSource.prototype.removeFilter = function (filterField) {
     var filterIndexToDelete = -1;
@@ -429,7 +429,7 @@ jasonDataSource.prototype.applyFilters = function () {
     return this.currentDataView;
 }
 /**
- * Clears all fitlers
+ * Clears all filters.
  */
 jasonDataSource.prototype.clearFilters = function () {
     this.filters = [];
@@ -441,7 +441,7 @@ jasonDataSource.prototype.clearFilters = function () {
 /**
  * Linear search for a search value across the data across fields.
  * @param {string} searchValue - Value to search.
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -469,7 +469,7 @@ jasonDataSource.prototype.search = function (searchValue, data, caseSensitive) {
  * Linear search for a search value across the data on a specific field.
  * @param {string} searchValue - Value to search.
  * @param {string[]} field - Fields to search on. 
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -501,9 +501,8 @@ jasonDataSource.prototype.searchByField = function (searchValue, fields, data, c
     return this.currentDataView;
 }
 /**
- * Grouping data by field,creating a create a treeview of data
- * nested based on the grouping field.
- * if there is already a grouping an extra level will be added.
+ * Groups data based on the grouping field.
+ * if there is already a grouping, an extra level will be added.
  * @property {string} field - Field to group by.
  * @property {array=} data - Data to group.
  * @property {boolean} [groupNow=false] - If true, grouping will execute immediately.
@@ -521,7 +520,7 @@ jasonDataSource.prototype.groupByField = function (field, data,groupNow) {
         this.groupData();
 }
 /**
- * Groups data , based on the datasource's current grouping configuration.
+ * Groups data based on the datasource's current grouping configuration.
  * @param {array=} data - Data to group.
  * @returns {object[]}
  */
@@ -544,7 +543,7 @@ jasonDataSource.prototype.groupData = function (data) {
     return dataGroupper.entries(dataToGroup);
 }
 /**
- * Check for an existing grouping.
+ * Checks for an existing grouping.
  * @param {string} field - Field name.
  * @returns {boolean}
  */
@@ -567,7 +566,7 @@ jasonDataSource.prototype.removeGrouping = function (grouping) {
     this.groupData();
 }
 /**
- * Returns a slice of the datasource's data, and applies any grouping if applicable.
+ * Returns a slice of the datasource's data and applies any grouping if applicable.
  * @property {number} start - starting index.
  * @property {number} stop - stoping index.
  * @returns {object[]} Returns array of data.

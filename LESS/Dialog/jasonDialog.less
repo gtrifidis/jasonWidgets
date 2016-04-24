@@ -1,0 +1,22 @@
+﻿@import "../jasonLessVariables";
+.jw-dialog-container{
+    position:absolute;
+    border:1px solid @jwBorderColor;
+    border-radius:@jwBorderRadius;
+    .jw-dialog-header{
+        border-bottom:1px solid @jwBorderColor;
+        height:35px;
+        background-color:@jwWhite;
+    }
+    .jw-dialog-body{
+        height:calc(~"100%" - 75px);
+        overflow:auto;
+        background-color:@jwWhite;
+    }
+    .jw-dialog-footer{
+        border-top:1px solid @jwBorderColor;
+        border-bottom:1px solid @jwBorderColor;
+        height:40px;
+        background-color:@jwWhite;
+    }
+}

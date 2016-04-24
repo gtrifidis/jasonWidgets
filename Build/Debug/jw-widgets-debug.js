@@ -139,6 +139,7 @@ var
     DATA_GROUPING_FIELD_ATTR = "jw-data-grouping-field",
     DATA_GROUP_EXPANDED_ATTR = "jw-data-group-expanded",
     DATA_GROUP_COLLAPSED_ATTR = "jw-data-group-collpsed",
+    DATA_GROUPING_KEY_ATTR = "jw-data-group-key",
     ITEM_INDEX_ATTR = "jw-item-index",
     CLEAR_FLOAT_CLASS = "jw-clear-float",
     JW_DISABLED = "jw-disabled",
@@ -235,8 +236,8 @@ function jasonCommon() {
         return formatString;
     }
     /**
-     * Returns the count of a char in a string .
-     * @param {string} char - Char to search for."
+     * Returns the count of a char in a string.
+     * @param {string} char - Char to search for.
      * @param {array} args - String that contains the char.
      * @returns {number} count.
      */
@@ -495,7 +496,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Get element parent element if it exists
+     * Get element parent element if it exists.
      * @param {string}  classOrId - Class name or id or tagName to identify the parent.
      * @param {HTMLElement}  childElement - Child element to start the search from.
      * @returns {HTMLElement} parentNode.
@@ -548,9 +549,9 @@ function jasonCommon() {
     }
     /**
      * Stores arbitrary data associated with an element.
-     * @param {object} element - HTMLElement. The element be associated with.
+     * @param {object} element - HTMLElement. The element to be associated with.
      * @param {string} name - Identifier for the data to be stored.
-     * @param {object} value - Any value to stored.
+     * @param {object} value - Any value to be stored.
      */
     jasonCommon.prototype.setData = function (element, name, value) {
         if (element) {
@@ -560,7 +561,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Removes data that were associated to an element.
+     * Removes data that was associated to an element.
      * @param {object} element - HTMLElement. The element be associated with.
      * @param {string} name - Identifier for the data to be removed.
      */
@@ -578,8 +579,8 @@ function jasonCommon() {
         }
     }
     /**
-     * Retrieves data that were associated to an element.
-     * @param {object} element - HTMLElement. The element be associated with.
+     * Retrieves data that was associated to an element.
+     * @param {object} element - HTMLElement. The element to be associated with.
      * @param {string} name - Identifier for the data to be retrieved.
      * @returns {object}
      */
@@ -593,10 +594,10 @@ function jasonCommon() {
         return null;
     }
     /**
-     * Swap child places
+     * Swap child places.
      * @param {any[]} array - Array that contains items.
      * @param {number} indexToMove - Current index of the item to move.
-     * @param {number} newIndex - New index to move item to.
+     * @param {number} newIndex - New index to move the item to.
      */
     jasonCommon.prototype.swapItemsInArray = function (array, indexToMove, newIndex) {
         var itemToMove = array[indexToMove];
@@ -607,10 +608,10 @@ function jasonCommon() {
         }
     }
     /**
-     * Swap dom elements places
+     * Swap dom elements places.
      * @param {any[]} array - Array that contains items.
      * @param {number} indexToMove - Current index of the item to move.
-     * @param {number} newIndex - New index to move item to.
+     * @param {number} newIndex - New index to move the item to.
      */
     jasonCommon.prototype.swapDomElements = function (container, indexToMove, newIndex) {
         if (container != void 0 && indexToMove != void 0 && newIndex != void 0) {
@@ -628,9 +629,9 @@ function jasonCommon() {
      * Moves children nodes from an element to another element.
      * @param {object} sourceElement - HTMLElement. The element that has the child nodes.
      * @param {object} targetElement - HTMLElement. The element that will have the child nodes.
-     * @param {array=} elementTagsToMove If defined only nodes with tagNames included in the array will be moved.
-     * @param {array=} elementTagsToExclude - If defined nodes with tagNames included in the array will be excluded from the move.
-     * @param {array=} classesToExclude - If defined nodes with classNames included in the array will be excluded from the move.
+     * @param {array=} elementTagsToMove If defined, only nodes with tagNames included in the array will be moved.
+     * @param {array=} elementTagsToExclude - If defined, nodes with tagNames included in the array will be excluded from the move.
+     * @param {array=} classesToExclude - If defined, nodes with classNames included in the array will be excluded from the move.
      */
     jasonCommon.prototype.moveChildrenTo = function (sourceElement, targetElement,elementTagsToMove,elementTagsToExclude,classesToExclude) {
         var OldChildren = [];
@@ -670,11 +671,11 @@ function jasonCommon() {
         }
     }
     /**
-     * Applies style property value to an child elements of an element.
+     * Applies style property value to child elements of an element.
      * @param {object} element - HTMLElement. The element to apply the style to.
      * @param {string} propertyName - Style property to be applied.
      * @param {any} propertyName - Style property value to be applied.
-     * @param {string} elementIdentifier - if defined it will apply style only to elements that match the identifier.Identifier can be the ID, a class or a tagName. 
+     * @param {string} elementIdentifier - If defined, it will apply style only to elements that match the identifier. Identifier can be the ID, a class or a tagName. 
      * @param {boolean} recursive - If true it will be applied to all child nodes regardless of nesting level.
      */
     jasonCommon.prototype.applyStyleProperty = function (element, propertyName, value,elementIdentifier,recursive) {
@@ -692,12 +693,12 @@ function jasonCommon() {
         }
     }
     /**
-     * Adds or removes class names from childs of an element
+     * Adds or removes class names from childs of an element.
      * @param {HTMLElement} element - Element to add or remove classes to.
      * @param {string} className - Class name to add/remove.
-     * @param {boolean} add - If true it will add the class. Default false.
-     * @param {string=} elementIdentifier - If defined it apply the action only to elements that match the identifier. Identifier can be the ID attribute | class name | tagName.
-     * @param {boolean}  recursive - If true it will apply the action to children's children also. Default is false.
+     * @param {boolean} add - If true it will add the class. The default is false.
+     * @param {string=} elementIdentifier - If defined it will apply the action only to elements that match the identifier. The identifier can be the ID attribute | class name | tagName.
+     * @param {boolean}  recursive - If true it will apply the action to children's children also. The default is false.
      */
     jasonCommon.prototype.cssClass = function (element, className, add, elementIdentifier, recursive) {
         for (var i = 0; i <= element.children.length - 1; i++) {
@@ -724,7 +725,7 @@ function jasonCommon() {
     /**
      * Fade out effect.
      * @param {object} element - HTMLElement. The element to apply the fade out to.
-     * @param {number} interval - Fade out duration
+     * @param {number} interval - Fade out duration.
      */
     jasonCommon.prototype.fadeOut = function (element, interval) {
         if (!element._jasonWidgetsFadeOut) {
@@ -744,7 +745,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns true the element is an inline element
+     * Returns true if the element is an inline element.
      * @param {object} element - HTMLElement.
      * @returns {boolean}
      */
@@ -756,7 +757,7 @@ function jasonCommon() {
         return false;
     }
     /**
-     * Returns true the element is an block element
+     * Returns true if the element is a block element.
      * @param {object} element - HTMLElement.
      * @returns {boolean}
      */
@@ -797,7 +798,7 @@ function jasonCommon() {
         return metrics.width;
     }
     /**
-     * Returns the computed style property value of an element
+     * Returns the computed style property value of an element.
      * @param {object} element - HTMLElement.
      * @param {string} property - Property name.
      * @returns {string}
@@ -806,7 +807,7 @@ function jasonCommon() {
         return window.getComputedStyle(element, null).getPropertyValue(property);
     }
     /**
-     * Replaces an element's text value
+     * Replaces an element's text value.
      * @param {object} element - HTMLElement.
      * @param {string} newText - New text value.
      */
@@ -826,7 +827,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Removes an element's text value
+     * Removes an element's text value.
      * @param {object} element - HTMLElement.
      * @param {string} newText - New text value.
      */
@@ -843,7 +844,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns the first textnode of the element
+     * Returns the first textnode of the element.
      * @param {object} element - HTMLElement.
      * @returns {HTMLElement}
      */
@@ -858,15 +859,15 @@ function jasonCommon() {
         return textNode;
     }
     /**
-     * Returns all elements that match the search criteria
-     * @param {HTMLElement=} element - If not set search scope will be the document.
+     * Returns all elements that match the search criteria.
+     * @param {HTMLElement=} element - If not set, search scope will be the document.
      * @param {string} attributeName - name of the attribute.
      * @param {string} attributeValue - value of the attribute.
      * @returns {array}
      */
-    jasonCommon.prototype.getElementsByAttribute = function (containerElement,attributeName,attributeValue) {
+    jasonCommon.prototype.getElementsByAttribute = function (containerElement,attributeName,attributeValue,elementTag) {
         var container = containerElement ? containerElement : document;
-        var queryString = "*[{0}='{1}']";
+        var queryString = elementTag === void 0 ? "*[{0}='{1}']" : elementTag + "[{0}='{1}']";
         return container.querySelectorAll(jw.common.formatString(queryString,[attributeName,attributeValue]));
     }
     /**
@@ -924,7 +925,7 @@ function jasonCommon() {
 //        return !(any == undefined || any == null);
     }
     /**
-     * Converts a string to boolean
+     * Converts a string to boolean.
      * @param {string} boolStr - String to convert to boolean.
      * @returns {boolean}
      */
@@ -934,7 +935,7 @@ function jasonCommon() {
         return false;
     }
     /**
-     * Converts a boolean to string
+     * Converts a boolean to string.
      * @param {boolean} bool - Boolean value to convert to string.
      * @returns {string}
      */
@@ -1018,7 +1019,7 @@ function jasonCommon() {
         return valueToConvert;
     }
     /**
-     * Returns a date object with no time information
+     * Returns a date object with no time information.
      * @property {date} Date - Date object from which time information will be removed.
      * @returns {date}
      */
@@ -1035,7 +1036,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns a date object with no date information
+     * Returns a date object with no date information.
      * @property {date} Date - Date object from which date information will be removed.
      * @returns {date}
      */
@@ -1052,7 +1053,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2 if the second date.
+     * Returns 0 if the date part of the date object is equal. Returns 1 if the 1st date is bigger and 2nd if the second date is bigger.
      * @property {date} date1 - Date object.
      * @property {date} date2 - Date object.
      * @returns {number}
@@ -1068,7 +1069,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2 if the second date.
+     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2nd if the second date is bigger.
      * @property {date} date1 - Date object.
      * @property {date} date2 - Date object.
      * @returns {number}
@@ -1093,7 +1094,7 @@ function jasonCommon() {
         return new Date(year, month, 0).getDate();
     }
     /**
-     * Returns day count in a year
+     * Returns day count in a year.
      * @param {number} year - Year.
      * @returns {number}
      */
@@ -1107,7 +1108,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns true the property exists on the object.
+     * Returns true if the property exists on the object.
      * @param {object} object - Object to search property in.
      * @param {string} propertyName - Name of the property to search for.
      * @returns {boolean}
@@ -1147,9 +1148,9 @@ function jasonCommon() {
         return result && !jw.common.contains(element, mouseEvent.target);
     }
     /**
-     * Removes any events added to the element and its children by JW. 
-     * @param {HTMLElement} element - Element to remove jasonWidget events.
-     * @param {boolean} recursive - If true it will be applied to the children of the element. Default is true.
+     * Removes any events added to the element and its children by jasonWidgets. 
+     * @param {HTMLElement} element - Element from which to remove jasonWidget events.
+     * @param {boolean} recursive - If true, it will be applied to the children of the element. The default is true.
      */
     jasonCommon.prototype.removeJWEvents = function (element,recursive) {
         var events = element._jasonWidgetsEventListeners_;
@@ -1184,7 +1185,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Add a global event listener
+     * Add a global event listener.
      * @param {function} listener - Listener function.
      */
     jasonCommon.prototype.addGlobalEventListener = function (listener) {
@@ -1214,7 +1215,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Trigger global event
+     * Trigger global event.
      * @param {number} eventCode - Code event to trigger.
      * @param {object=} eventData - Event data.
      */
@@ -1366,7 +1367,7 @@ var
  */
 function jasonHTMLFactory() {
     /**
-     * Creates the HTML for a jwButton
+     * Creates the HTML for a jwButton.
      * @param {string=} caption - Button caption.
      * @param {string=} iconClass - Icon class name.
      */
@@ -1392,7 +1393,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Creates the HTML for a text input styled for JW.
+     * Creates the HTML for a text input styled for jasonWidgets.
      * @param {string=} inputMode - Input mode attribute value.
      * @param {string=} placeHolder - Placeholder attribute value.
      * @param {boolean=} readOnly - Readonly attribute value.
@@ -1413,7 +1414,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Creates the HTML for a jwLabel
+     * Creates the HTML for a jwLabel.
      * @param {string=} caption - Label caption.
      */
     jasonHTMLFactory.prototype.createJWLinkLabel = function (caption) {
@@ -1433,9 +1434,10 @@ function jasonHTMLFactory() {
      * Creates the HTML for a jwMenuItem.
      * @param {string} [orientation = 'horizontal'] orientation - Parent menu's orientation.
      * @param {object} options - HTML factory menu item creation options.
+     * @param {HTMLElement=} element - If provided instead of creating a new element, the element passed will be used.
      */
-    jasonHTMLFactory.prototype.createJWMenuItem = function (orientation,options) {
-        var result = document.createElement("li");
+    jasonHTMLFactory.prototype.createJWMenuItem = function (orientation, options, element) {
+        var result = element == void 0 ? document.createElement("li") : element;
         var menuCaption;
         result.classList.add(JW_MENU_ITEM);
 
@@ -1488,7 +1490,12 @@ function jasonHTMLFactory() {
         if (options.items != void 0 && options.items.length > 0) {
             var arrowWrapper = document.createElement("div");
             var arrowElement = document.createElement("i");
-            arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_DOWN : JW_ICON_CHEVRON_RIGHT;
+            if (options.level == 0) {
+                arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_DOWN : JW_ICON_CHEVRON_RIGHT;
+            } else {
+                arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_RIGHT : JW_ICON_CHEVRON_DOWN;
+            }
+            
             menuCaption.classList.add("has-arrow");
             arrowWrapper.appendChild(arrowElement);
             arrowWrapper.classList.add(JW_MENU_ITEM_ARROW);
@@ -1499,7 +1506,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Converts an existin li element to a jwMenuItem element
+     * Converts an existing li element to a jwMenuItem element
      * @param {string=} orientation - Parent menu's orientation.
      * @param {HTMLElement} liElement - HTML factory menu item creation options.
      */
@@ -1543,10 +1550,10 @@ jw.htmlFactory = new jasonHTMLFactory();
  * @class
  * @name jasonWidgetEvent
  * @memberOf Common
- * @description The jasonWidgetEvent is a construct where jasonWidgets consumers can use to register event listeners to a widget.
- * @property {string} eventName - Name of the event to a listener for.
+ * @description The jasonWidgetEvent is a construct that jasonWidgets consumers can use to register event listeners to a widget.
+ * @property {string} eventName - Name of the event.
  * @property {function} listener - Callback function that will be called when the event is triggered. List of params will differ based on the event.
- * @property {object=} callingContext - If defined calls the listener using its value as the calling context.
+ * @property {object=} callingContext - If defined, calls the listener using its value as the calling context.
  */
 
 /**
@@ -1639,7 +1646,7 @@ jasonBaseWidget.prototype.addBaseClassName = function (element) {
  */
 jasonBaseWidget.prototype.addEventListener = function (eventName, eventListener,callingContext) {
     if (typeof eventListener == "function")
-        this._eventListeners.push({ event: eventName, listener: eventListener, callingContext: callingContext });
+        this._eventListeners.push({ eventName: eventName, listener: eventListener, callingContext: callingContext });
 }
 /**
  * Clean up code, both for UI and widget.
@@ -1655,7 +1662,7 @@ jasonBaseWidget.prototype.createElement = function (elementTagName, addItToList)
     return this.ui.createElement(elementTagName, addItToList);
 }
 /**
- * JW global event listener.
+ * JasonWidgets global event listener.
  * @param {number} eventCode - event code.
  * @param {any} eventData - event data.
  */
@@ -1668,13 +1675,14 @@ jasonBaseWidget.prototype.jwProc = function (eventCode, eventData) {
     }
 }
 /**
- * Trigger a widget's event.
+ * Triggers a widget's event.
  * @param {string} eventName - Name of the event.
  * @param {object} eventData - Event's data.
+ * @param {function} eventTriggeredCallback - Callback to be executed when all listeners are notified.
  */
-jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData) {
+jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData,eventTriggeredCallback) {
     var listeners = this._eventListeners.filter(function (eventListener) {
-        return eventListener.event == eventName && eventListener.listener;
+        return eventListener.eventName == eventName && eventListener.listener;
     });
     for (var i = 0; i <= listeners.length - 1; i++) {
         var listenerObject = listeners[i];
@@ -1683,9 +1691,11 @@ jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData) {
         else
             listenerObject.listener(this, eventData);
     }
+    if (eventTriggeredCallback != void 0)
+        eventTriggeredCallback();
 }
 /**
- * Updates widget's options. Descendants will to implement this,in order for the widgets
+ * Updates the widget options. Descendants will implement this in order for the widgets
  * to dynamically react to option changes.
  * @abstract
  * @param {object} options - Widget's options object.
@@ -1735,7 +1745,7 @@ Object.defineProperty(jasonBaseWidget.prototype, "readOnly", {
  * @constructor
  * @name jasonBaseWidgetUIHelper
  * @memberOf Common
- * @description The base class for all jason widgets UI helpers. It has all the UI logic, that widgets needs.Events,DOM creation,etc.
+ * @description The base class for all jasonWidgets UI helpers. It has all the UI logic that widgets need.Events, DOM creation, etc.
  * @param {Common.jasonWidgetBase} widget - jasonWidget.
  * @param {HTMLElement} htmlElement - HTMLElement that the widget will be attached to.
  * @property {Common.jasonWidgetOptions} options - widgets options.
@@ -1869,10 +1879,10 @@ jasonBaseWidgetUIHelper.prototype._setReadOnly = function (readOnly) {
  * @name jasonDataSourceSorting
  * @description Datasource sorting configuration item.
  * @memberOf Data
- * @description Object representation of a datasource sorting configuration. A datasource supports have multiple sorting configurations.
- * @property {string} name - field name for the sort
- * @property {boolean} reverse - false = asc , true = desc
- * @property {function} primer - if set, it will be used to convert the field value to another data type, suitable for comparison.
+ * @description Object representation of a datasource sorting configuration. A datasource supports multiple sorting configurations.
+ * @property {string} name - field name for the sort.
+ * @property {boolean} reverse - false = asc , true = desc.
+ * @property {function} primer - if set, it will be used to convert the field value to another data type suitable for comparison.
  */
 function jasonDataSourceSorting(name,reverse,primer) {
     this.name = name;
@@ -1882,7 +1892,7 @@ function jasonDataSourceSorting(name,reverse,primer) {
 
 /**
  * @constructor
- * @description Data wrapper that provides search,filter and sorting capabilities over a data array.
+ * @description Data wrapper that provides search, filter and sorting capabilities over a data array.
  * @memberOf Data
  * @param {array} data - Any array of data,either prime type array or object array.
  */
@@ -2005,7 +2015,7 @@ jasonDataSource.prototype.valueContains = function (fieldValue, filterValue) {
     return fieldValue.indexOf(filterValue) >= 0;
 }
 /**
- * Extending data properties if underlying data is an object array
+ * Extends data properties if underlying data is an object array.
  * @param {array} data - Array of data.
  */
 jasonDataSource.prototype.processData = function (data) {
@@ -2021,7 +2031,7 @@ jasonDataSource.prototype.processData = function (data) {
     }
 }
 /**
- * Default sort comparison function
+ * Default sort comparison function.
  * @param {any} value1 - value to compare.
  * @param {any} value2 - value to compare against.
  * @returns {boolean} 
@@ -2031,12 +2041,12 @@ jasonDataSource.prototype.defaultSortComparison = function (value1, value2) {
     return value1 < value2 ? -1 : 1;
 }
 /**
- * Default sort comparison function with data type conversion. It will use the {@link jasonDataSource#defaultSortComparison} to perform the actual comparison
+ * Default sort comparison function with data type conversion. It will use the {@link Data.jasonDataSource#defaultSortComparison} to perform the actual comparison
  * but will convert parameter using a data conversion function if provided. Can also dictate the direction of the comparison, asc or desc.
  * 
  * @param {function} primer - function that will convert passed in value to a data type.
- * @param {boolean} [reverse=false] - if true it will sort descending.
- * @returns {function} Returns function that does sort comparison and if applicable data type conversion.
+ * @param {boolean} [reverse=false] - if true, it will sort descending.
+ * @returns {function} Returns function that does sort comparison and if applicable, data type conversion.
  */
 jasonDataSource.prototype.dataTypeSortComparison = function (primer,reverse) {
     var defaultSort = this.defaultSortComparison;
@@ -2055,7 +2065,7 @@ jasonDataSource.prototype.dataTypeSortComparison = function (primer,reverse) {
 }
 /**
  * Adds sorting configuration to the datasource.
- * @property {Data.jasonDataSourceSorting} sortingConfiguration - sorting to add
+ * @property {Data.jasonDataSourceSorting} sortingConfiguration - sorting to add.
  * @property {boolean} [sort=false] - if true, sort now.
  * @returns {object[]|void}
  */
@@ -2073,7 +2083,7 @@ jasonDataSource.prototype.addSorting = function (sortingConfiguration, sortNow) 
 }
 /**
  * Removes sorting for a field.
- * @param {string} fieldName - Fieldname to remove sorting for.
+ * @param {string} fieldName - Fieldname of which to remove sorting.
  */
 jasonDataSource.prototype.removeSorting = function (fieldName) {
     var existingSorting = this.sorting.filter(function (sortingField) {
@@ -2096,7 +2106,7 @@ jasonDataSource.prototype.applySort = function () {
     this.sort();
 }
 /**
- * Clears all sorting
+ * Clears all sorting.
  */
 jasonDataSource.prototype.clearSorting = function () {
     this.sorting = [];
@@ -2108,8 +2118,8 @@ jasonDataSource.prototype.clearSorting = function () {
 /**
  * Returns a sorted array of data based on fields to sort. Supports multiple field sorting with the possibility to apply separate sorting
  * directions per sorting field. Default field sort direction is asc.
- * @param {array} fieldsToSort - Elements can be field names or objects defining sorting direction and/or data type converting function. See {@link jasonDataSource#dataTypeSortComparison}
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {array} fieldsToSort - Elements can be field names or objects defining sorting direction and/or data type converting function. See {@link Data.jasonDataSource#dataTypeSortComparison}
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @returns {object[]}
  */
 jasonDataSource.prototype.sort = function (fieldsToSort,data) {
@@ -2155,10 +2165,10 @@ jasonDataSource.prototype.sort = function (fieldsToSort,data) {
     return this.currentDataView;
 }
 /**
- * Filter values for a specific field. Retuns an array containing the data matching the filter parameters
+ * Filter values for a specific field. Retuns an array containing the data matching the filter parameters.
  * @param {array} filterValues - Array of objects containing value to filter plus logical connection operators and evaluator operators.
  * @param {string} filterField - Fieldname to filter.
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -2222,14 +2232,14 @@ jasonDataSource.prototype.filter = function (filterValues, filterField,data, cas
         return this.currentDataView;
 }
 /**
- * Add a filter
+ * Add a filter.
  * @param {string} filterField - Field to filter.
  * @param {string} filterValues - Filter values.
  * @param {boolean} [filterNow=false] - If true, it will apply filter.
  * @returns {object[]|void}
  */
 jasonDataSource.prototype.addFilter = function (filterField, filterValues, filterNow) {
-    filterNow = filterNow == void 0 ? true : filterNow;
+    filterNow = filterNow == void 0 ? false : filterNow;
     var existingFilter = this.filters.filter(function (filter) { return filter.filterField == filterField; })[0];
     var dataToFilter = this.data;
     if (!existingFilter) {
@@ -2244,8 +2254,8 @@ jasonDataSource.prototype.addFilter = function (filterField, filterValues, filte
         return this.filter(filterValues, filterField, dataToFilter);
 }
 /**
- * Removes filter.
- * @param {string} filterField - field to remove filtering for.
+ * Removes applied filter for the field.
+ * @param {string} filterField - Field name.
  */
 jasonDataSource.prototype.removeFilter = function (filterField) {
     var filterIndexToDelete = -1;
@@ -2286,7 +2296,7 @@ jasonDataSource.prototype.applyFilters = function () {
     return this.currentDataView;
 }
 /**
- * Clears all fitlers
+ * Clears all filters.
  */
 jasonDataSource.prototype.clearFilters = function () {
     this.filters = [];
@@ -2298,7 +2308,7 @@ jasonDataSource.prototype.clearFilters = function () {
 /**
  * Linear search for a search value across the data across fields.
  * @param {string} searchValue - Value to search.
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -2326,7 +2336,7 @@ jasonDataSource.prototype.search = function (searchValue, data, caseSensitive) {
  * Linear search for a search value across the data on a specific field.
  * @param {string} searchValue - Value to search.
  * @param {string[]} field - Fields to search on. 
- * @param {any[]} [data=[]] - If not provided the underlying Data array will be used.
+ * @param {any[]} [data=[]] - If not provided, the underlying Data array will be used.
  * @param {boolean} [caseSensitive=false] - When true, search will be case sensitive.
  * @returns {object[]}
  */
@@ -2358,9 +2368,8 @@ jasonDataSource.prototype.searchByField = function (searchValue, fields, data, c
     return this.currentDataView;
 }
 /**
- * Grouping data by field,creating a create a treeview of data
- * nested based on the grouping field.
- * if there is already a grouping an extra level will be added.
+ * Groups data based on the grouping field.
+ * if there is already a grouping, an extra level will be added.
  * @property {string} field - Field to group by.
  * @property {array=} data - Data to group.
  * @property {boolean} [groupNow=false] - If true, grouping will execute immediately.
@@ -2378,7 +2387,7 @@ jasonDataSource.prototype.groupByField = function (field, data,groupNow) {
         this.groupData();
 }
 /**
- * Groups data , based on the datasource's current grouping configuration.
+ * Groups data based on the datasource's current grouping configuration.
  * @param {array=} data - Data to group.
  * @returns {object[]}
  */
@@ -2401,7 +2410,7 @@ jasonDataSource.prototype.groupData = function (data) {
     return dataGroupper.entries(dataToGroup);
 }
 /**
- * Check for an existing grouping.
+ * Checks for an existing grouping.
  * @param {string} field - Field name.
  * @returns {boolean}
  */
@@ -2424,7 +2433,7 @@ jasonDataSource.prototype.removeGrouping = function (grouping) {
     this.groupData();
 }
 /**
- * Returns a slice of the datasource's data, and applies any grouping if applicable.
+ * Returns a slice of the datasource's data and applies any grouping if applicable.
  * @property {number} start - starting index.
  * @property {number} stop - stoping index.
  * @returns {object[]} Returns array of data.
@@ -2441,7 +2450,7 @@ jasonDataSource.prototype.range = function (start, stop) {
 /**
  * jasonWidgets Event Manager
  * @constructor
- * @description Auxilary class, that manages events for the widgets.
+ * @description Auxilary class that manages events for the widgets.
  * @memberOf Common
  */
 function jasonEventManager() {
@@ -2458,13 +2467,13 @@ function jasonEventManager() {
         }
     }
     /**
-     * Adds an event listener on an element
+     * Adds an event listener on an element.
      * @param {object} element - HTMLElement. The element to set the event.
      * @param {string} eventName - Name of the event.
      * @param {function} listener - Listener function.
-     * @param {boolean} stopPropagation - If false does not propagate the event. 
+     * @param {boolean} stopPropagation - If true, does not propagate the event.
      */
-    jasonEventManager.prototype.addEventListener = function (element, eventName, listener,useCurrentTarget) {
+    jasonEventManager.prototype.addEventListener = function (element, eventName, listener,useCurrentTarget,useCapture) {
         var self = this;
         if (!element._jasonWidgetsEventListeners_)
             element._jasonWidgetsEventListeners_ = [];
@@ -2486,8 +2495,8 @@ function jasonEventManager() {
             //    defaultEventListener = mouseEnterLeaveEventListener;
             //    defaultEventName = MOUSE_OUT_EVENT;
             //}
-            
-            element.addEventListener(defaultEventName, defaultEventListener);
+            useCapture = useCapture === void 0 ? false : useCapture;
+            element.addEventListener(defaultEventName, defaultEventListener,useCapture);
         }
         var evntListener = {
             element: element,
@@ -2622,7 +2631,7 @@ jwWindowEventManager.removeDocumentEventListener = function (eventName, listener
  * @description Localization class that manages localization for all jasonWidgets. It holds a list of all registered {@link Localization.jasonWidgetLanguage}
  * and {@link Localization.jasonWidgetCulture}.
  *
- * To register a lagnuage or culture, create a js file in which a descendant of {@link Localization.jasonWidgetLanguage} is created and
+ * To register a language or culture, create a js file in which a descendant of {@link Localization.jasonWidgetLanguage} is created and
  * registered.
  *
  * @memberOf Localization
@@ -2834,7 +2843,7 @@ function jasonLocalizationManager() {
  * 
  * jasonWidgets.localizationManager.languages["en-US"] = new jasonWidgetLanguageEN();
  * 
- * @property {string} key - Unique language key. For example en-US.
+ * @property {string} key - Unique language key. For example: en-US.
  * @property {object} search - Search localization.
  * @property {object} search.searchPlaceHolder - Text for the placeholder attribute of <input placeholder='Placeholder text!'> elements.
  * @property {object} filter - Filter localization.
@@ -2850,14 +2859,14 @@ function jasonLocalizationManager() {
  * @property {string} filter.filterValueLessEqualTo - 
  * @property {string} filter.filterHeaderCaption - Filter header caption.
  * @property {object} data - Data localization.
- * @property {string} data.noData - Text when no data are available.
+ * @property {string} data.noData - Text when no data is available.
  * @property {object} grid - Grid localization.
  * @property {object} grid.paging - Grid paging localization.
  * @property {string} grid.firstPageButton - Pager's first button text.
- * @property {string} grid.priorPageButton - Pager's prior button text..
- * @property {string} grid.nextPageButton - Pager's next button text..
- * @property {string} grid.lastPageButton - Pager's last button text..
- * @property {string} grid.pagerInputTooltip - Pager's input tooltip text..
+ * @property {string} grid.priorPageButton - Pager's prior button text.
+ * @property {string} grid.nextPageButton - Pager's next button text.
+ * @property {string} grid.lastPageButton - Pager's last button text.
+ * @property {string} grid.pagerInputTooltip - Pager's input tooltip text.
  * @property {object} grid.grouping - Grid grouping localization.
  * @property {string} grid.grouping.groupingMessage -  Grouping instruction message on how to group data by column.
  * @property {object} grid.filtering - Grid filtering localization.
@@ -2941,7 +2950,7 @@ function jasonWidgetLanguage() {
  * Culture class contains localized information for jasonWidgets for a culture.
  * 
  * 
- * For acceptable date/time formats go here {@link https://msdn.microsoft.com/en-us/library/8kb3ddd4%28v=vs.110%29.aspx}
+ * For acceptable date/time formats look here {@link https://msdn.microsoft.com/en-us/library/8kb3ddd4%28v=vs.110%29.aspx}
  * 
  * @example Creating an English culture localization file.
  * //file must be loaded after localization manager.
@@ -2960,7 +2969,7 @@ function jasonWidgetLanguage() {
  * jasonWidgets.localizationManager.cultures["en-US"] = new jasonWidgetCultureEN_US();
  * 
  * 
- * @property {string} key - Unique language key. For example en-US.
+ * @property {string} key - Unique culture key. For example: en-US.
  * @property {string} dateFormat - Date format string. 
  * @property {string} shortDateFormat - Short date format string.
  * @property {string} longDateFormat - Long date format string.
@@ -3928,30 +3937,42 @@ jasonCombobox.prototype.constructor = jasonCombobox;
  * @description Configuration for the combobox widget.
  * @augments Common.jasonWidgetOptions
  * @property {any[]}    [data=[]]                - Data for the combobox to display.
- * @property {string}   [keyFieldName=""]        - The name of a key field ,if the data is a list of objects.
+ * @property {string}   [keyFieldName=""]        - The name of a key field if the data is a list of objects.
  * @property {string}   [placeholder=""]         - Input placehoder string.
  * @property {string}   [inputMode=verbatim]     - InputMode.
- * @property {boolean}  [readOnly=false]            - If true does not allow typing.
- * @property {boolean}  [autoFilter=false]          - If true automatically filters results while typing.
- * @property {boolean}  [caseSentiveSearch=false]   - If true search is case sensitive.
- * @property {string}   [displayFormatString=""] - String with format parameters.For example "{0},{1}". Each format parameter will be replaced by the field value of fields defined in DisplayFields.
+ * @property {boolean}  [readOnly=false]            - If true, does not allow typing.
+ * @property {boolean}  [autoFilter=false]          - If true, automatically filters results while typing.
+ * @property {boolean}  [caseSentiveSearch=false]   - If true, search is case sensitive.
+ * @property {string}   [displayFormatString=""] - String with format parameters. For example "{0},{1}". Each format parameter will be replaced by the field value of fields defined in DisplayFields.
  * @property {string[]} [displayFields=[]]       - Array that lists the field values to be displayed on the input control.
  */
 
 /**
- * @class
- * @name jasonComboboxEvents
- * @memberOf Dropdowns
- * @description List of jasonCombobox events
- * @property {function} onSelectItem - function(selectedItem : any,selectedItemIndex:number)
- * @property {function} onRollUp - function()
- * @property {function} onRollDown - function()
+ * @event Dropdowns.jasonCombobox#onSelectItem
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
+ * @property {object} value - The event data.
+ * @property {object} value.selectedItem - The selected item object.
+ * @property {number} value.selectedItemIndex - The selected item index.
+ */
+/**
+ * @event Dropdowns.jasonCombobox#onRollUp
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
+ */
+/**
+ * @event Dropdowns.jasonCombobox#onRollDown
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
  */
 
+
+
+
 var
-    EVENT_ON_ROLL_DOWN = "onRollDown",
-    EVENT_ON_ROLL_UP = "onRollUp",
-    EVENT_ON_SELECT_ITEM = "onSelectItem";
+    JW_EVENT_ON_ROLL_DOWN = "onRollDown",
+    JW_EVENT_ON_ROLL_UP = "onRollUp",
+    JW_EVENT_ON_SELECT_ITEM = "onSelectItem";
 /**
  * @constructor
  * @memberOf Dropdowns
@@ -3959,8 +3980,13 @@ var
  * @description Combobox widget. If you want to make it behave like a drop down list, just set the readOnly property to true.
  * @param {HTMLElement} htmlElement - DOM element that will contain the combobox.
  * @param {Dropdowns.jasonComboboxOptions} options - Combobox control options.
+ * @property {object} selectedItem - The currently selected item.
+ * @property {number} selectedItemIndex - The currently selected item index.
+ * @fires Dropdowns.jasonCombobox#event:onSelectItem
+ * @fires Dropdowns.jasonCombobox#event:onRollUp
+ * @fires Dropdowns.jasonCombobox#event:onRollDown
  */
-function jasonCombobox(htmlElement, options) {
+function jasonCombobox(htmlElement, options, nameSpace) {
     if (htmlElement.tagName != "DIV")
         throw new Error("Combobox container element must be a div");
     this.defaultOptions = {
@@ -3974,11 +4000,11 @@ function jasonCombobox(htmlElement, options) {
         caseSentiveSearch: false,
         autoFilter:false
     };
-
-    jasonBaseWidget.call(this, "jasonCombobox", htmlElement, options, jasonComboboxUIHelper);
+    nameSpace = nameSpace === void 0 ? "jasonCombobox" : nameSpace;
+    jasonBaseWidget.call(this, nameSpace, htmlElement, options, jasonComboboxUIHelper);
     this.dataSource = new jasonDataSource({ data: this.options.data,onChange:this.onDataSourceChange });
-    this.selectedItem = null;
-    this.selectedItemIndex = -1;
+    this._selectedItem = null;
+    this._selectedItemIndex = -1;
     this.filteredData = [];
     this.search = this.search.bind(this);
     this.onDataSourceChange = this.onDataSourceChange.bind(this);
@@ -3986,9 +4012,35 @@ function jasonCombobox(htmlElement, options) {
     this.readOnly = this.options.readOnly;
     this.dataChanged = true;
     this.ui.renderUI();
- }
+}
 
-
+/**
+ * Selected item  property.
+ */
+Object.defineProperty(jasonCombobox.prototype, "selectedItem", {
+    get: function () {
+        return this._selectedItem;
+    },
+    set: function (value) {
+        this._selectedItem = value;
+        this.triggerEvent(JW_EVENT_ON_SELECT_ITEM, { selectedItem: value, selectedItemIndex: this._selectedItemIndex });
+    },
+    enumerable: true,
+    configurable: true
+});
+/**
+ * Selected item index property.
+ */
+Object.defineProperty(jasonCombobox.prototype, "selectedItemIndex", {
+    get: function () {
+        return this._selectedItemIndex;
+    },
+    set: function (value) {
+        this._selectedItemIndex = value;
+    },
+    enumerable: true,
+    configurable: true
+});
 /**
  * @ignore
  */
@@ -4004,24 +4056,21 @@ jasonCombobox.prototype.clearSelection = function () {
     this.selectedItemIndex = -1;
 }
 /**
- * Check if the combobox has a selection.
+ * Checks if the combobox has a selection.
  * @returns {boolean}
  */
 jasonCombobox.prototype.hasSelection = function () {
     return this.selectedItem != void 0 && this.selectedItemIndex >= 0;
 }
 /**
- * Selects an item
+ * Selects an item.
  * @param {number} itemIndex - Item index to select.
  */
 jasonCombobox.prototype.selectItem = function (itemIndex) {
+    this._selectedItemIndex = itemIndex;
     this.selectedItem = this.filteredData.length > 0 ? this.filteredData.filter(function (dataItem) { return dataItem._jwRowId == itemIndex; })[0] : this.dataSource.data[itemIndex];
-    this.selectedItemIndex = this.selectedItem._jwRowId;
-    this.ui.selectItem(itemIndex);
-    this.triggerEvent(EVENT_ON_SELECT_ITEM, {selectedItem : this.selectedItem, selectedItem :this.selectedItemIndex});
+    this.ui.updateInputTextFromSelection();
 }
-
-
 /**
  * Searches in the data using as criteria any value the input control has.
  * @ignore
@@ -4035,6 +4084,25 @@ jasonCombobox.prototype.search = function () {
     }
     this.ui.renderDropdownListItems(this.filteredData);
 }
+/**
+ * Shows the drop down list.
+ */
+jasonCombobox.prototype.showDropDownList = function () {
+    this.ui.showDropDownList();
+}
+/**
+ * Hides the drop down list.
+ */
+jasonCombobox.prototype.hideDropDownList = function () {
+    this.ui.hideDropDownList(true);
+}
+/**
+ * Toggles the drop down list.
+ */
+jasonCombobox.prototype.toggleDropDownList = function () {
+    this.ui.toggleDropdownList();
+}
+
 var
     COMBOBOX_CLASS = "jw-combobox",
     COMBOBOX_DROP_DOWN_LIST_CLASS = "drop-down-list",
@@ -4065,6 +4133,10 @@ function jasonComboboxUIHelper(widget, htmlElement) {
 
     /*if a click occurs outside the input or drop down list, hide the list.*/
     jwDocumentEventManager.addDocumentEventListener(CLICK_EVENT, this.monitorForDocumentClick.bind(this));
+    var self = this;
+    jwDocumentEventManager.addDocumentEventListener(TOUCH_MOVE_EVENT, function (scrollEvent) {
+        self.hideDropDownList();
+    });
 }
 /**
  * Renders combobox HTML.
@@ -4137,7 +4209,7 @@ jasonComboboxUIHelper.prototype.showDropDownList = function () {
         this.renderDropdownListContainer();
         this.dropDownListState = COMBOBOX_LIST_STATE_DOWN;
         this.comboboxButton.setAttribute(COMBOBOX_LIST_STATE_ATTR, this.dropDownListState);
-        this.widget.triggerEvent(EVENT_ON_ROLL_DOWN);
+        this.widget.triggerEvent(JW_EVENT_ON_ROLL_DOWN);
     }
 }
 /**
@@ -4151,7 +4223,7 @@ jasonComboboxUIHelper.prototype.hideDropDownList = function (focus) {
         this.comboboxButton.setAttribute(COMBOBOX_LIST_STATE_ATTR, this.dropDownListState);
         if (focus == true && !this.widget.readOnly)
             this.comboboxInput.focus();
-        this.widget.triggerEvent(EVENT_ON_ROLL_UP);
+        this.widget.triggerEvent(JW_EVENT_ON_ROLL_UP);
     }
 }
 
@@ -4182,7 +4254,7 @@ jasonComboboxUIHelper.prototype.initializeEvents = function () {
  * Sets the item index (selected item).
  * @param {number} itemIndex - Combobox item index.
  */
-jasonComboboxUIHelper.prototype.selectItem = function (itemIndex) {
+jasonComboboxUIHelper.prototype.updateInputTextFromSelection = function () {
     var self = this;
     var inputValue = "";
     if (this.widget.options.displayFields) {
@@ -4213,7 +4285,7 @@ jasonComboboxUIHelper.prototype.renderDropdownListContainer = function () {
         if (this.widget.dataChanged)
             this.renderDropdownListItems();
         this.dropDownListContainer.style.position = "absolute";
-        var bRect = jw.common.getOffsetCoordinates(this.htmlElement);
+        var bRect = this.htmlElement.getBoundingClientRect();//jw.common.getOffsetCoordinates(this.htmlElement);
         this.hasScrollBars = this.dropDownList.scrollHeight > this.dropDownListContainer.clientHeight;
         if (!this.scrollBarWidth)
             this.scrollBarWidth = jasonWidgets.common.scrollBarWidth();
@@ -4221,6 +4293,7 @@ jasonComboboxUIHelper.prototype.renderDropdownListContainer = function () {
         this.dropDownListContainer.style.width = ((this.comboboxInput.offsetWidth + this.comboboxButton.offsetWidth)) + "px";
         this.dropDownListContainer.style.top = bRect.top + this.htmlElement.offsetHeight + "px";
         this.dropDownListContainer.style.left = bRect.left + "px";
+        this.dropDownListContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.dropDownListContainer.style.display = "";
     }
 }
@@ -4310,10 +4383,10 @@ jasonComboboxUIHelper.prototype.onComboboxInputClick = function (clickEvent) {
 jasonComboboxUIHelper.prototype.onComboboxItemClick = function (clickEvent) {
     this.comboboxInput.value = clickEvent.target.textContent || clickEvent.target.innerText;
     this.clearSelection();
+    this.widget._selectedItemIndex = parseInt(clickEvent.target.getAttribute(DATA_ITEM_INDEX_ATTR));
     this.widget.selectedItem = jasonWidgets.common.getData(clickEvent.target, "jComboboxDataItem");
-    this.widget.selectedItemIndex = parseInt(clickEvent.target.getAttribute(DATA_ITEM_INDEX_ATTR));
     this.hideDropDownList(true);
-    clickEvent.stopPropagation();
+    //clickEvent.stopPropagation();
 }
 /**
  * Keydown event listener.
@@ -4432,7 +4505,7 @@ jasonMenu.prototype.constructor = jasonMenu;
 var
      JW_EVENT_ON_MENU_SHOWN = "onMenuShown",
      JW_EVENT_ON_MENU_HIDDEN = "onMenuHidden",
-     JW_EVENT_ON_MENU_ITEM_CLICKED = "onItemClicked",
+     JW_EVENT_ON_MENU_ITEM_CLICKED = "onItemClick",
      JW_EVENT_ON_MENU_CHECKBOX_CLICKED = "onCheckboxClicked",
      JW_EVENT_ON_MENU_ITEM_CONTENT_SHOW = "onItemContentShown";
 
@@ -4447,27 +4520,51 @@ var
  * @description Configuration for the menu/context menu widget.
  * @memberOf Menus
  * @augments Common.jasonWidgetOptions
- * @property {string}   [orientation=horizontal]          - horizontal or vertical. Defines how the menu would be rendered
- * @property {object}   [menu=undefined]                 - JSON object representation of the menu. If defined the menu widget will use that to create the HTML menu structure.
+ * @property {string}   [orientation=horizontal]          - Horizontal or vertical. Defines how the menu will be rendered.
+ * @property {object}   [menu=undefined]                 - JSON object representation of the menu. If defined, the menu widget will use it to create the HTML menu structure.
  * @property {object}   animation            - Animation configuration. 
  * @property {number}   [animation.speed=9]      - Numeric value to define animation speed. Range is 1-10.
  * @property {number}   [width=undefined]                - Sets the width of the menu.
  * @property {number}   [height=undefined]                - Sets the height of the menu. 
- * @property {number}   [hideDelay=undefined]            - If defined it will give the user a grace period before it hides the menu.If the user mouse's over the menu container the menu will not be hidden.
- * @property {boolean}  [autoHide=false]             - If true the menu will be hidden if user clicks outside the menu.
- * @property {boolean}  [expandMenuOnHover=true] - If true expands menu item contents on hover.
- * @property {boolean}  [invokable=false] - If true menu is hidden and it will be invoked when the invokable element is clicked.
+ * @property {number}   [hideDelay=undefined]            - If defined, it will give the user a grace period before it hides the menu. If the user mouses over the menu container the menu will not be hidden.
+ * @property {boolean}  [autoHide=false]             - If true, the menu will be hidden if the user clicks outside the menu.
+ * @property {boolean}  [expandMenuOnHover=true] - If true, the menu item will be expanded on hover.
+ * @property {boolean}  [invokable=false] - If true, menu is hidden and it will be invoked when the invokable element is clicked.
  */
 
 /**
- * @class
- * @name jasonMenuEvents
- * @memberOf Menus
- * @description List of jasonMenu events
- * @property {function} onMenuShow - function onMenuShow(sender:jasonMenu)
- * @property {function} onMenuHide - function onMenuHide(sender:jasonMenu)
- * @property {function} onItemClick -function onItemClick(eventInfo:{ event, item, uiHelper })
- * @property {function} onCheckBoxClicked - function onCheckBoxClicked(eventInfo:{ event, item, checked })
+ * @event Menus.jasonMenu#onMenuShow
+ * @type {object}
+ * @description Occurs when menu is shown.
+ * @property {Menus.jasonMenu} sender - The menu instance.
+ */
+
+/**
+ * @event Menus.jasonMenu#onMenuHide
+ * @type {object}
+ * @description Occurs when the menu is hidden.
+ * @property {Menus.jasonMenu} sender - The menu instance.
+ */
+
+/**
+ * @event Menus.jasonMenu#onItemClick
+ * @type {object}
+ * @description Occurs when item is clicked.
+ * @property {Menus.jasonMenu} sender - The menu instance.
+ * @property {object} eventInfo - The position information.
+ * @property {event} eventInfo.event - The DOM event.
+ * @property {Menus.jasonMenuItem} eventInfo.item - The jasonMenu item.
+ */
+
+/**
+ * @event Menus.jasonMenu#onCheckBoxClicked
+ * @type {object}
+ * @description Occurs when checkbox is clicked.
+ * @property {Menus.jasonMenu} sender - The menu instance.
+ * @property {object} eventInfo - The position information.
+ * @property {event} eventInfo.event - The DOM event.
+ * @property {Menus.jasonMenuItem} eventInfo.item - The jasonMenu item.
+ * @property {boolean} eventInfo.checked - The checked value of the menu item.
  */
 
 
@@ -4478,11 +4575,15 @@ var
  * @augments Common.jasonBaseWidget
  * @param {HTMLElement} htmlElement - DOM element that the menu will be bound to.
  * @param {Menus.jasonMenuOptions} options - jasonMenu options.
+ * @fires Menus.jasonMenu#event:onMenuShow
+ * @fires Menus.jasonMenu#event:onMenuHide
+ * @fires Menus.jasonMenu#event:onItemClick
+ * @fires Menus.jasonMenu#event:onCheckBoxClicked
  */
 function jasonMenu(htmlElement, options, uiHelper) {
     this.items = [];
     /*Default menu options*/
-    this.defaultOptions = { orientation: 'Vertical', animation: { speed: 9 }, expandMenuOnHover: true, invokable: false };
+    this.defaultOptions = { orientation: 'vertical', animation: { speed: 9 }, expandMenuOnHover: true, invokable: false };
     jasonBaseWidget.call(this, "jasonMenu", htmlElement, options, uiHelper);
 }
 
@@ -4501,7 +4602,7 @@ jasonMenuItem.prototype.constructor = jasonMenuItem;
  * @description Object representation of a jasonMenuItem.
  * @memberOf Menus
  * @property {string} caption - Menu item caption.
- * @property {string} title - Menu item title(tooltip).
+ * @property {string} title - Menu item title (tooltip).
  * @property {boolean} enabled - Gets/Sets enabled state for the item.
  * @property {array} items - Item's subitems.
  * @property {jasonMenuItem}  parent - Item's parent menu item.
@@ -4510,11 +4611,11 @@ jasonMenuItem.prototype.constructor = jasonMenuItem;
  * @property {number} level - Item's nest level. Root items start with zero.
  * @property {string} name - Item's name.
  * @property {boolean} hasCheckbox - If true, a checkbox input element is rendered.
- * @property {boolean} checked - Gets/Sets the checked state of the item, if it has a checkbox.
+ * @property {boolean} checked - Gets/Sets the checked state of the item if it has a checkbox.
  * @property {boolean} clickable - If true, item accepts click events.
- * @property {HTMLElement} checkboxElement - The input element of the item,if it has a checkbox.
+ * @property {HTMLElement} checkboxElement - The input element of the item if it has a checkbox.
  * @property {string} icon - Icon css class for the item.
- * @property {boolean} isDivider - If true the item is a special menu item, a menu divider.
+ * @property {boolean} isDivider - If true, the item is a special menu item - a menu divider.
  */
 function jasonMenuItem(htmlElement, options, uiHelper) {
     jasonBaseWidget.call(this, "jasonMenuItem", htmlElement, options, uiHelper);
@@ -4523,7 +4624,6 @@ function jasonMenuItem(htmlElement, options, uiHelper) {
     this.enabled = true;
     this.items = [];
     this.parent = null;
-    this.element = htmlElement;
     this.content = null;
     this.level = null;
     this.name = null;
@@ -4689,12 +4789,11 @@ function jasonMenuWidgetDOMParser(menuUI) {
  * @param {object} liElement - HTMLElement.
  */
 jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
-    var result = new jasonMenuItem();
+    var result = new jasonMenuItem(liElement,null,null);
     var menuItemLevel = liElement.getAttribute(MENU_ITEM_LEVEL_ATTRIBUTE);
     if (menuItemLevel)
         result.level = parseInt(menuItemLevel);
 
-    result.element = liElement;
     this.menuUI.eventManager.addEventListener(liElement, CLICK_EVENT, this.menuUI.onItemClick, true);
     this.menuUI.eventManager.addEventListener(liElement, TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
     this.menuUI.eventManager.addEventListener(liElement, MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter,true);
@@ -4784,45 +4883,53 @@ jasonMenuWidgetJSONParser.prototype.populateMenu = function (jasonMenu) {
             subItemsContainer = self.createSubItemsContainer();
             subMenuItemsUL = self.menuUI.createElement("ul");
             subItemsContainer.appendChild(subMenuItemsUL);
-            parentMenuItem.element.appendChild(subItemsContainer);
-            parentMenuItem.element._jasonMenuItemsContainer = subItemsContainer;
+            parentMenuItem.htmlElement.appendChild(subItemsContainer);
+            parentMenuItem.htmlElement._jasonMenuItemsContainer = subItemsContainer;
         }
         var menuULToUse = subMenuItemsUL != void 0 ? subMenuItemsUL : menuUL;
         //iterating through the child items to create LI elements.
         for (var i = 0 ; i <= parentMenuItem.items.length - 1; i++) {
-            var menuItem = parentMenuItem.items[i];
-            if (!jw.common.isJWWidget(menuItem)) {
-                var jwMenuItem = new jasonMenuItem(rootMenuElement, null, null);
-                jwMenuItem.assign(menuItem);
-                menuItem = jwMenuItem;
+            var newMenuItem = jw.common.isJWWidget(parentMenuItem.items[i]) ? parentMenuItem.items[i] : null;
+            var newMenuElement;
+            if (newMenuItem == null) {
+                newMenuElement = self.menuUI.createElement("li");
+                newMenuItem = new jasonMenuItem(newMenuElement, null, null);
+                newMenuItem.assign(parentMenuItem.items[i]);
+                newMenuItem.clickable = newMenuItem.clickable == void 0 ? true : newMenuItem.clickable;
+                newMenuItem.parent = parentMenuItem;
+                newMenuItem.level = parentMenuItem.level + 1;
+                self.createMenuElementFromItem(newMenuItem, newMenuElement);
+            } else {
+                newMenuElement = self.createMenuElementFromItem(newMenuItem, newMenuItem.htmlElement);
             }
-            menuItem.parent = parentMenuItem;
-            menuItem.level = parentMenuItem.level + 1;
-            var menuElement = self.createMenuElementFromItem(menuItem);
-            menuULToUse.appendChild(menuElement);
-            parentMenuItem.items[i] = menuItem;
-            if (menuItem.items.length > 0) {
-                populateItems(menuItem, menuULToUse);
+            menuULToUse.appendChild(newMenuElement);
+            parentMenuItem.items[i] = newMenuItem;
+            if (newMenuItem.items.length > 0) {
+                populateItems(newMenuItem, menuULToUse);
             }
         }
     }
     var menuUL = this.menuUI.ulMenuElement;
     //iterating through the root items of the UL element
     for (var i = 0; i <= jasonMenu.items.length - 1; i++) {
-        var rootMenuItem = jasonMenu.items[i];
-        if (!jw.common.isJWWidget(rootMenuItem)) {
-            var jwMenuItem = new jasonMenuItem(rootMenuElement, null, null);
-            jwMenuItem.assign(rootMenuItem);
-            jwMenuItem.clickable = true;
-            rootMenuItem = jwMenuItem;
+        var newMenuItem = jw.common.isJWWidget(jasonMenu.items[i]) ? jasonMenu.items[i] : null;
+        var newMenuElement;
+        if (newMenuItem == null) {
+            newMenuElement = self.menuUI.createElement("li");
+            newMenuItem = new jasonMenuItem(newMenuElement, null, null);
+            newMenuItem.assign(jasonMenu.items[i]);
+            newMenuItem.clickable = newMenuItem.clickable == void 0 ? true : newMenuItem.clickable;
+            newMenuItem.level = 0;
+            self.createMenuElementFromItem(newMenuItem, newMenuElement);
         }
-        var rootMenuElement = this.createMenuElementFromItem(rootMenuItem);
-        rootMenuItem.level = 0;
-        rootMenuElement.setAttribute(MENU_ITEM_LEVEL_ATTRIBUTE, rootMenuItem.level);
-        menuUL.appendChild(rootMenuElement);
+        else{
+            newMenuElement = self.createMenuElementFromItem(newMenuItem, newMenuItem.htmlElement);
+        }
+        newMenuElement.setAttribute(MENU_ITEM_LEVEL_ATTRIBUTE, newMenuItem.level);
+        menuUL.appendChild(newMenuElement);
 
-        jasonMenu.items[i] = rootMenuItem;
-        populateItems(rootMenuItem, menuUL);
+        jasonMenu.items[i] = newMenuItem;
+        populateItems(newMenuItem, menuUL);
     }
     return menuUL;
 }
@@ -4830,13 +4937,13 @@ jasonMenuWidgetJSONParser.prototype.populateMenu = function (jasonMenu) {
  * Creates menu UI element from menu item 
  * @param {object} menuItem - jasonMenuItem.
  */
-jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuItem) {
+jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuItem,menuElement) {
     var self = this;
     //the newly created element.
     var menuItemElement;
 
     if (menuItem.content) {
-        menuItemElement = this.menuUI.createElement("li");
+        menuItemElement = menuElement === void 0 ? this.menuUI.createElement("li") : menuElement;
         if (!menuItem.content.tagName) {
             var menuContent = this.menuUI.createElement("div");
             menuContent.innerHTML = menuItem.content;
@@ -4847,8 +4954,12 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
         menuItemElement.classList.add(MENU_ITEM_CONTENT);
         menuItem.content.classList.add(MENU_ITEM_CONTENT_CLASS);
     } else {
-        menuItemElement = jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem);
-        menuItem.element = menuItemElement;
+        if (menuElement === void 0)
+            menuItemElement = jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem);
+        else {
+            menuItemElement = menuElement
+            jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem, menuItemElement);
+        }
 
         if (menuItem.isDivider) {
             menuItemElement.appendChild(this.menuUI.createElement("hr"));
@@ -4862,11 +4973,13 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
                 this.menuUI.eventManager.addEventListener(checkBoxElement, CLICK_EVENT, this.menuUI.onCheckboxClick);
             }
         }
-        this.menuUI.eventManager.addEventListener(menuItemElement, CLICK_EVENT, this.menuUI.onItemClick, true);
+        var self = this;
+        this.menuUI.eventManager.addEventListener(menuItemElement, CLICK_EVENT, this.menuUI.onItemClick,true);
         this.menuUI.eventManager.addEventListener(menuItemElement, MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter);
         this.menuUI.eventManager.addEventListener(menuItemElement, MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave);
     }
-    jasonWidgets.common.setData(menuItemElement, MENU_ITEM_DATA_KEY, menuItem);
+    if (menuElement == void 0)
+        jasonWidgets.common.setData(menuItemElement, MENU_ITEM_DATA_KEY, menuItem);
     return menuItemElement;
 }
 //#endregion
@@ -4994,6 +5107,7 @@ jasonMenuUIHelper.prototype.showMenu = function (invokableElement,left,top) {
         || document.body.clientWidth;
         //coordinates.Left = coordinates.Left > width ? width : coordinates.Left;
         this.menuContainer.style.left = left ? left + "px" : coordinates.left + this.menuContainer.offsetWidth >= width ? coordinates.left - (this.menuContainer.offsetWidth) + "px" : coordinates.left + "px";
+        this.menuContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.widget.triggerEvent(JW_EVENT_ON_MENU_SHOWN);
     }
 }
@@ -5083,6 +5197,7 @@ jasonMenuUIHelper.prototype.getMenuItemFromEvent = function (event) {
 
 jasonMenuUIHelper.prototype.onCheckboxClick = function (clickEvent) {
     this.toggleCheckBox(clickEvent);
+    clickEvent.stopPropagation();
 }
 /**
  * Toggle checkbox checked state
@@ -5111,6 +5226,7 @@ jasonMenuUIHelper.prototype.onItemClick = function (clickEvent) {
             this.widget.triggerEvent(JW_EVENT_ON_MENU_ITEM_CLICKED, { event: clickEvent, item: menuItem, uiHelper: this });
         }
     }
+    clickEvent.stopPropagation();
 }
 /**
  * Triggered when a menu item is touched.
@@ -5139,7 +5255,7 @@ jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
  */
 jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
     if (menuItem) {
-        var menuElement = menuItem.element;
+        var menuElement = menuItem.htmlElement;
         if (!menuElement.getAttribute(MENU_ITEM_NO_HIGHLIGHT_ATTR) && menuItem.enabled)
             menuElement.classList.add(MENU_ITEM_CLASS_ACTIVE);
 
@@ -5158,7 +5274,7 @@ jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
  */
 jasonMenuUIHelper.prototype.hideMenuItemContents = function (menuItem) {
     if (menuItem) {
-        var menuElement = menuItem.element;
+        var menuElement = menuItem.htmlElement;
         if (!this.options._debug && !this.disableMouseEvents) {
             if (menuElement._jasonMenuItemsContainer && this.canHideSubMenu) {
                 menuElement._jasonMenuItemsContainer.style.display = "none";
@@ -5216,7 +5332,7 @@ jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContain
         var width = window.innerWidth
         || document.documentElement.clientWidth
         || document.body.clientWidth;
-        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
         menuItemsContainer.style.left = leftPosition + "px";
     }
 }
@@ -5308,8 +5424,8 @@ jasonContextMenuUIHelper.prototype.constructor = jasonContextMenuUIHelper;
 /**
  * @class
  * @name jasonMenuContextOptions
- * @augments jasonMenuOptions
- * @description Context jasonMenu options.Extends {@linkcode jasonMenuOptions}
+ * @augments Menus.jasonMenuOptions
+ * @description Context jasonMenu options.
  * @property {HTMLElement}  [target=undefined] - Target HTML Element for the context menu.
  * @memberOf Menus
  */
@@ -5375,12 +5491,12 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @memberOf Date/Time
  * @description Configuration for the jasonCalendar widget.
  * @property {boolean}  [invokable=true]        - If true the calendar is shown when it's invoked.
- * @property {object=}   invokableElement - Element which upon clicked it will display the calendar.
- * @property {boolean}  [autoHide=false]         - If true the calendar is hidden if there is a mouse click outside the calendar and the calendar is invokable.
+ * @property {object=}   invokableElement - The element which will display the calendar upon click.
+ * @property {boolean}  [autoHide=false]         - If true, the calendar is hidden if there is a mouse click outside the calendar and the calendar is invokable.
  * @property {array}    [specialDates=[]]     - List of special dates. Default is empty.
- * @property {number}   [firstDayOfWeek=1]   - Set the first day of the week. Default is Monday.Index is zero based.
+ * @property {number}   [firstDayOfWeek=1]   - Set the first day of the week. Default is Monday. Index is zero based.
  * @property {boolean}  [multiSelect=false]      - Allows date multi selection.
- * @property {boolean}  [rangeSelect=false]      - Allows date range selection. Similar to multi but the dates must consecutive. 
+ * @property {boolean}  [rangeSelect=false]      - Allows date range selection. Similar to multi but the dates must be consecutive. 
  * @property {number}   [width=300]            - Set the width of the calendar control in pixels.
  * @property {number}   [height=220]           - Set the height of the calendar control in pixels.
  * @property {string}   [calendarMode=days]     - Sets the mode of the calendar. Possible values [days,months,years,decades,centuries].
@@ -5391,11 +5507,11 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @class
  * @name jasonCalendarSpecialDate
  * @memberOf Date/Time
- * @description A special date; is date that will render a calendar item, with specific tooltip and/or cssClass
+ * @description A special date, is a date that will render a calendar item with a specific tooltip and/or cssClass.
  * @property {date} date            - Can be a date object or valid date string.
  * @property {string} tooltip       - Tooltip to be shown over the calendar item.
  * @property {string} cssClass      - Css class to be added to the calendar item.
- * @property {boolean} recurring    - If set to true then year is not taken into account.Default is false
+ * @property {boolean} recurring    - If set to true then the year is not taken into account. Default is false.
  */
 
 /**
@@ -5406,14 +5522,14 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @property {string} dayName - Day name.
  * @property {string} dayShortName - Day short name.
  * @property {date} date - Item's date value.
- * @property {number} month - Item's month.
+ * @property {number} month - Item's month value.
  * @property {string} monthName - Month name.
  * @property {string} monthShortName - Month short name.
  * @property {number} year - Item's year value.
  * @property {number} decadeStart - Item's decade start value.
  * @property {number} decadeStop - Item's decade stop value.
- * @property {number} centuryStart - Item's decade century value.
- * @property {number} centuryStop - Item's decade century value.
+ * @property {number} centuryStart - Item's century start value.
+ * @property {number} centuryStop - Item's century stop value.
  * @property {string} toolTip - Item's tooltip.
  * @property {string[]} classList - CSS classes to be added to the item.
  */
@@ -5441,15 +5557,28 @@ function jasonCalendarItem() {
 var
     JW_EVENT_CALENDAR_MODE_CHANGE = "onModeChange",
     JW_EVENT_CALENDAR_NAVIGATE = "onNavigate";
+
 /**
- * @class
- * @name jasonCalendarEvents
- * @memberOf Date/Time
- * @description List of jasonCalendar events
- * @property {function} onChange - function(value : date)
- * @property {function} onModeChange - function(value : string)
- * @property {function} onNavigate - function(value : { navDirection:string, navDate:date})
+ * @event Date/Time.jasonCalendar#onChange
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {date} value - The new date.
  */
+/**
+ * @event Date/Time.jasonCalendar#onModeChange
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {string} value - The new mode. 
+ */
+/**
+ * @event Date/Time.jasonCalendar#onNavigate
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {object} value - The event data.
+ * @property {string} value.navDirection - The navigation direction.
+ * @property {date} value.selectedItemIndex - The selected date after the navigation.
+ */
+
 
 /**
  * @constructor
@@ -5461,6 +5590,9 @@ var
  * @property {date} date - Date value of the widget.
  * @property {Date/Time.jasonCalendarSpecialDate[]} specialDates - Array of special dates.
  * @property {string} mode - Calendar mode. days | months | years | decades
+ * @fires Date/Time.jasonCalendar#event:onChange
+ * @fires Date/Time.jasonCalendar#event:onModeChange
+ * @fires Date/Time.jasonCalendar#event:onNavigate
  */
 function jasonCalendar(htmlElement, options) {
     this.defaultOptions = {
@@ -5540,6 +5672,7 @@ jasonCalendar.prototype._setDate = function (date) {
 jasonCalendar.prototype._setMode = function (mode) {
     if (mode && this._calendarMode != mode) {
         this._calendarMode = mode;
+        this.ui.renderCalendarItems(this.navigate(null));
         this.triggerEvent(JW_EVENT_CALENDAR_MODE_CHANGE, this._calendarMode);
     }
 }
@@ -5822,7 +5955,18 @@ jasonCalendar.prototype.getRowDivisionCount = function () {
         default: return 7;
     }
 }
-
+/**
+ * Navigates the calendar back.
+ */
+jasonCalendar.prototype.navigateBack = function () {
+    this.ui.renderCalendarItems(this.navigate("back"));
+}
+/**
+ * Navigates the calendar forward.
+ */
+jasonCalendar.prototype.navigateForward = function () {
+    this.ui.renderCalendarItems(this.navigate("forward"));
+}
 /**
  * Calendar navigate. Navigates based on the current calendar mode.
  * @ignore
@@ -6077,9 +6221,10 @@ jasonCalendarUIHelper.prototype.renderFooter = function () {
 jasonCalendarUIHelper.prototype.showCalendar = function (date) {
     if (this.options.invokableElement) {
         this.calendarNavigateToday(date ? date : this.widget.date);
-        var coordinates = jw.common.getOffsetCoordinates(this.options.invokableElement);
+        var coordinates = this.options.invokableElement.getBoundingClientRect();//jw.common.getOffsetCoordinates(this.options.invokableElement);
         this.htmlElement.style.left = coordinates.left + "px";
         this.htmlElement.style.top = (coordinates.top + this.options.invokableElement.offsetHeight) + "px";
+        this.htmlElement.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.htmlElement.style.display = "";
     }
 }
@@ -6157,8 +6302,6 @@ jasonCalendarUIHelper.prototype.calendarDisplayClick = function (clickEvent) {
 
     if (this.widget.mode == "days")
         this.widget.mode = "months";
-
-    this.renderCalendarItems(this.widget.navigate(null));
 }
 /**
  * Calendar item click event handler. It drills in if needed.
@@ -6267,7 +6410,7 @@ var
  * @description Configuration for the tab control widget.
  * @memberOf Containers
  * @augments Common.jasonWidgetOptions
- * @property {number}   pageHeight - Tab page height.No default.
+ * @property {number}   pageHeight - Tab page height. No default.
  */
 
 /**
@@ -6476,6 +6619,19 @@ function jasonGridUIHelper(widget, htmlElement) {
     this._renderHeader();
     //setting column reordering, resize and grouping functionality.
     this._enableColumnDragResize();
+    this.isReRendering = false;
+    this.monitorChanges = this.monitorChanges.bind(this);
+}
+
+jasonGridUIHelper.prototype.monitorChanges = function () {
+    window.requestAnimationFrame(this.monitorChanges);
+    if (this.isReRendering)
+        return;
+    if (this.gridHeaderTable.clientWidth != this.gridDataTable.clientWidth) {
+        this.isReRendering = true;
+        this._sizeColumns();
+        this.isReRendering = false;
+    }
 }
 
 //#region Object properties
@@ -6495,14 +6651,11 @@ jasonGridUIHelper.prototype._createColumnMenu = function () {
         orientation: 'vertical',
         autoHide:true,
         events: [
-            { event: JW_EVENT_ON_MENU_CHECKBOX_CLICKED, listener: this._onColumnMenuItemChecked, callingContext: this },
-            { event: JW_EVENT_ON_MENU_ITEM_CLICKED, listener: this._onColumnMenuItemClicked, callingContext: this },
-            { event: JW_EVENT_ON_MENU_HIDDEN, listener: this._onColumnMenuHidden, callingContext: this }
+            { eventName: JW_EVENT_ON_MENU_CHECKBOX_CLICKED, listener: this._onColumnMenuItemChecked, callingContext: this },
+            { eventName: JW_EVENT_ON_MENU_ITEM_CLICKED, listener: this._onColumnMenuItemClicked, callingContext: this },
+            { eventName: JW_EVENT_ON_MENU_HIDDEN, listener: this._onColumnMenuHidden, callingContext: this }
         ],
     }, jasonMenuUIHelper);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_CHECKBOX_CLICKED, this._onColumnMenuItemChecked, this);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_ITEM_CLICKED, this._onColumnMenuItemClicked, this);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_HIDDEN, this._onColumnMenuHidden, this);
 }
 //#endregion
 
@@ -6586,17 +6739,22 @@ jasonGridUIHelper.prototype._onColumnMenuItemChecked = function (sender,eventDat
  */
 jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventData) {
     /*first try to find the corresponding column*/
-    var columnIndex = eventData.uiHelper.invokableElement.getAttribute(GRID_COLUMN_ID_ATTR);
-    if (columnIndex)
-        columnIndex = parseInt(columnIndex);
-    var column = this.options.columns[columnIndex];
+    //var columnIndex = eventData.uiHelper.invokableElement.getAttribute(GRID_COLUMN_ID_ATTR);
+    //if (!columnIndex)
+    //    columnIndex = jw.common.getElementsByAttribute(eventData.uiHelper.invokableElement, GRID_COLUMN_ID_ATTR, "*")[0];
+    //if (columnIndex)
+    //    columnIndex = parseInt(columnIndex);
+    //var column = this.options.columns[columnIndex];
+    var column = this._currentFilterColumn;
     switch (eventData.item.name) {
         case "mnuSortAsc": {
             this.widget.sortBy(column.fieldName, "asc");
+            this.columnMenu.ui.hideMenu();
             break;
         }
         case "mnuSortDesc": {
             this.widget.sortBy(column.fieldName, "desc");
+            this.columnMenu.ui.hideMenu();
             break;
         }
         case "mnuClearSorting": {
@@ -6751,11 +6909,14 @@ jasonGridUIHelper.prototype._onGroupCollapseExpandIconClick = function (event) {
         iconNode.className = "jw-icon arrow-circle-top-2x";
         groupRow.setAttribute(DATA_GROUP_EXPANDED_ATTR, "false");
         this._collapseGroup(groupRow);
+
+        this.widget.triggerEvent(JW_EVENT_ON_GROUP_COLLAPSE,groupRow.getAttribute(DATA_GROUPING_KEY_ATTR))
     }
     else {
         iconNode.className = "jw-icon arrow-circle-bottom-2x";
         groupRow.setAttribute(DATA_GROUP_EXPANDED_ATTR, "true");
         this._expandGroup(groupRow);
+        this.widget.triggerEvent(JW_EVENT_ON_GROUP_EXPAND,groupRow.getAttribute(DATA_GROUPING_KEY_ATTR))
     }
 }
 /**
@@ -6787,22 +6948,39 @@ jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
             var columnFieldFromPoint = parentElementFromPoint.getAttribute(GRID_COLUMN_FIELD_ATTR);
             var columnFromPoint = this.widget._columnByField(columnFieldFromPoint);
             if (columnFromPoint.index != droppedColumn.index) {
-                jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
 
-                var droppedIndex = droppedColumn.index;
-                droppedColumn.index = columnFromPoint.index;
-                columnFromPoint.index = droppedIndex;
+                //var droppedIndex = droppedColumn.index;
+                //droppedColumn.index = columnFromPoint.index;
+                //columnFromPoint.index = droppedIndex;
 
 
 
-                this.renderUI();
-                this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: droppedColumn.index, toIndex: columnFromPoint.index });
+                //this.renderUI();
+                //this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: columnFromPoint.index, toIndex: droppedColumn.index });
+                this.moveColumn(droppedColumn, columnFromPoint.index);
             }
         }
     }
+}
+/**
+ * 
+ */
+jasonGridUIHelper.prototype.moveColumn = function (column, newIndex) {
+    jw.common.swapItemsInArray(this.options.columns, column.index, newIndex);
+    jw.common.swapDomElements(this.gridHeaderTableRow, column.index, newIndex);
+    jw.common.swapDomElements(this.headerTableColGroup, column.index, newIndex);
+    jw.common.swapDomElements(this.dataTableColGroup, column.index, newIndex);
+
+    var droppedIndex = column.index;
+    column.index = newIndex;
+    this.options.columns[newIndex].index = droppedIndex;
+
+    this.renderUI();
+    this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index, toIndex: newIndex });
 }
 /**
  * Called when a column resize is ends.
@@ -6813,6 +6991,7 @@ jasonGridUIHelper.prototype._onColumnResizeEnd = function (event, htmlElement) {
     if (column) {
         column.width = htmlElement.offsetWidth;
     }
+    this.widget.triggerEvent(JW_EVENT_ON_COLUMN_RESIZED, {column:column,newWidth:column.width});
 }
 /**
  * Removes grouping.
@@ -6852,13 +7031,15 @@ jasonGridUIHelper.prototype.renderUI = function (recordStart,recordStop) {
 
     /*last but not least the footer*/
     this._renderFooter(toRecord);
-    //var self = this;
-    //setTimeout(function () {
-    //    self.htmlElement.style.display = "none";
-    //    setTimeout(function () {
-    //        self.htmlElement.style.display = "";
-    //    });
-    //},5000);
+
+    var calcHeightDiff = 35;
+    if (this.options.grouping)
+        calcHeightDiff = calcHeightDiff + 35;
+    if(this.options.paging)
+        calcHeightDiff = calcHeightDiff + 35;
+    this.gridDataContainer.style.height = jw.common.formatString("calc(100% - {0}px", [calcHeightDiff]);
+    if (this.gridDataContainer.style.height == "")
+        this.gridDataContainer.style.height = jw.common.formatString("calc(100% - {0}px", [calcHeightDiff]);
 }
 /**
  * Creates header,data and footer containers for the grid
@@ -6976,7 +7157,7 @@ jasonGridUIHelper.prototype._sizeColumns = function () {
      * The header and the data table appear to home much smaller width and the UI is broken.
      * If the htmlElement is hidden and shown then Safari renders correctly the HTML.
      */
-    if (this._firstRun) {
+    if (window.navigator.vendor.indexOf("Apple")>=0) {
         this._firstRun = false;
         var self = this;
         this.htmlElement.style.display = "none";
@@ -7394,7 +7575,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                     captionElement.innerHTML = gridColumn.headerTemplate;
                 else
                     captionElement.appendChild(this.createTextNode(gridColumn.caption));
-                this.eventManager.addEventListener(captionElement, CLICK_EVENT, this._onGridColumnCaptionClick, true);
+                this.eventManager.addEventListener(captionElement, MOUSE_DOWN_EVENT, this._onGridColumnCaptionClick, true);
                 this.eventManager.addEventListener(captionElement, TOUCH_START_EVENT, function (touchEvent) {
                     //prevent default behavior and stop propagation.
                     touchEvent.preventDefault();
@@ -7419,6 +7600,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                 },true);
                 this.eventManager.addEventListener(gridColumnMenuIconAnchor, MOUSE_DOWN_EVENT, function (mouseEvent) { mouseEvent.stopPropagation(); }, true);
                 headerCellIconContainer.appendChild(gridColumnMenuIconAnchor);
+                //headerCellIconContainer.setAttribute(GRID_COLUMN_ID_ATTR, columnIndex);
             }
             if (this.options.filtering == true && this.options.columnMenu == false) {
                 var filterIconElement = this.createElement("i");
@@ -7560,6 +7742,7 @@ jasonGridUIHelper.prototype._createGrouppingRow = function (groupNode) {
     newRow.classList.add(GRID_TABLE_ROW_CLASS);
     newRow.classList.add(GRID_TABLE_GROUP_ROW_CLASS);
     newRow.setAttribute(DATA_GROUPING_LEVEL_ATTR, groupNode.level);
+    newRow.setAttribute(DATA_GROUPING_KEY_ATTR, groupNode.key);
     newCell.setAttribute(COLSPAN_ATTR, this.options.columns.filter(function (col) { return col.visible == true; }).length);
     newCell.appendChild(iconNode);
     newCell.appendChild(this.createTextNode(groupNode.key));
@@ -7976,13 +8159,13 @@ jasonGrid.prototype.constructor = jasonGrid;
  * @property {boolean}  [grouping=true]                        - Set to true to enable grouping.
  * @property {boolean}  [filtering=true]                       - Set to true to enable filtering.
  * @property {object|boolean}   [sorting=true]                         - Set to true to enable sorting.
- * @property {object}   [sorting.multiple=false]                - multiple - Set to true to enable multiple sorting 
+ * @property {object}   [sorting.multiple=false]                - Multiple - Set to true to enable multiple sorting 
  * @property {boolean}  [columnMenu=true]                      - Set to true to enable column menu.
  * @property {boolean}  [resizing=true]                        - Set to true to enable column resizing.
  * @property {boolean}  [reordering=true]                      - Set to true to enable column reordering.
  * @property {object}   [customization={}]                   - Grid customization.
  * @property {any}      [customization.rowTemplate=undefined]       - HTML string or script tag containing HTML to be used to render grid rows.
- * @property {string}   [customization.dataFieldAttribute=undefined]- String that defines the attribute in a template HTML for a data field.Default is 'data-field'
+ * @property {string}   [customization.dataFieldAttribute=undefined]- String that defines the attribute in a template HTML for a data field. Default is 'data-field'.
  */
 
 /**
@@ -7994,13 +8177,13 @@ jasonGrid.prototype.constructor = jasonGrid;
  * @property {string} fieldName     - FieldName of the underlying datasource.
  * @property {number} index         - Column index on the column list.
  * @property {string} tooltip       - Column tooltip.
- * @property {number} index         - If not specified a width value will be calculated for the column.Use it only when you want a specific width for a column.
- * @property {boolean} visible      - If false column is not rendered.
- * @property {string}  dataType     - Can be one of four data types. String,Date,Number and Boolean.
- * @property {boolean} isInMenu     - If false column is not displayed on the list of columns to be hidden/shown.
- * @property {boolean} columnMenu   - If false column does not show a column menu icon.
- * @property {any} headerTemplate   - HTML string or script tag containing HTML to be used to render column header.
- * @property {any} cellTemplate     - HTML string or script tag containing HTML to be used to render column cell.
+ * @property {number} index         - If not specified, a width value will be calculated for the column. Use it only when you want a specific width for a column.
+ * @property {boolean} visible      - If false, column is not rendered.
+ * @property {string}  dataType     - Can be one of four data types. String, Date, Number and Boolean.
+ * @property {boolean} isInMenu     - If false, column is not displayed on the list of columns to be hidden/shown.
+ * @property {boolean} columnMenu   - If false, column does not show a column menu icon.
+ * @property {any} headerTemplate   - HTML string or script tag containing HTML to be used to render a column header.
+ * @property {any} cellTemplate     - HTML string or script tag containing HTML to be used to render a column cell.
  */
 
 /**
@@ -8008,16 +8191,16 @@ jasonGrid.prototype.constructor = jasonGrid;
  * @name jasonGridFilterValue
  * @description A grid filter value.
  * @memberOf Grids
- * @property {any} value - filter value.
- * @property {object} filterClause - filter clause
- * @property {string} filterClause.symbol - filter clause symbol ['=','>','<','>=','<=','!=','startsWith','endsWith','contains']
- * @property {object} logicalOperator - filter logical operator
+ * @property {any} value - Filter value.
+ * @property {object} filterClause - Filter clause.
+ * @property {string} filterClause.symbol - Filter clause symbol ['=','>','<','>=','<=','!=','startsWith','endsWith','contains']
+ * @property {object} logicalOperator - Filter logical operator.
  * @property {string} logicalOperator.operator - operator ['and','or']
  */
 
 var
 JW_EVENT_ON_DATA_CHANGE = 'onDataChange',
-JW_EVENT_ON_GROUP_BY_FIELD = 'onGroupbyField',
+JW_EVENT_ON_GROUP_BY_FIELD = 'onGroupByField',
 JW_EVENT_ON_UNGROUP_FIELD = 'onUnGroupField',
 JW_EVENT_ON_SELECTION_CHANGE = 'onSelectionChange'
 JW_EVENT_ON_GROUP_COLLAPSE = 'onGroupCollapse',
@@ -8039,31 +8222,101 @@ PAGER_CONTAINER_CLASS = "jw-grid-pager",
 PAGER_CONTAINER_PAGE_INFO_CLASS = "jw-grid-pager-info";
 
 /**
- * @class
- * @name jasonGridEvents
- * @memberOf Grids
- * @description List of jasonGrid events
- * @property {function} onDataChange -  function onDataChange()
- * @property {function} onGroupByField - function onGroupByField(fieldName:string)
- * @property {function} onUnGroupField - function onUnGroupField(fieldName:string)
- * @property {function} onSelectionChange - function onSelectionChange(selectedRows:Array)
- * @property {function} onGroupCollapse - function onGroupCollapse()
- * @property {function} onGroupExpand - function onGroupExpand()
- * @property {function} onPageChange - function onPageChange(pageNumber:number)
- * @property {function} onColumnPositionChange - function onColumnPositionChange(positionInfo:{column , fromIndex , toIndex})
- * @property {function} onColumnResize -  function onColumnResize( resizeInfo:{column , newWidth})
+ * Occurs when the underlying datasource data changes.
+ * @event Grids.jasonGrid#onDataChange
+ * @type {object}
+ * @property {Grids.jasonGrid} sender - The grid instance.
  */
+
+/**
+ * @event Grids.jasonGrid#onGroupByField
+ * @type {object}
+ * @description Occurs when grouping is applied to a field.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {string} fieldName - The field that the grouping was applied to.
+ */
+
+/**
+ * @event Grids.jasonGrid#onUnGroupField
+ * @type {object}
+ * @description Occurs when grouping is removed from a field.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {string} fieldName - The field of which the grouping was removed.
+ */
+
+/**
+ * @event Grids.jasonGrid#onSelectionChange
+ * @type {object}
+ * @description Occurs when the selected rows are changed.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {object[]} selectedRows - The currently selected rows.
+ */
+
+/**
+ * @event Grids.jasonGrid#onGroupCollapse
+ * @type {object}
+ * @description Occurs when grouping collapses.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {string} groupKey - The grouping key of the group being collapsed.
+ */
+
+/**
+ * @event Grids.jasonGrid#onGroupExpand
+ * @type {object}
+ * @description Occurs when grouping expands.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {string} groupKey - The grouping key of the group being exapanded.
+ */
+
+/**
+ * @event Grids.jasonGrid#onPageChange
+ * @type {object}
+ * @description Occurs when the page changes.
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {number} pageNumber - The page number.
+ */
+
+/**
+ * @event Grids.jasonGrid#onColumnPositionChange
+ * @description Occurs when the column position changes.
+ * @type {object}
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {object} positionInfo - The position information.
+ * @property {Grids.jasonGridColumn} positionInfo.column - The grid column.
+ * @property {number} positionInfo.fromIndex - The grid column previous index.
+ * @property {number} positionInfo.toIndex - The grid column new index.
+ */
+
+/**
+ * @event Grids.jasonGrid#onColumnResize
+ * @description Occurs when the column resizes.
+ * @type {object}
+ * @property {Grids.jasonGrid} sender - The grid instance.
+ * @property {object} resizeInfo - The position information.
+ * @property {Grids.jasonGridColumn} resizeInfo.column - The grid column.
+ * @property {number} resizeInfo.newWidth - The grid column new width.
+ */
+
 
 
 /**
  * @constructor
  * @memberOf Grids
  * @augments Common.jasonBaseWidget
- * @description A multi-purpose data grid, that supports grouping,multiple sorting,filtering and more.
+ * @description A multi-purpose data grid that supports grouping, multiple sorting, filtering and more.
  * @param {HTMLElement} htmlElement - DOM element that will contain the grid.
  * @param {Grids.jasonGridOptions} options - jasonGrid options. 
  * @property {Data.jasonDataSource} dataSource - Grid's underlying datasource.
  * @property {array} selectedRows - Currently selected rows.
+ * @fires Grids.jasonGrid#event:onDataChange
+ * @fires Grids.jasonGrid#event:onGroupByField
+ * @fires Grids.jasonGrid#event:onUnGroupField
+ * @fires Grids.jasonGrid#event:onSelectionChange
+ * @fires Grids.jasonGrid#event:onGroupCollapse
+ * @fires Grids.jasonGrid#event:onGroupExpand
+ * @fires Grids.jasonGrid#event:onPageChange
+ * @fires Grids.jasonGrid#event:onColumnPositionChange
+ * @fires Grids.jasonGrid#event:onColumnResize
  */
 function jasonGrid(htmlElement, options) {
     if (htmlElement.tagName != "DIV")
@@ -8097,6 +8350,7 @@ function jasonGrid(htmlElement, options) {
     this.ui._createColumnMenu();
     this.ui._initializeEvents();
     this.ui.localizeStrings(this.options.localization);
+    this.ui.monitorChanges();
 }
 
 //#region  private members*/
@@ -8180,38 +8434,42 @@ jasonGrid.prototype._initializeColumns = function (options) {
 jasonGrid.prototype._initializeDefaultColumnMenu = function () {
     this.defaultGridColumnMenu = { items: [] };
     if (this.options.sorting) {
-        var menuItemSortAsc = new jasonMenuItem();
+        var menuItemSortAsc = new jasonMenuItem(this.ui.createElement("li"),null,null);
         menuItemSortAsc.name = "mnuSortAsc";
         menuItemSortAsc.caption = this.options.localization.grid.columnMenu.sortAscending;
         menuItemSortAsc.title = menuItemSortAsc.caption;
         menuItemSortAsc.clickable = true;
         menuItemSortAsc.enabled = jasonWidgets.common.assigned(this.options.sorting);
         menuItemSortAsc.icon = JW_ICON_SORT_ASC;
+        menuItemSortAsc.level = 0;
         this.defaultGridColumnMenu.items.push(menuItemSortAsc);
 
-        var menuItemSortDesc = new jasonMenuItem();
+        var menuItemSortDesc = new jasonMenuItem(this.ui.createElement("li"), null, null);
         menuItemSortDesc.name = "mnuSortDesc";
         menuItemSortDesc.caption = this.options.localization.grid.columnMenu.sortDescending;
         menuItemSortDesc.title = menuItemSortDesc.caption;
         menuItemSortDesc.enabled = jasonWidgets.common.assigned(this.options.sorting);
         menuItemSortDesc.clickable = true;
         menuItemSortDesc.icon = JW_ICON_SORT_DESC;
+        menuItemSortDesc.level = 0;
         this.defaultGridColumnMenu.items.push(menuItemSortDesc);
     }
 
-    var menuItemColumns = new jasonMenuItem();
+    var menuItemColumns = new jasonMenuItem(this.ui.createElement("li"), null, null);
     menuItemColumns.name = "mnuColumns";
     menuItemColumns.caption = this.options.localization.grid.columnMenu.columns;
     menuItemColumns.title = menuItemColumns.caption;
     menuItemColumns.icon = JW_ICON_COLUMNS;
+    menuItemColumns.level = 0;
     this.defaultGridColumnMenu.items.push(menuItemColumns);
 
     if (this.options.filtering) {
-        var menuItemFilter = new jasonMenuItem();
+        var menuItemFilter = new jasonMenuItem(this.ui.createElement("li"), null, null);
         menuItemFilter.name = "mnuFilter";
         menuItemFilter.caption = this.options.localization.grid.columnMenu.filter;
         menuItemFilter.title = menuItemFilter.caption;
         menuItemFilter.icon = JW_ICON_SEARCH;
+        menuItemFilter.level = 0;
         menuItemFilter.addEventListener(JW_EVENT_ON_MENU_ITEM_CONTENT_SHOW, this._onFilterShown, this);
         //menuItemFilter.onItemContentShown = this._onFilterShown;
         this.defaultGridColumnMenu.items.push(menuItemFilter);
@@ -8223,24 +8481,26 @@ jasonGrid.prototype._initializeDefaultColumnMenu = function () {
         this.defaultGridColumnMenu.items.push(createJasonMenuDividerItem());
         isDividerAdded = true;
 
-        var menuItemClearSorting = new jasonMenuItem();
+        var menuItemClearSorting = new jasonMenuItem(this.ui.createElement("li"), null, null);
         menuItemClearSorting.name = "mnuClearSorting";
         menuItemClearSorting.caption = this.options.localization.grid.columnMenu.clearSorting;
         menuItemClearSorting.title = menuItemClearSorting.caption;
         menuItemClearSorting.enabled = jasonWidgets.common.assigned(this.options.sorting);
         menuItemClearSorting.clickable = true;
         menuItemClearSorting.icon = JW_ICON_CIRCLE_X;
+        menuItemClearSorting.level = 0;
         this.defaultGridColumnMenu.items.push(menuItemClearSorting);
     }
 
     if (this.options.filtering) {
-        var menuItemClearFiltering = new jasonMenuItem();
+        var menuItemClearFiltering = new jasonMenuItem(this.ui.createElement("li"), null, null);
         menuItemClearFiltering.name = "mnuClearFiltering";
         menuItemClearFiltering.caption = this.options.localization.grid.columnMenu.clearFilters;
         menuItemClearFiltering.title = menuItemClearFiltering.caption;
         menuItemClearFiltering.enabled = jasonWidgets.common.assigned(this.options.sorting);
         menuItemClearFiltering.clickable = true;
         menuItemClearFiltering.icon = JW_ICON_CIRCLE_X;
+        menuItemClearFiltering.level = 0;
         this.defaultGridColumnMenu.items.push(menuItemClearFiltering);
         if (!isDividerAdded)
             this.defaultGridColumnMenu.items.push(createJasonMenuDividerItem());
@@ -8268,6 +8528,7 @@ jasonGrid.prototype._addColumnsToMenu = function () {
         menuItem.hasCheckBox = true;
         menuItem.checked = true;
         menuItem.clickable = true;
+        menuItem.level = 1;
         columnsMenuItem.items.push(menuItem);
     }
 }
@@ -8356,8 +8617,8 @@ jasonGrid.prototype.groupByField = function (fieldName) {
     }
 }
 /**
- * Groups data by a field.
- * @param {string} fieldName - Field name to remove grouping for.
+ * Removes grouping by a field.
+ * @param {string} fieldName - Field name of which the grouping will be removed.
  */
 jasonGrid.prototype.removeGrouping = function (fieldName) {
     if (fieldName) {
@@ -8388,8 +8649,8 @@ jasonGrid.prototype.removeGrouping = function (fieldName) {
 }
 /**
  * Sorts data by a field.
- * @param {string} fieldName - Field name to sort on.
- * @param {string} direction - Sort direction 'asc' or 'desc'. Default is 'asc'
+ * @param {string} fieldName - Field name to sort by.
+ * @param {string} direction - Sort direction is 'asc' or 'desc'. Default is 'asc'.
  */
 jasonGrid.prototype.sortBy = function (fieldName,direction) {
     if (fieldName) {
@@ -8415,7 +8676,7 @@ jasonGrid.prototype.sortBy = function (fieldName,direction) {
 }
 /**
  * Removes sorting by a field.
- * @param {string} fieldName - Field name to sort on.
+ * @param {string} fieldName - Field name of which the sorting will be removed.
  */
 jasonGrid.prototype.removeSorting = function (fieldName) {
     if (fieldName) {
@@ -8426,7 +8687,7 @@ jasonGrid.prototype.removeSorting = function (fieldName) {
 /**
  * Filters by a field.
  * @param {string} fieldName - Field name to filter on.
- * @param {jasonGridFilterValue[]} filterValues - filter values.
+ * @param {jasonGridFilterValue[]} filterValues - Filter values.
  */
 jasonGrid.prototype.filterBy = function (fieldName, filterValues) {
     if (fieldName && filterValues) {
@@ -8435,11 +8696,13 @@ jasonGrid.prototype.filterBy = function (fieldName, filterValues) {
         this.ui._goToPage(1, true);
         this.ui._sizeColumns();
         this.ui.columnMenu.ui.hideMenu();
+        if (this.ui._currentTHElement == null)
+            this.ui._currentTHElement = jw.common.getElementsByAttribute(this.ui.gridHeaderTable, GRID_COLUMN_FIELD_ATTR, fieldName,"th")[0];
         this.ui._currentTHElement.classList.add(GRID_FIELD_HAS_FILTER);
     }
 }
 /**
- * Clears filters by a field.If no field is defined, it clears all filters.
+ * Clears filters by a field. If no field is defined, it clears all filters.
  * @param {string} fieldName - Field name to filter on.
  */
 jasonGrid.prototype.clearFilter = function (fieldName) {
@@ -8452,7 +8715,7 @@ jasonGrid.prototype.clearFilter = function (fieldName) {
     }
 }
 /**
- * Navigates to a grid page, if paging is configured.
+ * Navigates to a grid page if paging is configured.
  * @param {number} pageNumber - Page number to navigate to.
  */
 jasonGrid.prototype.goToPage = function (pageNumber) {
@@ -8461,7 +8724,7 @@ jasonGrid.prototype.goToPage = function (pageNumber) {
     }
 }
 /**
- * Shows a column if column is hidden.
+ * Shows a column if the column is hidden.
  * @param {jasonGridColumn} column - Column to show.
  */
 jasonGrid.prototype.showColumn = function (column) {
@@ -8471,7 +8734,7 @@ jasonGrid.prototype.showColumn = function (column) {
     return true;
 }
 /**
- * Hides a column if column is visible. Cannot hide if there is only one column in the grid.
+ * Hides a column if the column is visible. Cannot hide if there is only one column in the grid.
  * @param {jasonGridColumn} column - Column to hide.
  */
 jasonGrid.prototype.hideColumn = function (column) {
@@ -8481,16 +8744,15 @@ jasonGrid.prototype.hideColumn = function (column) {
     return true;
 }
 /**
- * Moves a column if column is visible. .
+ * Moves a column if the column is visible.
  * @param {jasonGridColumn} column - Column to move.
  * @param {number} newIndex - New index for the column.
  */
-jasonGrid.prototype.moveColumnTo = function (column,newIndex) {
-    jw.common.swapItemsInArray(this.options.columns, column.index, newIndex);
-    this.ui.renderUI();
+jasonGrid.prototype.moveColumnTo = function (column, newIndex) {
+    this.ui.moveColumn(column, newIndex);
 }
 /**
- * Selects a data row and adds its to the selectedRows array, if multiple select is on.
+ * Selects a data row and adds its to the selectedRows array if multiple select is on.
  * @param {jasonGridColumn} column - Column to hide.
  */
 jasonGrid.prototype.selectRow = function (rowIndex) {
@@ -8537,7 +8799,7 @@ jasonGrid.prototype.collapseGroup = function () {
     throw new Error("Not implemented yet.");
 }
 /**
- * Shows filter for a column, if filtering is on and column menu is off.
+ * Shows filter for a column if filtering is on and column menu is off.
  */
 jasonGrid.prototype.collapseGroup = function (column) {
     throw new Error("Not implemented yet.");
@@ -8572,19 +8834,17 @@ jasonDatePicker.prototype.constructor = jasonDatePicker;
  * @augments Common.jasonWidgetOptions
  * @property {string}   [displayFormat=browser locale format] - Defines the display format of the widget.
  * @property {string}   [placeholder=""]   - Defines the placeholder text value.
- * @property {boolean}  [readOnly=false]      - If true does not allow typing. Default false.
+ * @property {boolean}  [readOnly=false]      - If true, does not allow typing. Default is false.
  * @property {date}     [date=now]          - Date value.
  * @property {string}   [mode=date]   - Date or DateTime mode.
  */
 
 /**
- * @class
- * @name jasonDatePickerEvents
- * @description List of events for the DatePicker.
- * @memberOf Date/Time
- * @property {function} onChange - function(value : date)
+ * @event Date/Time.jasonDatePicker#onChange
+ * @type {object}
+ * @property {Date/Time.jasonDatePicker} sender - The date picker instance.
+ * @property {date} value - The new date.
  */
-
 
 /**
  * @constructor
@@ -8594,6 +8854,7 @@ jasonDatePicker.prototype.constructor = jasonDatePicker;
  * @param {HTMLElement} htmlElement - DOM element that will contain the date picker.
  * @param {Date/Time.jasonDatePickerOptions} options - jasonDatePicker options. 
  * @property {date} date - Date value of the widget.
+ * @fires Date/Time.jasonDatePicker#event:onChange
  */
 function jasonDatePicker(htmlElement, options) {
     this.defaultOptions = {
@@ -8749,7 +9010,7 @@ jasonDatePickerUIHelper.prototype.renderUI = function () {
         this.calendarContainer = this.createElement("div");
         document.body.appendChild(this.calendarContainer);
         //this.htmlElement.appendChild(this.calendarContainer);
-        this.jasonCalendar = new jasonCalendar(this.calendarContainer, { invokable: true, autoHide: true, invokableElement: this.htmlElement });
+        this.jasonCalendar = new jasonCalendar(this.calendarContainer, { invokable: true, autoHide: true, invokableElement: this.htmlElement, width:this.options.width });
         this.jasonCalendar.addEventListener(JW_EVENT_ON_CHANGE, this.onCalendarDateChange);
 
         this.initializeEvents();
@@ -8804,7 +9065,7 @@ jasonDatePickerUIHelper.prototype.onCalendarDateChange = function (sender,newDat
  */
 jasonDatePickerUIHelper.prototype.buttonClick = function (clickEvent) {
     this.jasonCalendar.ui.showCalendar(this.widget.date);
-    clickEvent.stopPropagation();
+    //clickEvent.stopPropagation();
 }
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8823,17 +9084,16 @@ jasonTimePicker.prototype.constructor = jasonTimePicker;
  * @augments Common.jasonWidgetOptions
  * @property {string}   [displayFormat=browser locale format] - Defines the display format of the widget.
  * @property {string}   [placeholder=""]   - Defines the placeholder text value.
- * @property {boolean}  [readOnly=false]      - If true does not allow typing.
+ * @property {boolean}  [readOnly=false]      - If true, does not allow typing.
  * @property {date}     [time=now]          - Time value.
  * @property {number}   [interval=15]      - Minute interval of which the time picker will display the items.
  */
 
 /**
- * @class
- * @name jasonTimePickerEvents
- * @description List of events for the TimePicker.
- * @memberOf Date/Time
- * @property {function} onChange - function(value : date)
+ * @event Date/Time.jasonTimePicker#onChange
+ * @type {object}
+ * @property {Date/Time.jasonTimePicker} sender - The time picker instance.
+ * @property {date} value - The new time.
  */
 
 /**
@@ -8844,6 +9104,7 @@ jasonTimePicker.prototype.constructor = jasonTimePicker;
  * @param {HTMLElement} htmlElement - DOM element that will contain the time picker.
  * @param {Date/Time.jasonTimePickerOptions} options - jasonTimePicker options.
  * @property {date} time - Time value of the widget.
+ * @fires Date/Time.jasonTimePicker#event:onChange
  */
 function jasonTimePicker(htmlElement, options) {
     this.defaultOptions = {
@@ -8855,13 +9116,14 @@ function jasonTimePicker(htmlElement, options) {
     };
     jasonWidgets.common.extendObject(this.defaultOptions, options);
     this.prepareData(options);
-    jasonCombobox.call(this, htmlElement, options);
+    jasonCombobox.call(this, htmlElement, options,"jasonTimePicker");
     this._hasKeyStroke = false;
     this._time = jasonWidgets.common.timeOf(this.options.time ? this.options.time : new Date());
     this.cmbInputOnBlur = this.cmbInputOnBlur.bind(this);
     this.cmbInputKeyDown = this.cmbInputKeyDown.bind(this);
     this.eventManager.addEventListener(this.ui.comboboxInput, BLUR_EVENT, this.cmbInputOnBlur);
     this.eventManager.addEventListener(this.ui.comboboxInput, KEY_DOWN_EVENT, this.cmbInputKeyDown);
+    this.addEventListener(JW_EVENT_ON_SELECT_ITEM, this.onTimePickerSelectItem);
     //this.ui.comboboxButtonIcon.className = JW_ICON_CLOCK;
 }
 
@@ -8927,7 +9189,16 @@ jasonTimePicker.prototype._setTime = function (newTime) {
     }
 }
 /**
+ * @ignore
+ */
+jasonTimePicker.prototype.onTimePickerSelectItem = function (sender,value) {
+    if (value.selectedItem) {
+        sender.time = value.selectedItem.time;
+    }
+}
+/**
  * Sets the selected and selecteditemindex from a time value if found.
+ * @ignore
  */
 jasonTimePicker.prototype._selectItemFromTime = function (newTime) {
     var timeItem = null;
@@ -8965,7 +9236,7 @@ jasonTimePicker.prototype.parseTimeValue = function (timeStringValue) {
     var seconds = null;
     var newTime = null;
     for (var i = 0; i <= splittedFormat.length - 1; i++) {
-        if (splittedFormat[i].indexOf("h") >= 0) {
+        if (splittedFormat[i].indexOf("h") >= 0 || splittedFormat[i].indexOf("H") >= 0) {
             hours = parseInt(splittedValue[i]);
             if (jw.localizationManager.isTwelveHourClock && isAM)
                 hours = hours > 12 ? hours - 12 : hours;

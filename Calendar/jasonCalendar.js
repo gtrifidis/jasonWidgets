@@ -13,12 +13,12 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @memberOf Date/Time
  * @description Configuration for the jasonCalendar widget.
  * @property {boolean}  [invokable=true]        - If true the calendar is shown when it's invoked.
- * @property {object=}   invokableElement - Element which upon clicked it will display the calendar.
- * @property {boolean}  [autoHide=false]         - If true the calendar is hidden if there is a mouse click outside the calendar and the calendar is invokable.
+ * @property {object=}   invokableElement - The element which will display the calendar upon click.
+ * @property {boolean}  [autoHide=false]         - If true, the calendar is hidden if there is a mouse click outside the calendar and the calendar is invokable.
  * @property {array}    [specialDates=[]]     - List of special dates. Default is empty.
- * @property {number}   [firstDayOfWeek=1]   - Set the first day of the week. Default is Monday.Index is zero based.
+ * @property {number}   [firstDayOfWeek=1]   - Set the first day of the week. Default is Monday. Index is zero based.
  * @property {boolean}  [multiSelect=false]      - Allows date multi selection.
- * @property {boolean}  [rangeSelect=false]      - Allows date range selection. Similar to multi but the dates must consecutive. 
+ * @property {boolean}  [rangeSelect=false]      - Allows date range selection. Similar to multi but the dates must be consecutive. 
  * @property {number}   [width=300]            - Set the width of the calendar control in pixels.
  * @property {number}   [height=220]           - Set the height of the calendar control in pixels.
  * @property {string}   [calendarMode=days]     - Sets the mode of the calendar. Possible values [days,months,years,decades,centuries].
@@ -29,11 +29,11 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @class
  * @name jasonCalendarSpecialDate
  * @memberOf Date/Time
- * @description A special date; is date that will render a calendar item, with specific tooltip and/or cssClass
+ * @description A special date, is a date that will render a calendar item with a specific tooltip and/or cssClass.
  * @property {date} date            - Can be a date object or valid date string.
  * @property {string} tooltip       - Tooltip to be shown over the calendar item.
  * @property {string} cssClass      - Css class to be added to the calendar item.
- * @property {boolean} recurring    - If set to true then year is not taken into account.Default is false
+ * @property {boolean} recurring    - If set to true then the year is not taken into account. Default is false.
  */
 
 /**
@@ -44,14 +44,14 @@ jasonCalendar.prototype.constructor = jasonCalendar;
  * @property {string} dayName - Day name.
  * @property {string} dayShortName - Day short name.
  * @property {date} date - Item's date value.
- * @property {number} month - Item's month.
+ * @property {number} month - Item's month value.
  * @property {string} monthName - Month name.
  * @property {string} monthShortName - Month short name.
  * @property {number} year - Item's year value.
  * @property {number} decadeStart - Item's decade start value.
  * @property {number} decadeStop - Item's decade stop value.
- * @property {number} centuryStart - Item's decade century value.
- * @property {number} centuryStop - Item's decade century value.
+ * @property {number} centuryStart - Item's century start value.
+ * @property {number} centuryStop - Item's century stop value.
  * @property {string} toolTip - Item's tooltip.
  * @property {string[]} classList - CSS classes to be added to the item.
  */
@@ -79,15 +79,28 @@ function jasonCalendarItem() {
 var
     JW_EVENT_CALENDAR_MODE_CHANGE = "onModeChange",
     JW_EVENT_CALENDAR_NAVIGATE = "onNavigate";
+
 /**
- * @class
- * @name jasonCalendarEvents
- * @memberOf Date/Time
- * @description List of jasonCalendar events
- * @property {function} onChange - function(value : date)
- * @property {function} onModeChange - function(value : string)
- * @property {function} onNavigate - function(value : { navDirection:string, navDate:date})
+ * @event Date/Time.jasonCalendar#onChange
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {date} value - The new date.
  */
+/**
+ * @event Date/Time.jasonCalendar#onModeChange
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {string} value - The new mode. 
+ */
+/**
+ * @event Date/Time.jasonCalendar#onNavigate
+ * @type {object}
+ * @property {Date/Time.jasonCalendar} sender - The calendar instance.
+ * @property {object} value - The event data.
+ * @property {string} value.navDirection - The navigation direction.
+ * @property {date} value.selectedItemIndex - The selected date after the navigation.
+ */
+
 
 /**
  * @constructor
@@ -99,6 +112,9 @@ var
  * @property {date} date - Date value of the widget.
  * @property {Date/Time.jasonCalendarSpecialDate[]} specialDates - Array of special dates.
  * @property {string} mode - Calendar mode. days | months | years | decades
+ * @fires Date/Time.jasonCalendar#event:onChange
+ * @fires Date/Time.jasonCalendar#event:onModeChange
+ * @fires Date/Time.jasonCalendar#event:onNavigate
  */
 function jasonCalendar(htmlElement, options) {
     this.defaultOptions = {
@@ -178,6 +194,7 @@ jasonCalendar.prototype._setDate = function (date) {
 jasonCalendar.prototype._setMode = function (mode) {
     if (mode && this._calendarMode != mode) {
         this._calendarMode = mode;
+        this.ui.renderCalendarItems(this.navigate(null));
         this.triggerEvent(JW_EVENT_CALENDAR_MODE_CHANGE, this._calendarMode);
     }
 }
@@ -460,7 +477,18 @@ jasonCalendar.prototype.getRowDivisionCount = function () {
         default: return 7;
     }
 }
-
+/**
+ * Navigates the calendar back.
+ */
+jasonCalendar.prototype.navigateBack = function () {
+    this.ui.renderCalendarItems(this.navigate("back"));
+}
+/**
+ * Navigates the calendar forward.
+ */
+jasonCalendar.prototype.navigateForward = function () {
+    this.ui.renderCalendarItems(this.navigate("forward"));
+}
 /**
  * Calendar navigate. Navigates based on the current calendar mode.
  * @ignore
@@ -715,9 +743,10 @@ jasonCalendarUIHelper.prototype.renderFooter = function () {
 jasonCalendarUIHelper.prototype.showCalendar = function (date) {
     if (this.options.invokableElement) {
         this.calendarNavigateToday(date ? date : this.widget.date);
-        var coordinates = jw.common.getOffsetCoordinates(this.options.invokableElement);
+        var coordinates = this.options.invokableElement.getBoundingClientRect();//jw.common.getOffsetCoordinates(this.options.invokableElement);
         this.htmlElement.style.left = coordinates.left + "px";
         this.htmlElement.style.top = (coordinates.top + this.options.invokableElement.offsetHeight) + "px";
+        this.htmlElement.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.htmlElement.style.display = "";
     }
 }
@@ -795,8 +824,6 @@ jasonCalendarUIHelper.prototype.calendarDisplayClick = function (clickEvent) {
 
     if (this.widget.mode == "days")
         this.widget.mode = "months";
-
-    this.renderCalendarItems(this.widget.navigate(null));
 }
 /**
  * Calendar item click event handler. It drills in if needed.

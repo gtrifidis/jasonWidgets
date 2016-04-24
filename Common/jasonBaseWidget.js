@@ -6,10 +6,10 @@
  * @class
  * @name jasonWidgetEvent
  * @memberOf Common
- * @description The jasonWidgetEvent is a construct where jasonWidgets consumers can use to register event listeners to a widget.
- * @property {string} eventName - Name of the event to a listener for.
+ * @description The jasonWidgetEvent is a construct that jasonWidgets consumers can use to register event listeners to a widget.
+ * @property {string} eventName - Name of the event.
  * @property {function} listener - Callback function that will be called when the event is triggered. List of params will differ based on the event.
- * @property {object=} callingContext - If defined calls the listener using its value as the calling context.
+ * @property {object=} callingContext - If defined, calls the listener using its value as the calling context.
  */
 
 /**
@@ -102,7 +102,7 @@ jasonBaseWidget.prototype.addBaseClassName = function (element) {
  */
 jasonBaseWidget.prototype.addEventListener = function (eventName, eventListener,callingContext) {
     if (typeof eventListener == "function")
-        this._eventListeners.push({ event: eventName, listener: eventListener, callingContext: callingContext });
+        this._eventListeners.push({ eventName: eventName, listener: eventListener, callingContext: callingContext });
 }
 /**
  * Clean up code, both for UI and widget.
@@ -118,7 +118,7 @@ jasonBaseWidget.prototype.createElement = function (elementTagName, addItToList)
     return this.ui.createElement(elementTagName, addItToList);
 }
 /**
- * JW global event listener.
+ * JasonWidgets global event listener.
  * @param {number} eventCode - event code.
  * @param {any} eventData - event data.
  */
@@ -131,13 +131,14 @@ jasonBaseWidget.prototype.jwProc = function (eventCode, eventData) {
     }
 }
 /**
- * Trigger a widget's event.
+ * Triggers a widget's event.
  * @param {string} eventName - Name of the event.
  * @param {object} eventData - Event's data.
+ * @param {function} eventTriggeredCallback - Callback to be executed when all listeners are notified.
  */
-jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData) {
+jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData,eventTriggeredCallback) {
     var listeners = this._eventListeners.filter(function (eventListener) {
-        return eventListener.event == eventName && eventListener.listener;
+        return eventListener.eventName == eventName && eventListener.listener;
     });
     for (var i = 0; i <= listeners.length - 1; i++) {
         var listenerObject = listeners[i];
@@ -146,9 +147,11 @@ jasonBaseWidget.prototype.triggerEvent = function (eventName,eventData) {
         else
             listenerObject.listener(this, eventData);
     }
+    if (eventTriggeredCallback != void 0)
+        eventTriggeredCallback();
 }
 /**
- * Updates widget's options. Descendants will to implement this,in order for the widgets
+ * Updates the widget options. Descendants will implement this in order for the widgets
  * to dynamically react to option changes.
  * @abstract
  * @param {object} options - Widget's options object.
@@ -198,7 +201,7 @@ Object.defineProperty(jasonBaseWidget.prototype, "readOnly", {
  * @constructor
  * @name jasonBaseWidgetUIHelper
  * @memberOf Common
- * @description The base class for all jason widgets UI helpers. It has all the UI logic, that widgets needs.Events,DOM creation,etc.
+ * @description The base class for all jasonWidgets UI helpers. It has all the UI logic that widgets need.Events, DOM creation, etc.
  * @param {Common.jasonWidgetBase} widget - jasonWidget.
  * @param {HTMLElement} htmlElement - HTMLElement that the widget will be attached to.
  * @property {Common.jasonWidgetOptions} options - widgets options.

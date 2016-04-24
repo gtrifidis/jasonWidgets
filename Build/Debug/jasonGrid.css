@@ -21,7 +21,7 @@
   border-top: 1px solid #c9c9c9;
   border-right: 1px solid #c9c9c9;
   /*background-color: @jwGridHeaderBGColor;*/
-  color: #222222 !important;
+  color: #fff !important;
   font-size: 12px !important;
 }
 .jw-grid-header-container .jw-grid-header-table-container {
@@ -75,7 +75,7 @@
   display: inline-block;
 }
 .jw-grid-header-container table th.jw-grid-column-has-filter {
-  background-color: #E4E4E4;
+  background-color: #1E88E5;
 }
 .jw-grid-header-container .jw-column-resize {
   cursor: col-resize;
@@ -134,7 +134,7 @@
   /*we want the table cells not wrap , but hide their overflow*/
 }
 .jw-grid-data-container table .jw-grid-row .group-cell {
-  background-color: #E4E4E4;
+  background-color: #fff;
 }
 .jw-grid-data-container table .jw-grid-row td {
   overflow: hidden;
@@ -144,7 +144,7 @@
   white-space: nowrap;
 }
 .jw-grid-data-container table .jw-grid-row.group-row {
-  background-color: #E4E4E4;
+  background-color: #fff;
 }
 .jw-grid-data-container table .jw-grid-row.group-row i {
   margin-left: 5px;
@@ -154,7 +154,7 @@
 }
 .jw-grid-data-container table .jw-grid-row:hover,
 .jw-grid-data-container table .jw-grid-row.row-alt:hover {
-  background-color: #E0E0E0;
+  background-color: #EEEEEE;
   color: #000000;
 }
 .jw-grid-data-container table .jw-grid-no-data-row {
@@ -162,20 +162,21 @@
   font-weight: 700;
 }
 .jw-grid-data-container table .jw-grid-row.row-alt {
-  background-color: #F5F5F5;
+  background-color: #fff;
 }
 .jw-grid-data-container table .jw-grid-row.row-selected {
-  background-color: #E0E0E0;
+  background-color: #EEEEEE;
   color: #000000;
 }
 .jw-grid-data-container table .jw-grid-cell.cell-selected {
-  outline: 3px auto #9E9E9E;
+  outline: 3px auto #616161;
 }
 /* #endregion jw-grid-data - end*/
 /* #region jw-grid-footer*/
 .jw-grid-footer-container {
   /*background-color: @jwFooterContainerBGColor;*/
   border: 1px solid #c9c9c9;
+  height: 35px;
   /*height: 35px;
     padding: 5px 5px 0 5px;*/
   /* #region grid statusbar - start*/
@@ -278,10 +279,10 @@
 /* #region grid groupcontainer - start*/
 .jw-grid-group-container {
   height: 35px;
-  background-color: #FAFAFA;
-  color: #222222;
+  background-color: #0D47A1;
+  color: #fff;
   font-family: sans-serif;
-  border: 1px dashed #c9c9c9;
+  border: 1px solid #fff;
   border-bottom-style: none;
   width: 100%;
 }

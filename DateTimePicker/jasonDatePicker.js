@@ -21,19 +21,17 @@ jasonDatePicker.prototype.constructor = jasonDatePicker;
  * @augments Common.jasonWidgetOptions
  * @property {string}   [displayFormat=browser locale format] - Defines the display format of the widget.
  * @property {string}   [placeholder=""]   - Defines the placeholder text value.
- * @property {boolean}  [readOnly=false]      - If true does not allow typing. Default false.
+ * @property {boolean}  [readOnly=false]      - If true, does not allow typing. Default is false.
  * @property {date}     [date=now]          - Date value.
  * @property {string}   [mode=date]   - Date or DateTime mode.
  */
 
 /**
- * @class
- * @name jasonDatePickerEvents
- * @description List of events for the DatePicker.
- * @memberOf Date/Time
- * @property {function} onChange - function(value : date)
+ * @event Date/Time.jasonDatePicker#onChange
+ * @type {object}
+ * @property {Date/Time.jasonDatePicker} sender - The date picker instance.
+ * @property {date} value - The new date.
  */
-
 
 /**
  * @constructor
@@ -43,6 +41,7 @@ jasonDatePicker.prototype.constructor = jasonDatePicker;
  * @param {HTMLElement} htmlElement - DOM element that will contain the date picker.
  * @param {Date/Time.jasonDatePickerOptions} options - jasonDatePicker options. 
  * @property {date} date - Date value of the widget.
+ * @fires Date/Time.jasonDatePicker#event:onChange
  */
 function jasonDatePicker(htmlElement, options) {
     this.defaultOptions = {
@@ -198,7 +197,7 @@ jasonDatePickerUIHelper.prototype.renderUI = function () {
         this.calendarContainer = this.createElement("div");
         document.body.appendChild(this.calendarContainer);
         //this.htmlElement.appendChild(this.calendarContainer);
-        this.jasonCalendar = new jasonCalendar(this.calendarContainer, { invokable: true, autoHide: true, invokableElement: this.htmlElement });
+        this.jasonCalendar = new jasonCalendar(this.calendarContainer, { invokable: true, autoHide: true, invokableElement: this.htmlElement, width:this.options.width });
         this.jasonCalendar.addEventListener(JW_EVENT_ON_CHANGE, this.onCalendarDateChange);
 
         this.initializeEvents();
@@ -253,5 +252,5 @@ jasonDatePickerUIHelper.prototype.onCalendarDateChange = function (sender,newDat
  */
 jasonDatePickerUIHelper.prototype.buttonClick = function (clickEvent) {
     this.jasonCalendar.ui.showCalendar(this.widget.date);
-    clickEvent.stopPropagation();
+    //clickEvent.stopPropagation();
 }

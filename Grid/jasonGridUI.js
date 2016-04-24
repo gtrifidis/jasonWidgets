@@ -75,6 +75,19 @@ function jasonGridUIHelper(widget, htmlElement) {
     this._renderHeader();
     //setting column reordering, resize and grouping functionality.
     this._enableColumnDragResize();
+    this.isReRendering = false;
+    this.monitorChanges = this.monitorChanges.bind(this);
+}
+
+jasonGridUIHelper.prototype.monitorChanges = function () {
+    window.requestAnimationFrame(this.monitorChanges);
+    if (this.isReRendering)
+        return;
+    if (this.gridHeaderTable.clientWidth != this.gridDataTable.clientWidth) {
+        this.isReRendering = true;
+        this._sizeColumns();
+        this.isReRendering = false;
+    }
 }
 
 //#region Object properties
@@ -94,14 +107,11 @@ jasonGridUIHelper.prototype._createColumnMenu = function () {
         orientation: 'vertical',
         autoHide:true,
         events: [
-            { event: JW_EVENT_ON_MENU_CHECKBOX_CLICKED, listener: this._onColumnMenuItemChecked, callingContext: this },
-            { event: JW_EVENT_ON_MENU_ITEM_CLICKED, listener: this._onColumnMenuItemClicked, callingContext: this },
-            { event: JW_EVENT_ON_MENU_HIDDEN, listener: this._onColumnMenuHidden, callingContext: this }
+            { eventName: JW_EVENT_ON_MENU_CHECKBOX_CLICKED, listener: this._onColumnMenuItemChecked, callingContext: this },
+            { eventName: JW_EVENT_ON_MENU_ITEM_CLICKED, listener: this._onColumnMenuItemClicked, callingContext: this },
+            { eventName: JW_EVENT_ON_MENU_HIDDEN, listener: this._onColumnMenuHidden, callingContext: this }
         ],
     }, jasonMenuUIHelper);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_CHECKBOX_CLICKED, this._onColumnMenuItemChecked, this);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_ITEM_CLICKED, this._onColumnMenuItemClicked, this);
-    //this.columnMenu.addEventListener(JW_EVENT_ON_MENU_HIDDEN, this._onColumnMenuHidden, this);
 }
 //#endregion
 
@@ -185,17 +195,22 @@ jasonGridUIHelper.prototype._onColumnMenuItemChecked = function (sender,eventDat
  */
 jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventData) {
     /*first try to find the corresponding column*/
-    var columnIndex = eventData.uiHelper.invokableElement.getAttribute(GRID_COLUMN_ID_ATTR);
-    if (columnIndex)
-        columnIndex = parseInt(columnIndex);
-    var column = this.options.columns[columnIndex];
+    //var columnIndex = eventData.uiHelper.invokableElement.getAttribute(GRID_COLUMN_ID_ATTR);
+    //if (!columnIndex)
+    //    columnIndex = jw.common.getElementsByAttribute(eventData.uiHelper.invokableElement, GRID_COLUMN_ID_ATTR, "*")[0];
+    //if (columnIndex)
+    //    columnIndex = parseInt(columnIndex);
+    //var column = this.options.columns[columnIndex];
+    var column = this._currentFilterColumn;
     switch (eventData.item.name) {
         case "mnuSortAsc": {
             this.widget.sortBy(column.fieldName, "asc");
+            this.columnMenu.ui.hideMenu();
             break;
         }
         case "mnuSortDesc": {
             this.widget.sortBy(column.fieldName, "desc");
+            this.columnMenu.ui.hideMenu();
             break;
         }
         case "mnuClearSorting": {
@@ -350,11 +365,14 @@ jasonGridUIHelper.prototype._onGroupCollapseExpandIconClick = function (event) {
         iconNode.className = "jw-icon arrow-circle-top-2x";
         groupRow.setAttribute(DATA_GROUP_EXPANDED_ATTR, "false");
         this._collapseGroup(groupRow);
+
+        this.widget.triggerEvent(JW_EVENT_ON_GROUP_COLLAPSE,groupRow.getAttribute(DATA_GROUPING_KEY_ATTR))
     }
     else {
         iconNode.className = "jw-icon arrow-circle-bottom-2x";
         groupRow.setAttribute(DATA_GROUP_EXPANDED_ATTR, "true");
         this._expandGroup(groupRow);
+        this.widget.triggerEvent(JW_EVENT_ON_GROUP_EXPAND,groupRow.getAttribute(DATA_GROUPING_KEY_ATTR))
     }
 }
 /**
@@ -386,22 +404,39 @@ jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
             var columnFieldFromPoint = parentElementFromPoint.getAttribute(GRID_COLUMN_FIELD_ATTR);
             var columnFromPoint = this.widget._columnByField(columnFieldFromPoint);
             if (columnFromPoint.index != droppedColumn.index) {
-                jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
-                jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
+                //jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
 
-                var droppedIndex = droppedColumn.index;
-                droppedColumn.index = columnFromPoint.index;
-                columnFromPoint.index = droppedIndex;
+                //var droppedIndex = droppedColumn.index;
+                //droppedColumn.index = columnFromPoint.index;
+                //columnFromPoint.index = droppedIndex;
 
 
 
-                this.renderUI();
-                this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: droppedColumn.index, toIndex: columnFromPoint.index });
+                //this.renderUI();
+                //this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: columnFromPoint.index, toIndex: droppedColumn.index });
+                this.moveColumn(droppedColumn, columnFromPoint.index);
             }
         }
     }
+}
+/**
+ * 
+ */
+jasonGridUIHelper.prototype.moveColumn = function (column, newIndex) {
+    jw.common.swapItemsInArray(this.options.columns, column.index, newIndex);
+    jw.common.swapDomElements(this.gridHeaderTableRow, column.index, newIndex);
+    jw.common.swapDomElements(this.headerTableColGroup, column.index, newIndex);
+    jw.common.swapDomElements(this.dataTableColGroup, column.index, newIndex);
+
+    var droppedIndex = column.index;
+    column.index = newIndex;
+    this.options.columns[newIndex].index = droppedIndex;
+
+    this.renderUI();
+    this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index, toIndex: newIndex });
 }
 /**
  * Called when a column resize is ends.
@@ -412,6 +447,7 @@ jasonGridUIHelper.prototype._onColumnResizeEnd = function (event, htmlElement) {
     if (column) {
         column.width = htmlElement.offsetWidth;
     }
+    this.widget.triggerEvent(JW_EVENT_ON_COLUMN_RESIZED, {column:column,newWidth:column.width});
 }
 /**
  * Removes grouping.
@@ -451,13 +487,15 @@ jasonGridUIHelper.prototype.renderUI = function (recordStart,recordStop) {
 
     /*last but not least the footer*/
     this._renderFooter(toRecord);
-    //var self = this;
-    //setTimeout(function () {
-    //    self.htmlElement.style.display = "none";
-    //    setTimeout(function () {
-    //        self.htmlElement.style.display = "";
-    //    });
-    //},5000);
+
+    var calcHeightDiff = 35;
+    if (this.options.grouping)
+        calcHeightDiff = calcHeightDiff + 35;
+    if(this.options.paging)
+        calcHeightDiff = calcHeightDiff + 35;
+    this.gridDataContainer.style.height = jw.common.formatString("calc(100% - {0}px", [calcHeightDiff]);
+    if (this.gridDataContainer.style.height == "")
+        this.gridDataContainer.style.height = jw.common.formatString("calc(100% - {0}px", [calcHeightDiff]);
 }
 /**
  * Creates header,data and footer containers for the grid
@@ -575,7 +613,7 @@ jasonGridUIHelper.prototype._sizeColumns = function () {
      * The header and the data table appear to home much smaller width and the UI is broken.
      * If the htmlElement is hidden and shown then Safari renders correctly the HTML.
      */
-    if (this._firstRun) {
+    if (window.navigator.vendor.indexOf("Apple")>=0) {
         this._firstRun = false;
         var self = this;
         this.htmlElement.style.display = "none";
@@ -993,7 +1031,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                     captionElement.innerHTML = gridColumn.headerTemplate;
                 else
                     captionElement.appendChild(this.createTextNode(gridColumn.caption));
-                this.eventManager.addEventListener(captionElement, CLICK_EVENT, this._onGridColumnCaptionClick, true);
+                this.eventManager.addEventListener(captionElement, MOUSE_DOWN_EVENT, this._onGridColumnCaptionClick, true);
                 this.eventManager.addEventListener(captionElement, TOUCH_START_EVENT, function (touchEvent) {
                     //prevent default behavior and stop propagation.
                     touchEvent.preventDefault();
@@ -1018,6 +1056,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                 },true);
                 this.eventManager.addEventListener(gridColumnMenuIconAnchor, MOUSE_DOWN_EVENT, function (mouseEvent) { mouseEvent.stopPropagation(); }, true);
                 headerCellIconContainer.appendChild(gridColumnMenuIconAnchor);
+                //headerCellIconContainer.setAttribute(GRID_COLUMN_ID_ATTR, columnIndex);
             }
             if (this.options.filtering == true && this.options.columnMenu == false) {
                 var filterIconElement = this.createElement("i");
@@ -1159,6 +1198,7 @@ jasonGridUIHelper.prototype._createGrouppingRow = function (groupNode) {
     newRow.classList.add(GRID_TABLE_ROW_CLASS);
     newRow.classList.add(GRID_TABLE_GROUP_ROW_CLASS);
     newRow.setAttribute(DATA_GROUPING_LEVEL_ATTR, groupNode.level);
+    newRow.setAttribute(DATA_GROUPING_KEY_ATTR, groupNode.key);
     newCell.setAttribute(COLSPAN_ATTR, this.options.columns.filter(function (col) { return col.visible == true; }).length);
     newCell.appendChild(iconNode);
     newCell.appendChild(this.createTextNode(groupNode.key));

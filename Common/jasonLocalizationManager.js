@@ -14,7 +14,7 @@
  * @description Localization class that manages localization for all jasonWidgets. It holds a list of all registered {@link Localization.jasonWidgetLanguage}
  * and {@link Localization.jasonWidgetCulture}.
  *
- * To register a lagnuage or culture, create a js file in which a descendant of {@link Localization.jasonWidgetLanguage} is created and
+ * To register a language or culture, create a js file in which a descendant of {@link Localization.jasonWidgetLanguage} is created and
  * registered.
  *
  * @memberOf Localization
@@ -226,7 +226,7 @@ function jasonLocalizationManager() {
  * 
  * jasonWidgets.localizationManager.languages["en-US"] = new jasonWidgetLanguageEN();
  * 
- * @property {string} key - Unique language key. For example en-US.
+ * @property {string} key - Unique language key. For example: en-US.
  * @property {object} search - Search localization.
  * @property {object} search.searchPlaceHolder - Text for the placeholder attribute of <input placeholder='Placeholder text!'> elements.
  * @property {object} filter - Filter localization.
@@ -242,14 +242,14 @@ function jasonLocalizationManager() {
  * @property {string} filter.filterValueLessEqualTo - 
  * @property {string} filter.filterHeaderCaption - Filter header caption.
  * @property {object} data - Data localization.
- * @property {string} data.noData - Text when no data are available.
+ * @property {string} data.noData - Text when no data is available.
  * @property {object} grid - Grid localization.
  * @property {object} grid.paging - Grid paging localization.
  * @property {string} grid.firstPageButton - Pager's first button text.
- * @property {string} grid.priorPageButton - Pager's prior button text..
- * @property {string} grid.nextPageButton - Pager's next button text..
- * @property {string} grid.lastPageButton - Pager's last button text..
- * @property {string} grid.pagerInputTooltip - Pager's input tooltip text..
+ * @property {string} grid.priorPageButton - Pager's prior button text.
+ * @property {string} grid.nextPageButton - Pager's next button text.
+ * @property {string} grid.lastPageButton - Pager's last button text.
+ * @property {string} grid.pagerInputTooltip - Pager's input tooltip text.
  * @property {object} grid.grouping - Grid grouping localization.
  * @property {string} grid.grouping.groupingMessage -  Grouping instruction message on how to group data by column.
  * @property {object} grid.filtering - Grid filtering localization.
@@ -333,7 +333,7 @@ function jasonWidgetLanguage() {
  * Culture class contains localized information for jasonWidgets for a culture.
  * 
  * 
- * For acceptable date/time formats go here {@link https://msdn.microsoft.com/en-us/library/8kb3ddd4%28v=vs.110%29.aspx}
+ * For acceptable date/time formats look here {@link https://msdn.microsoft.com/en-us/library/8kb3ddd4%28v=vs.110%29.aspx}
  * 
  * @example Creating an English culture localization file.
  * //file must be loaded after localization manager.
@@ -352,7 +352,7 @@ function jasonWidgetLanguage() {
  * jasonWidgets.localizationManager.cultures["en-US"] = new jasonWidgetCultureEN_US();
  * 
  * 
- * @property {string} key - Unique language key. For example en-US.
+ * @property {string} key - Unique culture key. For example: en-US.
  * @property {string} dateFormat - Date format string. 
  * @property {string} shortDateFormat - Short date format string.
  * @property {string} longDateFormat - Long date format string.

@@ -41,7 +41,7 @@ var
  */
 function jasonHTMLFactory() {
     /**
-     * Creates the HTML for a jwButton
+     * Creates the HTML for a jwButton.
      * @param {string=} caption - Button caption.
      * @param {string=} iconClass - Icon class name.
      */
@@ -67,7 +67,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Creates the HTML for a text input styled for JW.
+     * Creates the HTML for a text input styled for jasonWidgets.
      * @param {string=} inputMode - Input mode attribute value.
      * @param {string=} placeHolder - Placeholder attribute value.
      * @param {boolean=} readOnly - Readonly attribute value.
@@ -88,7 +88,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Creates the HTML for a jwLabel
+     * Creates the HTML for a jwLabel.
      * @param {string=} caption - Label caption.
      */
     jasonHTMLFactory.prototype.createJWLinkLabel = function (caption) {
@@ -108,9 +108,10 @@ function jasonHTMLFactory() {
      * Creates the HTML for a jwMenuItem.
      * @param {string} [orientation = 'horizontal'] orientation - Parent menu's orientation.
      * @param {object} options - HTML factory menu item creation options.
+     * @param {HTMLElement=} element - If provided instead of creating a new element, the element passed will be used.
      */
-    jasonHTMLFactory.prototype.createJWMenuItem = function (orientation,options) {
-        var result = document.createElement("li");
+    jasonHTMLFactory.prototype.createJWMenuItem = function (orientation, options, element) {
+        var result = element == void 0 ? document.createElement("li") : element;
         var menuCaption;
         result.classList.add(JW_MENU_ITEM);
 
@@ -163,7 +164,12 @@ function jasonHTMLFactory() {
         if (options.items != void 0 && options.items.length > 0) {
             var arrowWrapper = document.createElement("div");
             var arrowElement = document.createElement("i");
-            arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_DOWN : JW_ICON_CHEVRON_RIGHT;
+            if (options.level == 0) {
+                arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_DOWN : JW_ICON_CHEVRON_RIGHT;
+            } else {
+                arrowElement.className = orientation == "horizontal" ? JW_ICON_CHEVRON_RIGHT : JW_ICON_CHEVRON_DOWN;
+            }
+            
             menuCaption.classList.add("has-arrow");
             arrowWrapper.appendChild(arrowElement);
             arrowWrapper.classList.add(JW_MENU_ITEM_ARROW);
@@ -174,7 +180,7 @@ function jasonHTMLFactory() {
         return result;
     }
     /**
-     * Converts an existin li element to a jwMenuItem element
+     * Converts an existing li element to a jwMenuItem element
      * @param {string=} orientation - Parent menu's orientation.
      * @param {HTMLElement} liElement - HTML factory menu item creation options.
      */

@@ -20,6 +20,7 @@ var
     DATA_GROUPING_FIELD_ATTR = "jw-data-grouping-field",
     DATA_GROUP_EXPANDED_ATTR = "jw-data-group-expanded",
     DATA_GROUP_COLLAPSED_ATTR = "jw-data-group-collpsed",
+    DATA_GROUPING_KEY_ATTR = "jw-data-group-key",
     ITEM_INDEX_ATTR = "jw-item-index",
     CLEAR_FLOAT_CLASS = "jw-clear-float",
     JW_DISABLED = "jw-disabled",
@@ -116,8 +117,8 @@ function jasonCommon() {
         return formatString;
     }
     /**
-     * Returns the count of a char in a string .
-     * @param {string} char - Char to search for."
+     * Returns the count of a char in a string.
+     * @param {string} char - Char to search for.
      * @param {array} args - String that contains the char.
      * @returns {number} count.
      */
@@ -376,7 +377,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Get element parent element if it exists
+     * Get element parent element if it exists.
      * @param {string}  classOrId - Class name or id or tagName to identify the parent.
      * @param {HTMLElement}  childElement - Child element to start the search from.
      * @returns {HTMLElement} parentNode.
@@ -429,9 +430,9 @@ function jasonCommon() {
     }
     /**
      * Stores arbitrary data associated with an element.
-     * @param {object} element - HTMLElement. The element be associated with.
+     * @param {object} element - HTMLElement. The element to be associated with.
      * @param {string} name - Identifier for the data to be stored.
-     * @param {object} value - Any value to stored.
+     * @param {object} value - Any value to be stored.
      */
     jasonCommon.prototype.setData = function (element, name, value) {
         if (element) {
@@ -441,7 +442,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Removes data that were associated to an element.
+     * Removes data that was associated to an element.
      * @param {object} element - HTMLElement. The element be associated with.
      * @param {string} name - Identifier for the data to be removed.
      */
@@ -459,8 +460,8 @@ function jasonCommon() {
         }
     }
     /**
-     * Retrieves data that were associated to an element.
-     * @param {object} element - HTMLElement. The element be associated with.
+     * Retrieves data that was associated to an element.
+     * @param {object} element - HTMLElement. The element to be associated with.
      * @param {string} name - Identifier for the data to be retrieved.
      * @returns {object}
      */
@@ -474,10 +475,10 @@ function jasonCommon() {
         return null;
     }
     /**
-     * Swap child places
+     * Swap child places.
      * @param {any[]} array - Array that contains items.
      * @param {number} indexToMove - Current index of the item to move.
-     * @param {number} newIndex - New index to move item to.
+     * @param {number} newIndex - New index to move the item to.
      */
     jasonCommon.prototype.swapItemsInArray = function (array, indexToMove, newIndex) {
         var itemToMove = array[indexToMove];
@@ -488,10 +489,10 @@ function jasonCommon() {
         }
     }
     /**
-     * Swap dom elements places
+     * Swap dom elements places.
      * @param {any[]} array - Array that contains items.
      * @param {number} indexToMove - Current index of the item to move.
-     * @param {number} newIndex - New index to move item to.
+     * @param {number} newIndex - New index to move the item to.
      */
     jasonCommon.prototype.swapDomElements = function (container, indexToMove, newIndex) {
         if (container != void 0 && indexToMove != void 0 && newIndex != void 0) {
@@ -509,9 +510,9 @@ function jasonCommon() {
      * Moves children nodes from an element to another element.
      * @param {object} sourceElement - HTMLElement. The element that has the child nodes.
      * @param {object} targetElement - HTMLElement. The element that will have the child nodes.
-     * @param {array=} elementTagsToMove If defined only nodes with tagNames included in the array will be moved.
-     * @param {array=} elementTagsToExclude - If defined nodes with tagNames included in the array will be excluded from the move.
-     * @param {array=} classesToExclude - If defined nodes with classNames included in the array will be excluded from the move.
+     * @param {array=} elementTagsToMove If defined, only nodes with tagNames included in the array will be moved.
+     * @param {array=} elementTagsToExclude - If defined, nodes with tagNames included in the array will be excluded from the move.
+     * @param {array=} classesToExclude - If defined, nodes with classNames included in the array will be excluded from the move.
      */
     jasonCommon.prototype.moveChildrenTo = function (sourceElement, targetElement,elementTagsToMove,elementTagsToExclude,classesToExclude) {
         var OldChildren = [];
@@ -551,11 +552,11 @@ function jasonCommon() {
         }
     }
     /**
-     * Applies style property value to an child elements of an element.
+     * Applies style property value to child elements of an element.
      * @param {object} element - HTMLElement. The element to apply the style to.
      * @param {string} propertyName - Style property to be applied.
      * @param {any} propertyName - Style property value to be applied.
-     * @param {string} elementIdentifier - if defined it will apply style only to elements that match the identifier.Identifier can be the ID, a class or a tagName. 
+     * @param {string} elementIdentifier - If defined, it will apply style only to elements that match the identifier. Identifier can be the ID, a class or a tagName. 
      * @param {boolean} recursive - If true it will be applied to all child nodes regardless of nesting level.
      */
     jasonCommon.prototype.applyStyleProperty = function (element, propertyName, value,elementIdentifier,recursive) {
@@ -573,12 +574,12 @@ function jasonCommon() {
         }
     }
     /**
-     * Adds or removes class names from childs of an element
+     * Adds or removes class names from childs of an element.
      * @param {HTMLElement} element - Element to add or remove classes to.
      * @param {string} className - Class name to add/remove.
-     * @param {boolean} add - If true it will add the class. Default false.
-     * @param {string=} elementIdentifier - If defined it apply the action only to elements that match the identifier. Identifier can be the ID attribute | class name | tagName.
-     * @param {boolean}  recursive - If true it will apply the action to children's children also. Default is false.
+     * @param {boolean} add - If true it will add the class. The default is false.
+     * @param {string=} elementIdentifier - If defined it will apply the action only to elements that match the identifier. The identifier can be the ID attribute | class name | tagName.
+     * @param {boolean}  recursive - If true it will apply the action to children's children also. The default is false.
      */
     jasonCommon.prototype.cssClass = function (element, className, add, elementIdentifier, recursive) {
         for (var i = 0; i <= element.children.length - 1; i++) {
@@ -605,7 +606,7 @@ function jasonCommon() {
     /**
      * Fade out effect.
      * @param {object} element - HTMLElement. The element to apply the fade out to.
-     * @param {number} interval - Fade out duration
+     * @param {number} interval - Fade out duration.
      */
     jasonCommon.prototype.fadeOut = function (element, interval) {
         if (!element._jasonWidgetsFadeOut) {
@@ -625,7 +626,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns true the element is an inline element
+     * Returns true if the element is an inline element.
      * @param {object} element - HTMLElement.
      * @returns {boolean}
      */
@@ -637,7 +638,7 @@ function jasonCommon() {
         return false;
     }
     /**
-     * Returns true the element is an block element
+     * Returns true if the element is a block element.
      * @param {object} element - HTMLElement.
      * @returns {boolean}
      */
@@ -678,7 +679,7 @@ function jasonCommon() {
         return metrics.width;
     }
     /**
-     * Returns the computed style property value of an element
+     * Returns the computed style property value of an element.
      * @param {object} element - HTMLElement.
      * @param {string} property - Property name.
      * @returns {string}
@@ -687,7 +688,7 @@ function jasonCommon() {
         return window.getComputedStyle(element, null).getPropertyValue(property);
     }
     /**
-     * Replaces an element's text value
+     * Replaces an element's text value.
      * @param {object} element - HTMLElement.
      * @param {string} newText - New text value.
      */
@@ -707,7 +708,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Removes an element's text value
+     * Removes an element's text value.
      * @param {object} element - HTMLElement.
      * @param {string} newText - New text value.
      */
@@ -724,7 +725,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns the first textnode of the element
+     * Returns the first textnode of the element.
      * @param {object} element - HTMLElement.
      * @returns {HTMLElement}
      */
@@ -739,15 +740,15 @@ function jasonCommon() {
         return textNode;
     }
     /**
-     * Returns all elements that match the search criteria
-     * @param {HTMLElement=} element - If not set search scope will be the document.
+     * Returns all elements that match the search criteria.
+     * @param {HTMLElement=} element - If not set, search scope will be the document.
      * @param {string} attributeName - name of the attribute.
      * @param {string} attributeValue - value of the attribute.
      * @returns {array}
      */
-    jasonCommon.prototype.getElementsByAttribute = function (containerElement,attributeName,attributeValue) {
+    jasonCommon.prototype.getElementsByAttribute = function (containerElement,attributeName,attributeValue,elementTag) {
         var container = containerElement ? containerElement : document;
-        var queryString = "*[{0}='{1}']";
+        var queryString = elementTag === void 0 ? "*[{0}='{1}']" : elementTag + "[{0}='{1}']";
         return container.querySelectorAll(jw.common.formatString(queryString,[attributeName,attributeValue]));
     }
     /**
@@ -805,7 +806,7 @@ function jasonCommon() {
 //        return !(any == undefined || any == null);
     }
     /**
-     * Converts a string to boolean
+     * Converts a string to boolean.
      * @param {string} boolStr - String to convert to boolean.
      * @returns {boolean}
      */
@@ -815,7 +816,7 @@ function jasonCommon() {
         return false;
     }
     /**
-     * Converts a boolean to string
+     * Converts a boolean to string.
      * @param {boolean} bool - Boolean value to convert to string.
      * @returns {string}
      */
@@ -899,7 +900,7 @@ function jasonCommon() {
         return valueToConvert;
     }
     /**
-     * Returns a date object with no time information
+     * Returns a date object with no time information.
      * @property {date} Date - Date object from which time information will be removed.
      * @returns {date}
      */
@@ -916,7 +917,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns a date object with no date information
+     * Returns a date object with no date information.
      * @property {date} Date - Date object from which date information will be removed.
      * @returns {date}
      */
@@ -933,7 +934,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2 if the second date.
+     * Returns 0 if the date part of the date object is equal. Returns 1 if the 1st date is bigger and 2nd if the second date is bigger.
      * @property {date} date1 - Date object.
      * @property {date} date2 - Date object.
      * @returns {number}
@@ -949,7 +950,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2 if the second date.
+     * Returns 0 if the date part of the date objects is equal. Returns 1 if the 1st date is bigger and 2nd if the second date is bigger.
      * @property {date} date1 - Date object.
      * @property {date} date2 - Date object.
      * @returns {number}
@@ -974,7 +975,7 @@ function jasonCommon() {
         return new Date(year, month, 0).getDate();
     }
     /**
-     * Returns day count in a year
+     * Returns day count in a year.
      * @param {number} year - Year.
      * @returns {number}
      */
@@ -988,7 +989,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Returns true the property exists on the object.
+     * Returns true if the property exists on the object.
      * @param {object} object - Object to search property in.
      * @param {string} propertyName - Name of the property to search for.
      * @returns {boolean}
@@ -1028,9 +1029,9 @@ function jasonCommon() {
         return result && !jw.common.contains(element, mouseEvent.target);
     }
     /**
-     * Removes any events added to the element and its children by JW. 
-     * @param {HTMLElement} element - Element to remove jasonWidget events.
-     * @param {boolean} recursive - If true it will be applied to the children of the element. Default is true.
+     * Removes any events added to the element and its children by jasonWidgets. 
+     * @param {HTMLElement} element - Element from which to remove jasonWidget events.
+     * @param {boolean} recursive - If true, it will be applied to the children of the element. The default is true.
      */
     jasonCommon.prototype.removeJWEvents = function (element,recursive) {
         var events = element._jasonWidgetsEventListeners_;
@@ -1065,7 +1066,7 @@ function jasonCommon() {
         }
     }
     /**
-     * Add a global event listener
+     * Add a global event listener.
      * @param {function} listener - Listener function.
      */
     jasonCommon.prototype.addGlobalEventListener = function (listener) {
@@ -1095,7 +1096,7 @@ function jasonCommon() {
         return result;
     }
     /**
-     * Trigger global event
+     * Trigger global event.
      * @param {number} eventCode - Code event to trigger.
      * @param {object=} eventData - Event data.
      */

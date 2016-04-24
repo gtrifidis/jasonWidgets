@@ -8,8 +8,8 @@ jasonContextMenuUIHelper.prototype.constructor = jasonContextMenuUIHelper;
 /**
  * @class
  * @name jasonMenuContextOptions
- * @augments jasonMenuOptions
- * @description Context jasonMenu options.Extends {@linkcode jasonMenuOptions}
+ * @augments Menus.jasonMenuOptions
+ * @description Context jasonMenu options.
  * @property {HTMLElement}  [target=undefined] - Target HTML Element for the context menu.
  * @memberOf Menus
  */

@@ -9,7 +9,7 @@
 .jw-button:hover,
 .jw-button:focus {
   outline: 0;
-  box-shadow: 0 0 3px 2px #9E9E9E;
+  box-shadow: 0 0 3px 2px #2196F3;
 }
 .jw-calendar {
   border: 1px solid #c9c9c9;
@@ -22,8 +22,8 @@
   user-select: none;
   height: 15%;
   border-bottom: 1px solid #c9c9c9;
-  background-color: #BDBDBD;
-  color: #000000;
+  background-color: #1565C0;
+  color: #fff;
 }
 .jw-calendar .jw-calendar-header .jw-calendar-back {
   /*float: left;*/
@@ -33,7 +33,7 @@
   vertical-align: middle;
 }
 .jw-calendar .jw-calendar-header .jw-calendar-back a:focus {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #64B5F6;
 }
 .jw-calendar .jw-calendar-header .jw-calendar-display {
   width: 80%;
@@ -44,7 +44,7 @@
   vertical-align: middle;
   line-height: 32px;
   overflow-y: hidden;
-  color: #000000;
+  color: #fff;
 }
 .jw-calendar .jw-calendar-header .jw-calendar-forward {
   display: inline-block;
@@ -85,13 +85,16 @@
 .jw-calendar .jw-calendar-body table td.jw-calendar-item-outofscope a {
   color: gray;
 }
+.jw-calendar .jw-calendar-body table .selected-date > a {
+  color: #fff;
+}
 .jw-calendar .jw-calendar-body table td.selected-date {
-  background: #E0E0E0;
+  background: #1976D2;
   color: #fff;
   border-radius: 3px;
 }
 .jw-calendar .jw-calendar-body table td.selected-date:hover a {
-  color: #000000;
+  color: #fff;
 }
 .jw-calendar .jw-calendar-body table td:hover a {
   color: #60a0e8;
@@ -135,6 +138,9 @@
   border-top: 1px solid #c9c9c9;
   text-align: center;
 }
+.jw-calendar .jw-calendar-footer span {
+  color: #1565C0;
+}
 .jw-calendar .jw-calendar-footer span:hover {
   color: #60a0e8;
   cursor: pointer;
@@ -143,10 +149,6 @@
 .jw-calendar a {
   text-decoration: none;
   color: #333;
-}
-.jw-calendar .jw-calendar-display a {
-  color: #fff;
-  vertical-align: middle;
 }
 .jw-calendar a:focus {
   text-decoration: underline;

@@ -127,12 +127,11 @@ function jasonMenuWidgetDOMParser(menuUI) {
  * @param {object} liElement - HTMLElement.
  */
 jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
-    var result = new jasonMenuItem();
+    var result = new jasonMenuItem(liElement,null,null);
     var menuItemLevel = liElement.getAttribute(MENU_ITEM_LEVEL_ATTRIBUTE);
     if (menuItemLevel)
         result.level = parseInt(menuItemLevel);
 
-    result.element = liElement;
     this.menuUI.eventManager.addEventListener(liElement, CLICK_EVENT, this.menuUI.onItemClick, true);
     this.menuUI.eventManager.addEventListener(liElement, TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
     this.menuUI.eventManager.addEventListener(liElement, MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter,true);
@@ -222,45 +221,53 @@ jasonMenuWidgetJSONParser.prototype.populateMenu = function (jasonMenu) {
             subItemsContainer = self.createSubItemsContainer();
             subMenuItemsUL = self.menuUI.createElement("ul");
             subItemsContainer.appendChild(subMenuItemsUL);
-            parentMenuItem.element.appendChild(subItemsContainer);
-            parentMenuItem.element._jasonMenuItemsContainer = subItemsContainer;
+            parentMenuItem.htmlElement.appendChild(subItemsContainer);
+            parentMenuItem.htmlElement._jasonMenuItemsContainer = subItemsContainer;
         }
         var menuULToUse = subMenuItemsUL != void 0 ? subMenuItemsUL : menuUL;
         //iterating through the child items to create LI elements.
         for (var i = 0 ; i <= parentMenuItem.items.length - 1; i++) {
-            var menuItem = parentMenuItem.items[i];
-            if (!jw.common.isJWWidget(menuItem)) {
-                var jwMenuItem = new jasonMenuItem(rootMenuElement, null, null);
-                jwMenuItem.assign(menuItem);
-                menuItem = jwMenuItem;
+            var newMenuItem = jw.common.isJWWidget(parentMenuItem.items[i]) ? parentMenuItem.items[i] : null;
+            var newMenuElement;
+            if (newMenuItem == null) {
+                newMenuElement = self.menuUI.createElement("li");
+                newMenuItem = new jasonMenuItem(newMenuElement, null, null);
+                newMenuItem.assign(parentMenuItem.items[i]);
+                newMenuItem.clickable = newMenuItem.clickable == void 0 ? true : newMenuItem.clickable;
+                newMenuItem.parent = parentMenuItem;
+                newMenuItem.level = parentMenuItem.level + 1;
+                self.createMenuElementFromItem(newMenuItem, newMenuElement);
+            } else {
+                newMenuElement = self.createMenuElementFromItem(newMenuItem, newMenuItem.htmlElement);
             }
-            menuItem.parent = parentMenuItem;
-            menuItem.level = parentMenuItem.level + 1;
-            var menuElement = self.createMenuElementFromItem(menuItem);
-            menuULToUse.appendChild(menuElement);
-            parentMenuItem.items[i] = menuItem;
-            if (menuItem.items.length > 0) {
-                populateItems(menuItem, menuULToUse);
+            menuULToUse.appendChild(newMenuElement);
+            parentMenuItem.items[i] = newMenuItem;
+            if (newMenuItem.items.length > 0) {
+                populateItems(newMenuItem, menuULToUse);
             }
         }
     }
     var menuUL = this.menuUI.ulMenuElement;
     //iterating through the root items of the UL element
     for (var i = 0; i <= jasonMenu.items.length - 1; i++) {
-        var rootMenuItem = jasonMenu.items[i];
-        if (!jw.common.isJWWidget(rootMenuItem)) {
-            var jwMenuItem = new jasonMenuItem(rootMenuElement, null, null);
-            jwMenuItem.assign(rootMenuItem);
-            jwMenuItem.clickable = true;
-            rootMenuItem = jwMenuItem;
+        var newMenuItem = jw.common.isJWWidget(jasonMenu.items[i]) ? jasonMenu.items[i] : null;
+        var newMenuElement;
+        if (newMenuItem == null) {
+            newMenuElement = self.menuUI.createElement("li");
+            newMenuItem = new jasonMenuItem(newMenuElement, null, null);
+            newMenuItem.assign(jasonMenu.items[i]);
+            newMenuItem.clickable = newMenuItem.clickable == void 0 ? true : newMenuItem.clickable;
+            newMenuItem.level = 0;
+            self.createMenuElementFromItem(newMenuItem, newMenuElement);
         }
-        var rootMenuElement = this.createMenuElementFromItem(rootMenuItem);
-        rootMenuItem.level = 0;
-        rootMenuElement.setAttribute(MENU_ITEM_LEVEL_ATTRIBUTE, rootMenuItem.level);
-        menuUL.appendChild(rootMenuElement);
+        else{
+            newMenuElement = self.createMenuElementFromItem(newMenuItem, newMenuItem.htmlElement);
+        }
+        newMenuElement.setAttribute(MENU_ITEM_LEVEL_ATTRIBUTE, newMenuItem.level);
+        menuUL.appendChild(newMenuElement);
 
-        jasonMenu.items[i] = rootMenuItem;
-        populateItems(rootMenuItem, menuUL);
+        jasonMenu.items[i] = newMenuItem;
+        populateItems(newMenuItem, menuUL);
     }
     return menuUL;
 }
@@ -268,13 +275,13 @@ jasonMenuWidgetJSONParser.prototype.populateMenu = function (jasonMenu) {
  * Creates menu UI element from menu item 
  * @param {object} menuItem - jasonMenuItem.
  */
-jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuItem) {
+jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuItem,menuElement) {
     var self = this;
     //the newly created element.
     var menuItemElement;
 
     if (menuItem.content) {
-        menuItemElement = this.menuUI.createElement("li");
+        menuItemElement = menuElement === void 0 ? this.menuUI.createElement("li") : menuElement;
         if (!menuItem.content.tagName) {
             var menuContent = this.menuUI.createElement("div");
             menuContent.innerHTML = menuItem.content;
@@ -285,8 +292,12 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
         menuItemElement.classList.add(MENU_ITEM_CONTENT);
         menuItem.content.classList.add(MENU_ITEM_CONTENT_CLASS);
     } else {
-        menuItemElement = jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem);
-        menuItem.element = menuItemElement;
+        if (menuElement === void 0)
+            menuItemElement = jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem);
+        else {
+            menuItemElement = menuElement
+            jw.htmlFactory.createJWMenuItem(this.menuUI.options.orientation, menuItem, menuItemElement);
+        }
 
         if (menuItem.isDivider) {
             menuItemElement.appendChild(this.menuUI.createElement("hr"));
@@ -300,11 +311,13 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
                 this.menuUI.eventManager.addEventListener(checkBoxElement, CLICK_EVENT, this.menuUI.onCheckboxClick);
             }
         }
-        this.menuUI.eventManager.addEventListener(menuItemElement, CLICK_EVENT, this.menuUI.onItemClick, true);
+        var self = this;
+        this.menuUI.eventManager.addEventListener(menuItemElement, CLICK_EVENT, this.menuUI.onItemClick,true);
         this.menuUI.eventManager.addEventListener(menuItemElement, MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter);
         this.menuUI.eventManager.addEventListener(menuItemElement, MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave);
     }
-    jasonWidgets.common.setData(menuItemElement, MENU_ITEM_DATA_KEY, menuItem);
+    if (menuElement == void 0)
+        jasonWidgets.common.setData(menuItemElement, MENU_ITEM_DATA_KEY, menuItem);
     return menuItemElement;
 }
 //#endregion

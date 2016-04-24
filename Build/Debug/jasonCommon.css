@@ -64,7 +64,7 @@ body .jasonWidget input:-moz-placeholder {
 .jw-button:hover,
 .jw-button:focus {
   outline: 0;
-  box-shadow: 0 0 2px 2px #BDBDBD;
+  box-shadow: 0 0 2px 2px #42A5F5;
 }
 .jw-text-input {
   display: inline-block;
@@ -91,7 +91,7 @@ body .jasonWidget input:-moz-placeholder {
 .jw-text-input:focus,
 .jw-text-input:hover {
   outline: 0;
-  box-shadow: 0 0 2px 2px #BDBDBD;
+  box-shadow: 0 0 2px 2px #42A5F5;
 }
 .jw-unselectable {
   -moz-user-select: none;
@@ -100,11 +100,11 @@ body .jasonWidget input:-moz-placeholder {
   user-select: none;
 }
 .jw-drag-image-container {
-  border: 1px solid #EEEEEE;
+  border: 1px solid #90CAF9;
   border-radius: 4px;
   position: absolute;
   max-width: 150px;
-  background: #9E9E9E;
+  background: #2196F3;
   max-height: 25px !important;
   display: flex;
   justify-content: center;

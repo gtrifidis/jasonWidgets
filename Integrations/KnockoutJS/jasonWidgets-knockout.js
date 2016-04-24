@@ -3,10 +3,10 @@
  * @name KnockoutJS 
  * @property {function} jasonGrid - jasonGrid binding. @sample Binding example: data-bind="jasonGrid:{data:customers}"
  * @property {function} jasonCombobox - jasonCombobox binding. @sample Binding example data-bind="jasonCombobox:{data:customers,displayFields: ['FirstName', 'LastName'], displayFormatString: '{0},{1}'}".
- * @property {function} jasonTabControl - jasonTabControl binding @sample Binding example: data-bind="jasonTabControl:{pageHeight:750}"
- * @property {function} jasonMenu - jasonMenu binding @sample Binding example: data-bind="jasonMenu:{ animation: { speed: 9 }, orientation: 'horizontal'}"
- * @property {function} jasonContextMenu - jasonContextMenu binding @sample Binding example: data-bind="jasonContextMenu:{ target: document.getElementById('contextMenuDemoTarget')}"
- * @property {function} jasonCalendar - jasonCalendar binding @sample Binding example: data-bind="jasonCalendar:{
+ * @property {function} jasonTabControl - jasonTabControl binding. @sample Binding example: data-bind="jasonTabControl:{pageHeight:750}"
+ * @property {function} jasonMenu - jasonMenu binding. @sample Binding example: data-bind="jasonMenu:{ animation: { speed: 9 }, orientation: 'horizontal'}"
+ * @property {function} jasonContextMenu - jasonContextMenu binding. @sample Binding example: data-bind="jasonContextMenu:{ target: document.getElementById('contextMenuDemoTarget')}"
+ * @property {function} jasonCalendar - jasonCalendar binding. @sample Binding example: data-bind="jasonCalendar:{
             firstDayOfWeek: 5,
             multiSelect: true,
             rangeSelect: false,
@@ -15,8 +15,8 @@
                 { date: '2000/12/01', tooltip: 'New Year', recurring: true }
             ]
         }"
- * @property {function} jasonDatePicker - jasonDatePicker binding @sample Binding example: data-bind="jasonDatePicker:{ placeholder: 'Type in a date', displayFormat: 'dd/MM/yyyy' }"
- * @property {function} jasonTimePicker - jasonTimePicker binding @sample Binding example: data-bind="jasonTimePicker:{ placeholder: 'Type in a time' }"
+ * @property {function} jasonDatePicker - jasonDatePicker binding. @sample Binding example: data-bind="jasonDatePicker:{ placeholder: 'Type in a date', displayFormat: 'dd/MM/yyyy' }"
+ * @property {function} jasonTimePicker - jasonTimePicker binding. @sample Binding example: data-bind="jasonTimePicker:{ placeholder: 'Type in a time' }"
  */
 
 var

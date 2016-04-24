@@ -13,7 +13,7 @@
   padding: 0;
   margin: 0;
   /*outline: 1px solid red;*/
-  background-color: #FAFAFA;
+  background-color: #fff;
   box-shadow: 10px 10px 5px #888;
   /*li{
             margin-right:10px;
@@ -29,11 +29,11 @@
 }
 .jw-menu-item-container {
   /*box-shadow: 10px 10px 5px #888;*/
-  background-color: #FAFAFA;
+  background-color: #fff;
 }
 .jw-menu-items-container {
   border: 1px solid #c9c9c9;
-  background-color: #FAFAFA;
+  background-color: #fff;
 }
 .jw-menu.horizontal {
   white-space: nowrap;
@@ -51,7 +51,7 @@
 }
 .jw-menu-item {
   padding: 5px;
-  background-color: #FAFAFA;
+  background-color: #fff;
   color: #222222;
   cursor: default;
   min-width: 80px;
@@ -117,10 +117,10 @@
   border-left: 1px solid #c5c5c5;
 }
 .jw-menu-item-active {
-  background-color: #E0E0E0;
+  background-color: #EEEEEE;
   color: #fff;
 }
 .jw-menu-item-active .menu-content {
-  background-color: #FAFAFA;
+  background-color: #fff;
   color: #222222;
 }

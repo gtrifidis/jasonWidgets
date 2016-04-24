@@ -30,30 +30,42 @@ jasonCombobox.prototype.constructor = jasonCombobox;
  * @description Configuration for the combobox widget.
  * @augments Common.jasonWidgetOptions
  * @property {any[]}    [data=[]]                - Data for the combobox to display.
- * @property {string}   [keyFieldName=""]        - The name of a key field ,if the data is a list of objects.
+ * @property {string}   [keyFieldName=""]        - The name of a key field if the data is a list of objects.
  * @property {string}   [placeholder=""]         - Input placehoder string.
  * @property {string}   [inputMode=verbatim]     - InputMode.
- * @property {boolean}  [readOnly=false]            - If true does not allow typing.
- * @property {boolean}  [autoFilter=false]          - If true automatically filters results while typing.
- * @property {boolean}  [caseSentiveSearch=false]   - If true search is case sensitive.
- * @property {string}   [displayFormatString=""] - String with format parameters.For example "{0},{1}". Each format parameter will be replaced by the field value of fields defined in DisplayFields.
+ * @property {boolean}  [readOnly=false]            - If true, does not allow typing.
+ * @property {boolean}  [autoFilter=false]          - If true, automatically filters results while typing.
+ * @property {boolean}  [caseSentiveSearch=false]   - If true, search is case sensitive.
+ * @property {string}   [displayFormatString=""] - String with format parameters. For example "{0},{1}". Each format parameter will be replaced by the field value of fields defined in DisplayFields.
  * @property {string[]} [displayFields=[]]       - Array that lists the field values to be displayed on the input control.
  */
 
 /**
- * @class
- * @name jasonComboboxEvents
- * @memberOf Dropdowns
- * @description List of jasonCombobox events
- * @property {function} onSelectItem - function(selectedItem : any,selectedItemIndex:number)
- * @property {function} onRollUp - function()
- * @property {function} onRollDown - function()
+ * @event Dropdowns.jasonCombobox#onSelectItem
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
+ * @property {object} value - The event data.
+ * @property {object} value.selectedItem - The selected item object.
+ * @property {number} value.selectedItemIndex - The selected item index.
+ */
+/**
+ * @event Dropdowns.jasonCombobox#onRollUp
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
+ */
+/**
+ * @event Dropdowns.jasonCombobox#onRollDown
+ * @type {object}
+ * @property {Dropdowns.jasonComboBox} sender - The combobox instance.
  */
 
+
+
+
 var
-    EVENT_ON_ROLL_DOWN = "onRollDown",
-    EVENT_ON_ROLL_UP = "onRollUp",
-    EVENT_ON_SELECT_ITEM = "onSelectItem";
+    JW_EVENT_ON_ROLL_DOWN = "onRollDown",
+    JW_EVENT_ON_ROLL_UP = "onRollUp",
+    JW_EVENT_ON_SELECT_ITEM = "onSelectItem";
 /**
  * @constructor
  * @memberOf Dropdowns
@@ -61,8 +73,13 @@ var
  * @description Combobox widget. If you want to make it behave like a drop down list, just set the readOnly property to true.
  * @param {HTMLElement} htmlElement - DOM element that will contain the combobox.
  * @param {Dropdowns.jasonComboboxOptions} options - Combobox control options.
+ * @property {object} selectedItem - The currently selected item.
+ * @property {number} selectedItemIndex - The currently selected item index.
+ * @fires Dropdowns.jasonCombobox#event:onSelectItem
+ * @fires Dropdowns.jasonCombobox#event:onRollUp
+ * @fires Dropdowns.jasonCombobox#event:onRollDown
  */
-function jasonCombobox(htmlElement, options) {
+function jasonCombobox(htmlElement, options, nameSpace) {
     if (htmlElement.tagName != "DIV")
         throw new Error("Combobox container element must be a div");
     this.defaultOptions = {
@@ -76,11 +93,11 @@ function jasonCombobox(htmlElement, options) {
         caseSentiveSearch: false,
         autoFilter:false
     };
-
-    jasonBaseWidget.call(this, "jasonCombobox", htmlElement, options, jasonComboboxUIHelper);
+    nameSpace = nameSpace === void 0 ? "jasonCombobox" : nameSpace;
+    jasonBaseWidget.call(this, nameSpace, htmlElement, options, jasonComboboxUIHelper);
     this.dataSource = new jasonDataSource({ data: this.options.data,onChange:this.onDataSourceChange });
-    this.selectedItem = null;
-    this.selectedItemIndex = -1;
+    this._selectedItem = null;
+    this._selectedItemIndex = -1;
     this.filteredData = [];
     this.search = this.search.bind(this);
     this.onDataSourceChange = this.onDataSourceChange.bind(this);
@@ -88,9 +105,35 @@ function jasonCombobox(htmlElement, options) {
     this.readOnly = this.options.readOnly;
     this.dataChanged = true;
     this.ui.renderUI();
- }
+}
 
-
+/**
+ * Selected item  property.
+ */
+Object.defineProperty(jasonCombobox.prototype, "selectedItem", {
+    get: function () {
+        return this._selectedItem;
+    },
+    set: function (value) {
+        this._selectedItem = value;
+        this.triggerEvent(JW_EVENT_ON_SELECT_ITEM, { selectedItem: value, selectedItemIndex: this._selectedItemIndex });
+    },
+    enumerable: true,
+    configurable: true
+});
+/**
+ * Selected item index property.
+ */
+Object.defineProperty(jasonCombobox.prototype, "selectedItemIndex", {
+    get: function () {
+        return this._selectedItemIndex;
+    },
+    set: function (value) {
+        this._selectedItemIndex = value;
+    },
+    enumerable: true,
+    configurable: true
+});
 /**
  * @ignore
  */
@@ -106,24 +149,21 @@ jasonCombobox.prototype.clearSelection = function () {
     this.selectedItemIndex = -1;
 }
 /**
- * Check if the combobox has a selection.
+ * Checks if the combobox has a selection.
  * @returns {boolean}
  */
 jasonCombobox.prototype.hasSelection = function () {
     return this.selectedItem != void 0 && this.selectedItemIndex >= 0;
 }
 /**
- * Selects an item
+ * Selects an item.
  * @param {number} itemIndex - Item index to select.
  */
 jasonCombobox.prototype.selectItem = function (itemIndex) {
+    this._selectedItemIndex = itemIndex;
     this.selectedItem = this.filteredData.length > 0 ? this.filteredData.filter(function (dataItem) { return dataItem._jwRowId == itemIndex; })[0] : this.dataSource.data[itemIndex];
-    this.selectedItemIndex = this.selectedItem._jwRowId;
-    this.ui.selectItem(itemIndex);
-    this.triggerEvent(EVENT_ON_SELECT_ITEM, {selectedItem : this.selectedItem, selectedItem :this.selectedItemIndex});
+    this.ui.updateInputTextFromSelection();
 }
-
-
 /**
  * Searches in the data using as criteria any value the input control has.
  * @ignore
@@ -137,6 +177,25 @@ jasonCombobox.prototype.search = function () {
     }
     this.ui.renderDropdownListItems(this.filteredData);
 }
+/**
+ * Shows the drop down list.
+ */
+jasonCombobox.prototype.showDropDownList = function () {
+    this.ui.showDropDownList();
+}
+/**
+ * Hides the drop down list.
+ */
+jasonCombobox.prototype.hideDropDownList = function () {
+    this.ui.hideDropDownList(true);
+}
+/**
+ * Toggles the drop down list.
+ */
+jasonCombobox.prototype.toggleDropDownList = function () {
+    this.ui.toggleDropdownList();
+}
+
 var
     COMBOBOX_CLASS = "jw-combobox",
     COMBOBOX_DROP_DOWN_LIST_CLASS = "drop-down-list",
@@ -167,6 +226,10 @@ function jasonComboboxUIHelper(widget, htmlElement) {
 
     /*if a click occurs outside the input or drop down list, hide the list.*/
     jwDocumentEventManager.addDocumentEventListener(CLICK_EVENT, this.monitorForDocumentClick.bind(this));
+    var self = this;
+    jwDocumentEventManager.addDocumentEventListener(TOUCH_MOVE_EVENT, function (scrollEvent) {
+        self.hideDropDownList();
+    });
 }
 /**
  * Renders combobox HTML.
@@ -239,7 +302,7 @@ jasonComboboxUIHelper.prototype.showDropDownList = function () {
         this.renderDropdownListContainer();
         this.dropDownListState = COMBOBOX_LIST_STATE_DOWN;
         this.comboboxButton.setAttribute(COMBOBOX_LIST_STATE_ATTR, this.dropDownListState);
-        this.widget.triggerEvent(EVENT_ON_ROLL_DOWN);
+        this.widget.triggerEvent(JW_EVENT_ON_ROLL_DOWN);
     }
 }
 /**
@@ -253,7 +316,7 @@ jasonComboboxUIHelper.prototype.hideDropDownList = function (focus) {
         this.comboboxButton.setAttribute(COMBOBOX_LIST_STATE_ATTR, this.dropDownListState);
         if (focus == true && !this.widget.readOnly)
             this.comboboxInput.focus();
-        this.widget.triggerEvent(EVENT_ON_ROLL_UP);
+        this.widget.triggerEvent(JW_EVENT_ON_ROLL_UP);
     }
 }
 
@@ -284,7 +347,7 @@ jasonComboboxUIHelper.prototype.initializeEvents = function () {
  * Sets the item index (selected item).
  * @param {number} itemIndex - Combobox item index.
  */
-jasonComboboxUIHelper.prototype.selectItem = function (itemIndex) {
+jasonComboboxUIHelper.prototype.updateInputTextFromSelection = function () {
     var self = this;
     var inputValue = "";
     if (this.widget.options.displayFields) {
@@ -315,7 +378,7 @@ jasonComboboxUIHelper.prototype.renderDropdownListContainer = function () {
         if (this.widget.dataChanged)
             this.renderDropdownListItems();
         this.dropDownListContainer.style.position = "absolute";
-        var bRect = jw.common.getOffsetCoordinates(this.htmlElement);
+        var bRect = this.htmlElement.getBoundingClientRect();//jw.common.getOffsetCoordinates(this.htmlElement);
         this.hasScrollBars = this.dropDownList.scrollHeight > this.dropDownListContainer.clientHeight;
         if (!this.scrollBarWidth)
             this.scrollBarWidth = jasonWidgets.common.scrollBarWidth();
@@ -323,6 +386,7 @@ jasonComboboxUIHelper.prototype.renderDropdownListContainer = function () {
         this.dropDownListContainer.style.width = ((this.comboboxInput.offsetWidth + this.comboboxButton.offsetWidth)) + "px";
         this.dropDownListContainer.style.top = bRect.top + this.htmlElement.offsetHeight + "px";
         this.dropDownListContainer.style.left = bRect.left + "px";
+        this.dropDownListContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.dropDownListContainer.style.display = "";
     }
 }
@@ -412,10 +476,10 @@ jasonComboboxUIHelper.prototype.onComboboxInputClick = function (clickEvent) {
 jasonComboboxUIHelper.prototype.onComboboxItemClick = function (clickEvent) {
     this.comboboxInput.value = clickEvent.target.textContent || clickEvent.target.innerText;
     this.clearSelection();
+    this.widget._selectedItemIndex = parseInt(clickEvent.target.getAttribute(DATA_ITEM_INDEX_ATTR));
     this.widget.selectedItem = jasonWidgets.common.getData(clickEvent.target, "jComboboxDataItem");
-    this.widget.selectedItemIndex = parseInt(clickEvent.target.getAttribute(DATA_ITEM_INDEX_ATTR));
     this.hideDropDownList(true);
-    clickEvent.stopPropagation();
+    //clickEvent.stopPropagation();
 }
 /**
  * Keydown event listener.

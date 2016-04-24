@@ -35,7 +35,7 @@
 .jw-tabcontrol-list li:hover,
 .jw-tabcontrol-list li:focus {
   outline: 0;
-  box-shadow: 0 0 2px 2px #BDBDBD;
+  box-shadow: 0 0 2px 2px #42A5F5;
 }
 .jw-tabcontrol-list li.jw-tab-active {
   border-bottom-width: 1px;

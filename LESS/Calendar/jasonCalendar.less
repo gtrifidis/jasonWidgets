@@ -17,8 +17,8 @@
         user-select: none;
         height: 15%;
         border-bottom: 1px solid @jwBorderColor;
-        background-color: @jwDefault400;
-        color: @jwBlack;
+        background-color: @jwDefault800;
+        color: @jwWhite;
 
         .jw-calendar-back {
             /*float: left;*/
@@ -41,7 +41,7 @@
             vertical-align: middle;
             line-height: 32px;
             overflow-y: hidden;
-            color: @jwBlack;
+            color: @jwWhite;
         }
 
         .jw-calendar-forward {
@@ -90,16 +90,18 @@
                     color: gray;
                 }
             }
-
+            .selected-date > a {
+                color:@jwWhite;
+            }
             td.selected-date {
-                background: @jwDefault300;
+                background: @jwDefault700;
                 color: @jwWhite;
                 border-radius: 3px;
             }
-
+            
             td.selected-date:hover {
                 a {
-                    color: @jwBlack;
+                    color: @jwWhite;
                 }
             }
 
@@ -154,7 +156,9 @@
         height: 15%;
         border-top: 1px solid @jwBorderColor;
         text-align: center;
-
+        span{
+            color:@jwDefault800;
+        }
         span:hover {
             color: @jwHoverBlue;
             cursor: pointer;
@@ -165,13 +169,6 @@
     a {
         text-decoration: none;
         color: @jwFontColor;
-    }
-
-    .jw-calendar-display {
-        a {
-            color: @jwWhite;
-            vertical-align: middle;
-        }
     }
 
     a:focus {

@@ -4,7 +4,7 @@
 /**
  * jasonWidgets Event Manager
  * @constructor
- * @description Auxilary class, that manages events for the widgets.
+ * @description Auxilary class that manages events for the widgets.
  * @memberOf Common
  */
 function jasonEventManager() {
@@ -21,13 +21,13 @@ function jasonEventManager() {
         }
     }
     /**
-     * Adds an event listener on an element
+     * Adds an event listener on an element.
      * @param {object} element - HTMLElement. The element to set the event.
      * @param {string} eventName - Name of the event.
      * @param {function} listener - Listener function.
-     * @param {boolean} stopPropagation - If false does not propagate the event. 
+     * @param {boolean} stopPropagation - If true, does not propagate the event.
      */
-    jasonEventManager.prototype.addEventListener = function (element, eventName, listener,useCurrentTarget) {
+    jasonEventManager.prototype.addEventListener = function (element, eventName, listener,useCurrentTarget,useCapture) {
         var self = this;
         if (!element._jasonWidgetsEventListeners_)
             element._jasonWidgetsEventListeners_ = [];
@@ -49,8 +49,8 @@ function jasonEventManager() {
             //    defaultEventListener = mouseEnterLeaveEventListener;
             //    defaultEventName = MOUSE_OUT_EVENT;
             //}
-            
-            element.addEventListener(defaultEventName, defaultEventListener);
+            useCapture = useCapture === void 0 ? false : useCapture;
+            element.addEventListener(defaultEventName, defaultEventListener,useCapture);
         }
         var evntListener = {
             element: element,
