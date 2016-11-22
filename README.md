@@ -26,7 +26,7 @@ You can [download released versions of JasonWidgets](http://jasonwidgets.com/dow
  2. **Install Gulp**
 	[https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md]
 	
- 3.**Run the build tool**
+ 3. **Run the build tool**
 	gulp
 	
 	Output files be found under 'Build/Debug' and 'Build/Release'
