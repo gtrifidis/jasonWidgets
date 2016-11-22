@@ -1,0 +1,167 @@
+﻿/**/
+@import "../jasonLessVariables";
+
+.jw-calendar {
+    /*border: 1px solid @jwBorderColor;*/
+    background-color: @jwWhite;
+    .jw-calendar-header {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        height: 15%;
+        border: 1px solid @jwBorderColor;
+        border-bottom: none;
+        /*width:100%;*/
+        border-top-right-radius:@jwBorderRadius;
+        border-top-left-radius:@jwBorderRadius;
+        /*background-color: @jwDefault800;
+        color: @jwWhite;*/
+
+        .jw-calendar-back {
+            /*float: left;*/
+            width: 32px;
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            border-radius:0;
+            border-top-left-radius:@jwBorderRadius - 1px;
+            a:focus {
+                border: 1px solid @jwDefault400;
+            }
+        }
+
+        .jw-calendar-display {
+            width: -webkit-calc(~"100%" - 64px);
+            width: calc(~"100%" - 64px);
+            text-align: center;
+            cursor: pointer;
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            line-height: 32px;
+            overflow-y: hidden;
+        }
+
+        .jw-calendar-forward {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            width: 32px;
+            border-radius:0;
+            border-top-right-radius:@jwBorderRadius - 1px;
+            
+        }
+
+        i {
+            cursor: pointer;
+        }
+    }
+
+    .jw-calendar-body {
+        height: 70%;
+        /*padding: 0 5px 0 5px;*/
+        /*width: 100%;*/
+        -moz-box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+        border: 1px solid @jwBorderColor;
+        border-bottom: none;
+        .jw-label{
+            display:inline;
+            line-height:normal;
+        }
+        table {
+            width: -webkit-calc(~"100%" - 20px);
+            width: calc(~"100%" - 10px);
+            table-layout: fixed;
+            border-collapse: separate;
+            text-align: center;
+            th {
+                text-align: center;
+            }
+
+            tr {
+                height: 20px;
+            }
+
+            td {
+                cursor: pointer;
+            }
+
+            td.jw-calendar-item-outofscope {
+                a {
+                    color: gray;
+                }
+            }
+            .selected-date > a {
+                color:@jwWhite;
+            }
+            td.selected-date {
+                background: @jwDefault700;
+                color: @jwWhite;
+                border-radius: 3px;
+            }
+            
+        }
+
+        table.month-view {
+            border-spacing: 10px;
+            border-collapse: separate;
+            font-size: 16px;
+
+            td {
+                cursor: pointer;
+            }
+        }
+
+        table.years-view {
+            border-spacing: 20px;
+            border-collapse: separate;
+            font-size: 16px;
+
+            td {
+                cursor: pointer;
+            }
+        }
+
+        table.decades-view,
+        table.centuries-view {
+            border-spacing: 5px;
+            border-collapse: separate;
+            font-size: 16px;
+            height:100%;
+            td {
+                cursor: pointer;
+                padding-left: 5px;
+
+                span {
+                    display: inline-block;
+                    -ms-word-break: break-word;
+                    word-break: break-word;
+                    text-align: justify;
+                }
+            }
+        }
+    }
+
+    .jw-calendar-footer {
+        height: 15%;
+        border: 1px solid @jwBorderColor;
+        /*border-top: 1px solid @jwBorderColor;*/
+        text-align: center;
+        /*width:100%;*/
+        border-bottom-left-radius:@jwBorderRadius;
+        border-bottom-right-radius:@jwBorderRadius;
+        span{
+            color:@jwDefault800;
+        }
+        span:hover {
+            cursor: pointer;
+        }
+        .jw-label{
+            overflow:hidden;
+        }
+    }
+
+}

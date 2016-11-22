@@ -1,0 +1,175 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+.jw-popover {
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  min-height: 80px;
+  min-width: 100px;
+  position: absolute;
+  background: #fafafa;
+}
+.jw-popover .jw-popover-header {
+  height: 32px;
+  padding-left: 5px;
+}
+.jw-popover .jw-popover-header .jw-label.has-icon {
+  /*plus the 5 padding pixels*/
+  width: calc(100% - 37px);
+  padding-right: 5px;
+}
+.jw-popover .jw-popover-header .jw-button {
+  float: right;
+}
+.jw-popover .jw-popover-body {
+  height: calc(100% - 32px);
+  padding: 5px;
+}
+.jw-popover.animated {
+  opacity: 0;
+  transition: opacity 1s;
+}
+.jw-popover.top::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #e0e0e0 transparent transparent transparent;
+}
+.jw-popover.top.arrow-left::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 10%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #e0e0e0 transparent transparent transparent;
+}
+.jw-popover.top.arrow-right::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 90%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #e0e0e0 transparent transparent transparent;
+}
+.jw-popover.bottom::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #e0e0e0 transparent;
+}
+.jw-popover.bottom.arrow-left::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 10%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #e0e0e0 transparent;
+}
+.jw-popover.bottom.arrow-right::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 90%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #e0e0e0 transparent;
+}
+.jw-popover.right::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-left: 10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #e0e0e0 transparent transparent;
+}
+.jw-popover.right.arrow-left::after {
+  content: " ";
+  position: absolute;
+  top: 10%;
+  right: 100%;
+  margin-left: 10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #e0e0e0 transparent transparent;
+}
+.jw-popover.right.arrow-right::after {
+  content: " ";
+  position: absolute;
+  top: 90%;
+  right: 100%;
+  margin-left: 10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #e0e0e0 transparent transparent;
+}
+.jw-popover.left::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 0;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #e0e0e0;
+}
+.jw-popover.left.arrow-left::after {
+  content: " ";
+  position: absolute;
+  top: 10%;
+  left: 100%;
+  margin-left: 0;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #e0e0e0;
+}
+.jw-popover.left.arrow-right::after {
+  content: " ";
+  position: absolute;
+  top: 90%;
+  left: 100%;
+  margin-left: 0;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #e0e0e0;
+}
+.jw-popover.jw-validation-bubble {
+  min-height: initial;
+  color: #fafafa;
+  background-color: #F44336;
+}
+.jw-popover.jw-validation-bubble .jw-popover-header {
+  display: none;
+}
+.jw-popover.jw-validation-bubble .jw-popover-header .jw-label {
+  color: #eeeeee;
+}
+.jw-popover.jw-validation-bubble.top.arrow-right::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 90%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #F44336 transparent transparent transparent;
+}

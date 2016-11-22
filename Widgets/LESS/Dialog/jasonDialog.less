@@ -1,0 +1,76 @@
+﻿@import "../jasonLessVariables";
+.jw-dialog-container {
+    position: absolute;
+    border: 1px solid @jwBorderColor;
+    border-radius: @jwBorderRadius;
+    .jw-block-element{
+        top:-1px !important;
+        left:-1px !important;
+    }
+    /*padding:10px;*/
+    .jw-dialog-header {
+        height: 32px;
+        background-color: @jwDefault200;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+
+        .title-container {
+            width: calc(~"100%" - 32px);
+            display: inline-block;
+        }
+
+        .jw-label {
+            text-indent: 10px;
+            padding-right: 10px;
+            width: 100%;
+        }
+
+        .header-button-container {
+            float: right;
+            display: inline-block;
+            .jw-button{
+                border-top-left-radius:0;
+                border-top-right-radius:2px;
+                border-bottom-right-radius:0;
+                border-bottom-left-radius:0;
+            }
+        }
+    }
+
+    .jw-dialog-body {
+        height: calc(~"100%" - 72px);
+        overflow: auto;
+        background-color: @jwWhite;
+        border-bottom: 1px solid @jwBorderColor;
+        border-top: 1px solid @jwBorderColor;
+    }
+
+    .jw-dialog-footer {
+        height: 40px;
+        background-color: @jwDefault200;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        overflow: hidden;
+
+        .jw-dialog-buttons {
+            margin-top: 5px;
+            float:right;
+        }
+
+        .jw-button {
+            text-align: center;
+            width: 70px;
+            float: left;
+            margin-right: 15px;
+            padding-left:5px;
+            padding-right:5px;
+            .jw-label{
+                text-indent:0;
+            }
+        }
+
+        .jw-label {
+            width: 100%;
+        }
+    }
+}

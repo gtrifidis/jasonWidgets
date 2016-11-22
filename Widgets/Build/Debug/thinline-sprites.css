@@ -1,0 +1,274 @@
+.jw-icon {
+  background: url('thinline-sprites.png') no-repeat top left;
+  display: inline-block;
+}
+.jw-icon.calendar32x32 {
+  background-position: 0px 0px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.chevron_down32x32 {
+  background-position: 0px -42px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.chevron_left32x32 {
+  background-position: 0px -84px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.chevron_right32x32 {
+  background-position: 0px -126px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.chevron_up32x32 {
+  background-position: 0px -168px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.choose32x32 {
+  background-position: 0px -210px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_arrow_down32x32 {
+  background-position: 0px -252px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_arrow_left32x32 {
+  background-position: 0px -294px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_arrow_right32x32 {
+  background-position: 0px -336px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_arrow_up32x32 {
+  background-position: 0px -378px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_choose32x32 {
+  background-position: 0px -420px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_close32x32 {
+  background-position: 0px -462px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_minus32x32 {
+  background-position: 0px -504px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.circle_plus32x32 {
+  background-position: 0px -546px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.clock32x32 {
+  background-position: 0px -588px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.close32x32 {
+  background-position: 0px -630px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.filter32x32 {
+  background-position: 0px -672px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.list32x32 {
+  background-position: 0px -714px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.minus32x32 {
+  background-position: 0px -756px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.plus32x32 {
+  background-position: 0px -798px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.remove-filter32x32 {
+  background-position: 0px -840px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.remove-sorting32x32 {
+  background-position: 0px -882px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.search32x32 {
+  background-position: 0px -924px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.settings32x32 {
+  background-position: 0px -966px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.signal32x32 {
+  background-position: 0px -1008px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.sort_asc32x32 {
+  background-position: 0px -1050px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.sort_desc32x32 {
+  background-position: 0px -1092px;
+  width: 32px;
+  height: 32px;
+}
+.jw-icon.calendar24x24 {
+  background-position: 0px -1134px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.chevron_down24x24 {
+  background-position: 0px -1168px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.chevron_left24x24 {
+  background-position: 0px -1202px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.chevron_right24x24 {
+  background-position: 0px -1236px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.chevron_up24x24 {
+  background-position: 0px -1270px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.choose24x24 {
+  background-position: 0px -1304px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_arrow_down24x24 {
+  background-position: 0px -1338px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_arrow_left24x24 {
+  background-position: 0px -1372px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_arrow_right24x24 {
+  background-position: 0px -1406px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_arrow_up24x24 {
+  background-position: 0px -1440px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_choose24x24 {
+  background-position: 0px -1474px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_close24x24 {
+  background-position: 0px -1508px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_minus24x24 {
+  background-position: 0px -1542px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.circle_plus24x24 {
+  background-position: 0px -1576px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.clock24x24 {
+  background-position: 0px -1610px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.close24x24 {
+  background-position: 0px -1644px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.filter24x24 {
+  background-position: 0px -1678px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.list24x24 {
+  background-position: 0px -1712px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.minus24x24 {
+  background-position: 0px -1746px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.plus24x24 {
+  background-position: 0px -1780px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.remove-filter24x24 {
+  background-position: 0px -1814px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.remove-sorting24x24 {
+  background-position: 0px -1848px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.search24x24 {
+  background-position: 0px -1882px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.settings24x24 {
+  background-position: 0px -1916px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.signal24x24 {
+  background-position: 0px -1950px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.sort_asc24x24 {
+  background-position: 0px -1984px;
+  width: 24px;
+  height: 24px;
+}
+.jw-icon.sort_desc24x24 {
+  background-position: 0px -2018px;
+  width: 24px;
+  height: 24px;
+}

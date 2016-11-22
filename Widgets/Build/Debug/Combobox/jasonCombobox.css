@@ -1,0 +1,19 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+.jw-combobox {
+  color: #212121;
+  height: 32px;
+  /*border:1px solid @jwBorderColor;
+    border-radius:@jwBorderRadius;*/
+}
+.jw-combobox .jw-text-input {
+  width: calc(100% - 32px);
+  width: -webkit-calc(100% - 32px);
+}
+.jw-combobox .jw-button {
+  width: 32px;
+}
