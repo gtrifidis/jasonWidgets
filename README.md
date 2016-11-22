@@ -28,7 +28,7 @@ You can [download released versions of JasonWidgets](http://jasonwidgets.com/dow
 	
  3. **Run the build tool**
  
-	gulp
+        gulp
 	
 	Output files be found under 'Build/Debug' and 'Build/Release'
 	
