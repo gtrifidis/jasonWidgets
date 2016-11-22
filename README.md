@@ -15,7 +15,7 @@ For more details, see
 
 ##Downloading JasonWidgets
 
-You can [download released versions of JasonWidgets](http://jasonwidgets.com/downloads/) from the project's website.
+You can [download released versions of JasonWidgets](http://jasonwidgets.com/download/) from the project's website.
 
 ##Building JasonWidgets from sources
  1. **Clone the repo from GitHub**
