@@ -576,6 +576,7 @@ jasonDataSource.prototype.groupData = function (data) {
     if (!this.grouperDataSource)
         this.grouperDataSource = new jasonDataSource({ data: dataToGroup });
     this.grouperDataSource.clearSorting();
+    this.grouperDataSource.setData(dataToGroup);
     for (var i = 0; i <= this.grouping.length - 1; i++) {
         var grouping = this.grouping[i];
         this.grouperDataSource.addSorting({ name: grouping.field, reverse: false }, false);

@@ -4,8 +4,10 @@
 
 @import "../jasonLessVariables";
 .jw-numeric-textbox{
+     height:@jwInputLineBorderedHeight;
     .jw-text-input{
-        width:calc(~"100%" - 70px);
+        /*24px is each button + 2px are the borders*/
+        width:calc(~"100%" - 52px);
         min-width:32px;
         border-right:0 !important;
         border-top-right-radius:0 !important;
@@ -14,6 +16,8 @@
     .jw-button{
         border:1px @jwBorderColor solid;
         border-radius:0;
+        width:@jwButtonWidth;
+        vertical-align:middle;
     }
     .jw-button:last-child{
         border-left:0;

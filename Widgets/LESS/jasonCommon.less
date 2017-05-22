@@ -24,9 +24,8 @@ body .jasonWidget {
 }
 
 .jw-label{
-    display: inline-block;    
-    height:100%;
-    line-height:32px;
+    /*display: inline-block;    
+    height:100%;*/
     color:@jwFontColor;
     text-decoration:none;
 }
@@ -37,28 +36,41 @@ body .jasonWidget {
     -ms-text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
+    display:inline-block;
 }
 
-.jw-button{
-    height:100%;
-    display:inline-block;
-    vertical-align:middle;
-    border-radius:@jwBorderRadius;
-    color:@jwFontColor;
-    text-decoration:none;
-    cursor:pointer;
-    .jw-label{
-        width:calc(~"100%" - 32px);
-        width:-webkit-calc(~"100%" - 32px);
-        vertical-align:middle;
-        color:@jwFontColor;
-        line-height:@jwButtonHeight;
-        text-indent:5px;
+.jw-button {
+    height: 100%;
+    display: inline-block;
+    line-height: @jwInputLineHeight;
+    border-radius: @jwBorderRadius;
+    color: @jwFontColor;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+
+    .jw-label {
+        width: calc(~"100%" - @jwIconWidth);
+        width: -webkit-calc(~"100%" - @jwIconWidth);
+        color: @jwFontColor;
+        max-width: 150px;
+        text-indent: 5px;
     }
-    .jw-icon{
-        vertical-align:middle;
+
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.jw-button.standalone {
+    height: @jwInputLineBorderedHeight;
+
+    .jw-label,
+    .jw-icon {
+        vertical-align: middle;
+        padding-right: 5px;
     }
-    transition:border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+
+    .jw-label {
+        width: auto;
+    }
 }
 .jw-button.jw-bordered{
     border:1px solid @jwBorderColor;
@@ -76,9 +88,9 @@ body .jasonWidget {
     }
     
     text-decoration:underline;
-    .jw-icon{
+    /*.jw-icon{
         background-image: url('Sprites/thinline-sprites_inverted.png');
-    }
+    }*/
 }
 
 .jw-text-input{
@@ -200,16 +212,18 @@ body .jasonWidget {
             }
 
             input[type='checkbox']{
-                margin-left:0;
-                margin-top:0;
+                /*margin-left:0;
+                margin-top:0;*/
                 vertical-align:middle;
                 display:inline-block;
+                margin:0;
             }
             label{
                 overflow-y:hidden;
                 margin-bottom:0;
                 font-weight:normal;
                 vertical-align:middle;
+                margin-left:3px;
             }
         }
 
@@ -250,18 +264,20 @@ body .jasonWidget {
 }
 
 
-.jw-validation-container{
-    .jw-button{
-        display:block;
-        float:right;
+.jw-validation-container {
+    .jw-button {
+        display: block;
+        float: right;
     }
-    .jw-validation-message-container{
-        max-width:250px;
-        overflow:auto;
-        line-height:24px;
-        .jw-validation-message{
-            line-height:normal;
-            display:inline-block;
+
+    .jw-validation-message-container {
+        max-width: 250px;
+        overflow: auto;
+        line-height: @jwInputLineHeight;
+
+        .jw-validation-message {
+            line-height: normal;
+            display: inline-block;
         }
     }
 }

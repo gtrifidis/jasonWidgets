@@ -3,16 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 .jw-date-picker {
   color: #212121;
-  height: 32px;
+  height: 30px;
   /*border:1px solid @jwBorderColor;
     border-radius:@jwBorderRadius;*/
 }
 .jw-date-picker .jw-text-input {
-  width: calc(100% - 32px);
-  width: -webkit-calc(100% - 32px);
+  width: calc(100% - 24px);
+  width: -webkit-calc(100% - 24px);
 }
 .jw-date-picker .jw-button {
-  width: 32px;
+  width: 24px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

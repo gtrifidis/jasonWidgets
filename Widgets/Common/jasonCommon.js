@@ -496,8 +496,33 @@ function jasonCommon() {
         }
     }
     /**
-     * Swap dom elements places.
+     * Moves items in an array from one position to another.
      * @param {any[]} array - Array that contains items.
+     * @param {number} indexToMove - Current index of the item to move.
+     * @param {number} newIndex - New index to move the item to.
+     */
+    jasonCommon.prototype.moveItemsInArray = function (array, indexToMove, newIndex) {
+        array.splice(newIndex, 0, array.splice(indexToMove, 1)[0]);
+    }
+    /**
+     * Moves DOM elements in an HTMLCollection from one position to another.
+     * @param {HTMLElement} container - Element that has children.
+     * @param {number} indexToMove - Current index of the item to move.
+     * @param {number} newIndex - New index to move the item to.
+     */
+    jasonCommon.prototype.moveDomElements = function (container, indexToMove, newIndex) {
+        var tempArray = Array.prototype.slice.call(container.children);
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        jw.common.moveItemsInArray(tempArray, indexToMove, newIndex);
+        tempArray.forEach(function (element, index) {
+            container.appendChild(element);
+        });
+    }
+    /**
+     * Swap dom elements places.
+     * @param {HTMLElement} container - Element that has children.
      * @param {number} indexToMove - Current index of the item to move.
      * @param {number} newIndex - New index to move the item to.
      */
@@ -1878,7 +1903,9 @@ jasonWidgets.DOM.events = {
     JW_EVENT_ON_JW_TAB_ENTER: "onTabEnter",
     JW_EVENT_ON_UNGROUP_FIELD: 'onUnGroupField',
     JW_EVENT_ON_SHOW: "onShow",
-    JW_EVENT_ON_HIDE:"onHide",
+    JW_EVENT_ON_HIDE: "onHide",
+    JW_EVENT_ON_ELEMENT_RESIZING:"onElementResizing",
+    JW_EVENT_ON_ELEMENT_RESIZED: "onElementResized",
     KEY_DOWN_EVENT: "keydown",
     KEY_PRESS_EVENT: "keypress",
     KEY_UP_EVENT: "keyup",
@@ -1909,7 +1936,20 @@ jw.DOM.eventCodes = {
  * @description CSS class names, used by JasonWidgets.
  */
 jw.DOM.classes = {
-    JW_BUTTON : "jw-button",
+    grids:{
+        GRID: "jw-grid-non-tabular",
+        GRID_HEADER: "jw-grid-header",
+        GRID_BODY: "jw-grid-body",
+        GRID_FOOTER:"jw-grid-footer",
+        GRID_COLUMN: "jw-grid-column",
+        GRID_COLUMN_CAPTION: "jw-grid-column-caption",
+        GRID_COLUMN_BUTTON: "jw-grid-column-button",
+        GRID_FILTER:"jw-grid-filter",
+        GRID_GROUPING_CONTAINER: "jw-grid-grouping",
+        GRID_GROUPING_MESSAGE: "jw-grouping-message"
+    },
+    JW_BUTTON: "jw-button",
+    JW_BUTTON_STANDALONE:"standalone",
     JW_BUTTON_ELEMENT: "jw-button-element",
     JW_BLOCK_ELEMENT: "jw-block-element",
     JW_CALENDAR : "jw-calendar",
@@ -1961,13 +2001,14 @@ jw.DOM.classes = {
     JW_GRID_FOOTER_CONTAINER : "jw-grid-footer-container",
     JW_GRID_GROUPING_CONTAINER_CLASS : "jw-grid-group-container",
     JW_GRID_GROUP_CELL: "group-cell",
+    JW_GRID_GROUP_KEY_CAPTION:"group-key-caption",
     JW_GRID_GROUPING_MESSAGE:"jw-grouping-message",
     JW_GRID_HEADER : "jw-grid-header",
     JW_GRID_HEADER_CELL_CAPTION_CONTAINER : "jw-header-cell-caption",
     JW_GRID_HEADER_CELL_ICON_CONTAINER : "jw-header-cell-icon",
     JW_GRID_HEADER_CONTAINER : "jw-grid-header-container",
     JW_GRID_HEADER_CONTAINER_NO_GROUPING : "no-grouping",
-    JW_GRID_HEADER_JW_TABLE_CONTAINER : "jw-grid-header-table-container",
+    JW_GRID_HEADER_JW_TABLE_CONTAINER: "jw-grid-header-table-container",
     JW_GRID_JW_TABLE_ALT_ROW_CLASS : "row-alt",
     JW_GRID_JW_TABLE_CELL_CLASS : "jw-grid-cell",
     JW_GRID_JW_TABLE_CELL_CONTENT_CONTAINER_CLASS : "jw-grid-cell-content",
@@ -1977,6 +2018,7 @@ jw.DOM.classes = {
     JW_GRID_SELECTED_CELL_CLASS : "cell-selected",
     JW_GRID_SELECTED_ROW_CLASS: "row-selected",
     JW_GRID_REMOVE_GROUP_BUTTON: "jw-grid-remove-grouping",
+    JW_GRID_UNSELECTABLE:"unselectable",
     JW_HAS_ARROW: "has-arrow",
     JW_HAS_CHECKBOX: "has-checkbox",
     JW_HAS_ICON: "has-icon",
@@ -1986,7 +2028,8 @@ jw.DOM.classes = {
     JW_INVALID :"jw-invalid",
     JW_MENU_CLASS : "jw-menu",
     JW_MENU_CONTAINER_CLASS : "jw-menu-container",
-    JW_MENU_HORIZONTAL : "horizontal",
+    JW_MENU_HORIZONTAL: "horizontal",
+    JW_MENU_VERTICAL: "vertical",
     JW_MENU_ITEM : "jw-menu-item",
     JW_MENU_ITEMS_CONTAINER_CLASS : "jw-menu-items-container",
     JW_MENU_ITEM_ARROW : "jw-menu-item-arrow",
@@ -2046,7 +2089,7 @@ jw.DOM.attributeValues = {
     JW_MENU_ITEM_DATA_KEY: "jasonMenuItem"
 }
 var
-    JW_ICON = "jw-icon ";
+    JW_ICON = "jw-icon fa fa-fw ";
 /**
  * @readonly
  * @enum {string}
@@ -2054,34 +2097,34 @@ var
  * @description Icon class names, used by JasonWidgets.
  */
 jw.DOM.icons = {
-    CALENDAR: JW_ICON + "calendar32x32",
-    CHEVRON_DOWN: JW_ICON + "chevron_down32x32",
-    CHEVRON_UP: JW_ICON + "chevron_up32x32",
-    CHEVRON_LEFT: JW_ICON + "chevron_left32x32",
-    CHEVRON_RIGHT: JW_ICON + "chevron_right32x32",
-    CIRCLE_ARROW_DOWN: JW_ICON + "circle_arrow_down32x32",
-    CIRCLE_ARROW_UP: JW_ICON + "circle_arrow_up32x32",
-    CIRCLE_ARROW_LEFT: JW_ICON + "circle_arrow_left32x32",
-    CIRCLE_ARROW_RIGHT: JW_ICON + "circle_arrow_right32x32",
-    CIRCLE_CHOOSE: JW_ICON + "circle_choose32x32",
-    CIRCLE_MINUS: JW_ICON + "circle_minus32x32",
-    CIRCLE_PLUS: JW_ICON + "circle_plus32x32",
-    CLOCK : JW_ICON + "clock32x32",
-    CLOSE: JW_ICON + "close32x32",
-    CLOSE_24x24:JW_ICON + "close24x24",
-    FILTER: JW_ICON + "filter32x32",
-    LIST: JW_ICON + "list32x32",
-    MINUS: JW_ICON + "minus32x32",
-    PLUS: JW_ICON + "plus32x32",
-    REMOVE_SORT: JW_ICON + "remove-sorting32x32",
-    REMOVE_FILTER: JW_ICON + "remove-filter32x32",
-    SEARCH: JW_ICON + "search32x32",
-    SETTINGS : JW_ICON + "settings32x32",
-    SIGNAL: JW_ICON + "singal32x32",
-    SORT_ASC: JW_ICON + "sort_asc32x32",
-    SORT_DESC: JW_ICON + "sort_desc32x32",
-    CHEVRON_DOWN16x16: JW_ICON + "chevron_down16x16",
-    CHEVRON_UP16x16: JW_ICON + "chevron_up16x16",
+    CALENDAR: JW_ICON + "fa-calendar",
+    CHEVRON_DOWN: JW_ICON + "fa-chevron-down",
+    CHEVRON_UP: JW_ICON + "fa-chevron-up",
+    CHEVRON_LEFT: JW_ICON + "fa-chevron-left",
+    CHEVRON_RIGHT: JW_ICON + "fa-chevron-right",
+    CIRCLE_ARROW_DOWN: JW_ICON + "fa-chevron-circle-down",
+    CIRCLE_ARROW_UP: JW_ICON + "fa-chevron-circle-up",
+    CIRCLE_ARROW_LEFT: JW_ICON + "fa-chevron-circle-left",
+    CIRCLE_ARROW_RIGHT: JW_ICON + "fa-chevron-circle-right",
+    CIRCLE_CHOOSE: JW_ICON + "fa-check-circle",
+    CIRCLE_MINUS: JW_ICON + "fa-minus-circle",
+    CIRCLE_PLUS: JW_ICON + "fa-plus-circle",
+    CLOCK : JW_ICON + "fa-clock-o",
+    CLOSE: JW_ICON + "fa-close",
+    CLOSE_24x24: JW_ICON + "fa-close",
+    FILTER: JW_ICON + "fa-filter",
+    LIST: JW_ICON + "fa-list",
+    MINUS: JW_ICON + "fa-minus",
+    PLUS: JW_ICON + "fa-plus",
+    REMOVE_SORT: JW_ICON + "fa-trash",
+    REMOVE_FILTER: JW_ICON + "fa-trash",
+    SEARCH: JW_ICON + "fa-search",
+    SETTINGS : JW_ICON + "fa-cog",
+    SIGNAL: JW_ICON + "fa-signal",
+    SORT_ASC: JW_ICON + "fa-sort-amount-asc",
+    SORT_DESC: JW_ICON + "fa-sort-amount-desc",
+    CHEVRON_DOWN16x16: JW_ICON + "fa-chevron-down",
+    CHEVRON_UP16x16: JW_ICON + "fa-chevron-up",
 }
 
 jasonWidgets.keycodes = {

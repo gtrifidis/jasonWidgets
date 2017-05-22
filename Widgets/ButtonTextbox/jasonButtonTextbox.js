@@ -79,8 +79,8 @@ jasonButtonTextboxUIHelper.prototype.renderUI = function () {
         this.button = jw.htmlFactory.createJWButton(null, this.options.icon);
         this.button.setAttribute(jw.DOM.attributes.TITLE_ATTR, this.options.title == void 0 ? "" : this.options.title);
         this.htmlElement.appendChild(this.button);
-        /*32px is the icon and 3px are the added borders. */
-        var buttonWidth = this.options.icon ? 35 : 0;
+        /*24px is the icon and 1px are the added borders. */
+        var buttonWidth = this.options.icon ? 27 : 0;
         this.inputControl.style.width = "calc(100% - " + (buttonWidth) + "px)";
         if (this.inputControl.style.width == "")
             this.inputControl.style.width = "-webkit-calc(100% - " + (buttonWidth) + "px)";

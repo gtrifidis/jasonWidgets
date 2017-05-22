@@ -260,6 +260,7 @@ jasonDateTimePickerUIHelper.prototype.renderUI = function () {
 
         this.timeButton = new jasonDropDownListButton(jw.htmlFactory.createJWButton(null, jw.DOM.icons.CLOCK), timeOptions);
         this.timeButton.htmlElement.classList.remove(jw.DOM.classes.JW_BORDERED);
+        this.timeButton.htmlElement.classList.remove(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.timeButton.visible = this.options.mode == "date" ? false : true;
         this.button.style.display = this.options.mode == "time" ? "none" : "";

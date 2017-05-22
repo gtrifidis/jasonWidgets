@@ -104,6 +104,24 @@ jasonMenuWidgetParser.prototype.mustAddArrowIcon = function (liElement) {
         result = false;
     return result;
 }
+/**
+ * Sets event handlers for the newly created menu item.
+ * @param {object} liElement - HTMLElement.
+ */
+jasonMenuWidgetParser.prototype.setMenuItemEvents = function (liElement, menuItem) {
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
+    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
+    if (arrowElement) {
+        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+    }
+    if (menuItem.hasCheckBox && menuItem.checkBoxElement) {
+        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
+    }
+}
 
 
 
@@ -122,7 +140,7 @@ function jasonMenuWidgetDOMParser(menuUI) {
  */
 jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
     var result = new jasonMenuItem(liElement,null,null);
-    var menuItemLevel = liElement.getAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTEJW_MENU_ITEM_LEVEL_ATTRIBUTE);
+    var menuItemLevel = liElement.getAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTE);
     if (menuItemLevel)
         result.level = parseInt(menuItemLevel);
 
@@ -130,24 +148,24 @@ jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
     jasonWidgets.common.setData(liElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY, result);
     return result;
 }
-/**
- * Sets event handlers for the newly created menu item.
- * @param {object} liElement - HTMLElement.
- */
-jasonMenuWidgetDOMParser.prototype.setMenuItemEvents = function (liElement,menuItem) {
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
-    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
-    if (arrowElement) {
-        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
-    }
-    if (menuItem.hasCheckBox) {
-        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
-    }
-}
+///**
+// * Sets event handlers for the newly created menu item.
+// * @param {object} liElement - HTMLElement.
+// */
+//jasonMenuWidgetDOMParser.prototype.setMenuItemEvents = function (liElement,menuItem) {
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
+//    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
+//    if (arrowElement) {
+//        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+//    }
+//    if (menuItem.hasCheckBox) {
+//        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
+//    }
+//}
 /**
  * Creates json representation of the UL element structure.
  * @param {object} ulElementMenu - HTMLElement.
@@ -173,6 +191,7 @@ jasonMenuWidgetDOMParser.prototype.populateMenu = function (ulElementMenu) {
                 for (var x = 0; x <= subItemsUL.children.length - 1; x++) {
                     var subMenuItemElement = subItemsUL.children[x];
                     var subMenuItem = self.createMenuItem(subMenuItemElement);
+                    subMenuItem.level = parentMenuItem.level + 1;
                     jw.htmlFactory.convertToJWMenuItem(self.menuUI.options.orientation, subMenuItemElement, subMenuItem);
                     self.setMenuItemEvents(subMenuItemElement,subMenuItem);
                     parentMenuItem.items.push(subMenuItem);
@@ -196,7 +215,8 @@ jasonMenuWidgetDOMParser.prototype.populateMenu = function (ulElementMenu) {
         var rootMenuElement = ulElementMenu.children[i];
         rootMenuElement.setAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTE, 0);
         var rootMenuItem = this.createMenuItem(rootMenuElement);
-        jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation == "horizontal" ? "vertical" : "horizontal", rootMenuElement, rootMenuItem);
+        //jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation == "horizontal" ? "vertical" : "horizontal", rootMenuElement, rootMenuItem);
+        jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation, rootMenuElement, rootMenuItem);
         this.setMenuItemEvents(rootMenuElement, rootMenuItem);
         rootMenuItem.level = 0;
         menu.items.push(rootMenuItem);
@@ -315,22 +335,14 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
             menuItemElement.classList.add(jw.DOM.classes.JW_MENU_ITEM_DIVIDER);
             menuItemElement.setAttribute(jw.DOM.attributeValues.JW_MENU_ITEM_NO_HIGHLIGHT_ATTR, "true");
         }
-        if (menuItem.hasCheckBox) {
-            var checkBoxElement = jw.common.getElementsByAttribute(menuItemElement, "type", "checkbox")[0];
-            if (checkBoxElement != void 0) {
-                menuItem.checkBoxElement = checkBoxElement;
-                this.menuUI.eventManager.addEventListener(checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
-            }
-        }
         if (!menuItem.isDivider) {
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown,true);
-            var arrowElement = menuItemElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
-            if (arrowElement) {
-                this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+            if (menuItem.hasCheckBox) {
+                var checkBoxElement = jw.common.getElementsByAttribute(menuItemElement, "type", "checkbox")[0];
+                if (checkBoxElement != void 0) {
+                    menuItem.checkBoxElement = checkBoxElement;
+                }
             }
+            this.setMenuItemEvents(menuItemElement, menuItem);
         }
     }
     if (menuElement == void 0)

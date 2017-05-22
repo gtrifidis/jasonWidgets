@@ -9,6 +9,15 @@
     text-align:left;
 }
 
+.jasonWidget.jw-grid.unselectable{
+    *{
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
 /*#region grid header - start*/
 .jw-grid-header-container {
     position: relative;
@@ -19,16 +28,17 @@
     border-top: 1px solid @jwBorderColor;
     border-right: 1px solid @jwBorderColor;
     /*background-color: @jwGridHeaderBGColor;*/
-    color:@jwGridHeaderFontColor !important;
-    font-size:@jwGridHeaderFontSize !important;
-    .jw-grid-header-table-container{
-        overflow:hidden;
+    color: @jwGridHeaderFontColor !important;
+    font-size: @jwGridHeaderFontSize !important;
+
+    .jw-grid-header-table-container {
+        overflow: hidden;
     }
+
     table {
         table-layout: fixed;
         border-collapse: collapse;
         /*width: 100%;*/
-
         tr {
             height: 35px;
         }
@@ -36,49 +46,43 @@
         th {
             text-align: left;
             padding: 0;
-            overflow: hidden;
-            -ms-text-overflow: ellipsis;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             border-left: 1px solid @jwBorderColor;
             border-right: 1px solid @jwBorderColor;
-            height:32px;
+            height: @jwGenericHeaderHeight;
             .jw-header-cell-caption {
                 width: calc(~"100%" - 40px);
                 padding-left: 5px;
-                overflow: hidden;
-                -ms-text-overflow: ellipsis;
-                -o-text-overflow: ellipsis;
-                text-overflow: ellipsis;
-                white-space:nowrap;
-                vertical-align:middle;
-                display:inline-block;
-                .jw-label{
-                    max-width:90%;
+                vertical-align: middle;
+                display: inline-block;
+
+                .jw-label {
+                    max-width: 90%;
+                    line-height: @jwInputLineHeight;
                 }
             }
 
             .jw-header-cell-icon {
                 width: 32px;
-                vertical-align:middle;
-                display:inline-block;
+                vertical-align: middle;
+                display: inline-block;
+
+                .jw-button {
+                    width: 100%;
+                }
             }
         }
-        /*th:last-child{
-            border-right-style:none;
-        }*/
 
         th.jw-grid-column-has-filter {
             background-color: @jwGridColumnHasFilterColor;
         }
     }
-    .jw-column-resize{
-        cursor:col-resize;
-        width:5px;
-        top:0;
-        height:35px;
-        position:absolute;
+
+    .jw-column-resize {
+        cursor: col-resize;
+        width: 5px;
+        top: 0;
+        height: 35px;
+        position: absolute;
     }
 }
 .jw-grid-header-container.no-grouping{
@@ -88,16 +92,21 @@
 .jw-grid-column-drag-image{
     position:absolute;
     text-decoration:none;
-    color:@jwFontColor;
     border:1px solid;
     border-radius : 3px;
-    padding: 5px;
+    padding: 0 5px 0 5px;
+    background-color:@jwDefault700;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    opacity:0.8;
+    max-width:150px;
+    .jw-label{
+        color:@jwWhite !important;
+    }
 }
 
 .jw-button.jw-grid-remove-grouping{
-    /*.jw-icon{
-        background-image: url('Sprites/thinline-sprites_inverted.png');
-    }*/
     background-color:@jwDefault500;
 }
 .jw-button.jw-grid-remove-grouping:hover{
@@ -113,7 +122,7 @@
     /*background-color:@jwGridContainerBGColor;*/
     table{
         table-layout: fixed;
-        border-collapse:collapse;
+        border-collapse: collapse;
         line-height: 2.3em;
         /*width:100%;*/
         /*we do not want to the first line of cells to have a border
@@ -157,7 +166,7 @@
             a{
                 text-indent:0;
             }
-            span{
+            span.group-key-caption{
                 padding-left:10px;
             }
         }
@@ -212,7 +221,7 @@
     .jw-grid-pager {
         display:inline-block;
         width: 50%;
-        line-height:32px;
+        line-height:@jwInputLineHeight;
         vertical-align:middle;
         .jw-button{
             padding-left:5px;
@@ -221,7 +230,7 @@
         .jw-text-input{
             margin-left:5px;
             margin-right:5px;
-            height:32px;
+            height:@jwInputLineHeight;
             width:50px;
             border:1px inset;
         }
@@ -237,7 +246,7 @@
         overflow:hidden;
         white-space:nowrap;
         vertical-align:middle;
-        line-height:32px;
+        line-height:@jwInputLineHeight;
         text-align:right;
         margin-right:5px;
     }
@@ -248,56 +257,66 @@
 /* #region grid filter - start*/
 .jw-grid-filter-container {
     position: absolute;
-    width:calc(~"100%" - 10px);
-    height: 265px;
+    width: calc(~"100%" - 15px);
+    height: 255px;
     border-radius: @jwBorderRadius;
     background-color: @jwBackgroundColor;
-    border-color:@jwBorderColor;
-    border:1px solid;
-    padding-left:5px;
-    padding-right:5px;
+    border-color: @jwBorderColor;
+    border: 1px solid;
+    padding-left: 5px;
+    padding-right: 5px;
+
     .jw-grid-filter-header {
         height: 10%;
-        span{
-            padding:5px;
-            vertical-align:middle;
-            line-height:32px;
+        margin-bottom: 5px;
+
+        span {
+            padding: 5px;
+            vertical-align: middle;
+            line-height: @jwInputLineHeight;
         }
     }
 
     .jw-grid-filter-body {
-        height: -webkit-calc(~"75%");
-        height: calc(~"75%");
+        height: -webkit-calc(~"73%");
+        height: calc(~"73%");
 
         .jw-filter-input {
-            height:32px;
-            margin-bottom:5px;
+            margin-bottom: 7.5px;
             /*border:1px solid @jwBorderColor;
             border-radius:@jwBorderRadius;*/
             /*>.jw-text-input{
                 width:100%
             }*/
         }
-        .jw-combobox{
-            margin-bottom:5px;
+        .jw-filter-input.jw-textbox:not(.jw-numeric-textbox){
+            width:calc(~"100%" - 2px);//2px are the input element borders.
         }
-           
+        .jw-combobox {
+            margin-bottom: 7.5px;
+        }
     }
 
     .jw-grid-filter-footer {
-        height: 32px;
-        .apply-filter{
-            float:right;
-            width:40%;
-            span{
-                text-indent:5px;
+        height: @jwGenericHeaderHeight;
+
+        .apply-filter {
+            float: right;
+            width: 35%;
+
+            span {
+                /*text-indent: 5px;*/
+                line-height: @jwInputLineHeight;
             }
         }
-        .clear-filter{
-            float:left;
-            width:40%;
-            span{
-                text-indent:5px;
+
+        .clear-filter {
+            float: left;
+            width: 35%;
+
+            span {
+                /*text-indent: 5px;*/
+                line-height: @jwInputLineHeight;
             }
         }
     }
@@ -357,6 +376,5 @@
     }
 }
 /* #endregion grid groupcontainer - end*/
-
 
 

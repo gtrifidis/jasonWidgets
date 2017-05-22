@@ -33,16 +33,12 @@ function jasonGridUIHelper(widget, htmlElement) {
     this._currentFilterColumn = null;
     this._currentTHElement = null;
     this._firstRun = true;
-
-    //initializing grid columns.
-    //this.widget._initializeColumns();
-
-
+    this._gridResizer = null;
+    this._gridColumnDragger = null;
     this.isReRendering = false;
     this.isColumnMoveResize = false;
-    this.monitorChanges = this.monitorChanges.bind(this);
+    this._recordPosition = { recordStart: null, recordStop: null };
     jasonBaseWidgetUIHelper.call(this, widget, htmlElement);
-    //jwWindowEventManager.addWindowEventListener(jw.DOM.events.RESIZE_EVENT, this.monitorChanges);
 }
 /**
  * Customization template initialization.
@@ -95,18 +91,6 @@ jasonGridUIHelper.prototype.initialize = function () {
     this._enableColumnDragResize();
     jasonBaseWidgetUIHelper.prototype.initialize.call(this);
 }
-
-jasonGridUIHelper.prototype.monitorChanges = function () {
-    window.requestAnimationFrame(this.monitorChanges);
-    if (this.isColumnMoveResize || this.isReRendering)
-        return;
-    if (this.gridHeaderTable.clientWidth != this.gridDataTable.clientWidth) {
-        this.isReRendering = true;
-        this._sizeColumns();
-        this.isReRendering = false;
-    }
-}
-
 //#region Object properties
 
 //#endregion
@@ -215,13 +199,6 @@ jasonGridUIHelper.prototype._onColumnMenuItemChecked = function (sender,eventDat
  * @param {object} menuItem - jasonMenuItem that was clicked.
  */
 jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventData) {
-    /*first try to find the corresponding column*/
-    //var columnIndex = eventData.uiHelper.invokableElement.getAttribute(JW_GRID_COLUMN_ID_ATTR);
-    //if (!columnIndex)
-    //    columnIndex = jw.common.getElementsByAttribute(eventData.uiHelper.invokableElement, JW_GRID_COLUMN_ID_ATTR, "*")[0];
-    //if (columnIndex)
-    //    columnIndex = parseInt(columnIndex);
-    //var column = this.options.columns[columnIndex];
     var column = this._currentFilterColumn;
     switch (eventData.item.name) {
         case "mnuSortAsc": {
@@ -248,7 +225,6 @@ jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventDa
             }
             this._clearFilterControls();
             this._goToPage(this._currentPage, true);
-            this._sizeColumns();
             this.columnMenu.ui.hideMenu();
         }
     }
@@ -266,7 +242,7 @@ jasonGridUIHelper.prototype._onColumnMenuHidden = function () {
 jasonGridUIHelper.prototype._manageCellSelection = function (cellElement,ctrlKey) {
     var selectedCell = this.gridSelectedCells[this.gridSelectedCells.indexOf(cellElement)];
 
-    // if cell multi select is on and ctrl key is NOT pressed OR if the cell multi select is off, clear all previous selections.
+    // if cell multi select is on and control key is NOT pressed OR if the cell multi select is off, clear all previous selections.
     if ((this.options.cellMultiSelect == true && ctrlKey == false) || !this.options.cellMultiSelect) {
         this.gridSelectedCells.forEach(function (cellSelected) {
             cellSelected.children[0].classList.remove(jw.DOM.classes.JW_GRID_SELECTED_CELL_CLASS);
@@ -278,9 +254,6 @@ jasonGridUIHelper.prototype._manageCellSelection = function (cellElement,ctrlKey
     }
     else
         cellElement.children[0].classList.add(jw.DOM.classes.JW_GRID_SELECTED_CELL_CLASS);
-    //if (!this.options.cellMultiSelect) {
-    //    this.gridSelectedCells = new Array();
-    //}
     this.gridSelectedCells.push(cellElement);
 }
 /**
@@ -323,7 +296,7 @@ jasonGridUIHelper.prototype._manageRowSelection = function (rowElement, ctrlKey)
     this.gridSelectedRows.push(rowElement);
 }
 /**
- * Mananing selected row(s) based on the configuration of the grid.
+ * Managing selected row(s) based on the configuration of the grid.
  * @ignore
  * @param {event} event - DOM event
  */
@@ -433,7 +406,7 @@ jasonGridUIHelper.prototype._keyboardNavigateToCell = function (direction,ctrlKe
         //if the current scroll position minus the new cell offset value is more than the grid container height, 
         //OR
         //if the difference of the grid container height minus the difference between the new cell offset position and the current scroll position is less than the cell height,
-        //it means that the new cell is not within the visible  are of the grid container and we need to scoll upwards 
+        //it means that the new cell is not within the visible  are of the grid container and we need to scroll upwards 
         var needsToScrollUp = Math.abs(currentVerticalScroll - cellVerticalOffsetValue) >= this.gridDataContainer.offsetHeight ||
             (this.gridDataContainer.offsetHeight - (Math.abs(cellVerticalOffsetValue - currentVerticalScroll)) <= newCellToBeSelected.offsetHeight);
 
@@ -444,7 +417,7 @@ jasonGridUIHelper.prototype._keyboardNavigateToCell = function (direction,ctrlKe
         //if the current scroll position minus the new cell offset value is more than the grid container width, 
         //OR
         //if the difference of the grid container width minus the difference between the new cell offset position and the current scroll position is less than the cell width,
-        //it means that the new cell is not within the visible  are of the grid container and we need to scoll upwards 
+        //it means that the new cell is not within the visible  are of the grid container and we need to scroll upwards 
         var needsToScrollLeft = Math.abs(currentHorizontalScroll - cellHorizontalOffsetValue) >= this.gridDataContainer.offsetWidth ||
             (this.gridDataContainer.offsetWidth - (Math.abs(cellHorizontalOffsetValue - currentHorizontalScroll)) <= newCellToBeSelected.offsetWidth);
 
@@ -541,19 +514,11 @@ jasonGridUIHelper.prototype._onGridColumnMenuIconClick = function (clickEvent) {
     }
 }
 /*
- * more performant way to handle resize event cals , taken from https://developer.mozilla.org/en-US/docs/Web/Events/resize
+ * more per-formant way to handle resize event calls , taken from https://developer.mozilla.org/en-US/docs/Web/Events/resize
  * upon a window resize we want to resize the sticky headers, so they always align with the data table.
  */
 jasonGridUIHelper.prototype._onResize = function (resizeEvent) {
     this._sizeColumns();
-    //var self = this;
-    //if (!this.resizeTimeout) {
-    //    this.resizeTimeout = setTimeout(function () {
-    //        self.resizeTimeout = null;
-    //        self._sizeColumns();
-    //        // The actualResizeHandler will execute at a rate of 15fps
-    //    }, 66);
-    //}
 }
 /**
  * Keeping in sync the data and header table scroll position.
@@ -581,7 +546,7 @@ jasonGridUIHelper.prototype._onGridColumnCaptionClick = function (event) {
     }
 }
 /**
- * Keyevents for grid columns.
+ * Key events for grid columns.
  * If the down arrow is pressed it gives focus to the cell below the current column in the first row.
  * If the tab button is pressed and its the last element of the last column then set focus to the data table.
  */
@@ -615,7 +580,7 @@ jasonGridUIHelper.prototype._onGridColumnKeyDown = function (keyDownEvent) {
     }
 }
 /**
- * When the grid footer receives a keydown event, managing the focus flow between the data table and the rest elements that are focusable or have tabindex attributes.
+ * When the grid footer receives a keydown event, managing the focus flow between the data table and the rest elements that are focusable or have tab-index attributes.
  */
 jasonGridUIHelper.prototype._onGridFooterKeyDown = function (keyDownEvent) {
     if (this.widget.readonly || !this.widget.enabled)
@@ -634,7 +599,7 @@ jasonGridUIHelper.prototype._onGridFooterKeyDown = function (keyDownEvent) {
     }
 }
 /**
- * When a grid column (TH) receives focus, make sure the scrolling position of the header and data table are in synch.
+ * When a grid column (TH) receives focus, make sure the scrolling position of the header and data table are in sync.
  */
 jasonGridUIHelper.prototype._onGridColumnFocus = function (focusEvent) {
     this.gridDataContainer.scrollLeft = this.gridHeaderTableContainer.scrollLeft;
@@ -645,16 +610,16 @@ jasonGridUIHelper.prototype._onGridColumnFocus = function (focusEvent) {
 jasonGridUIHelper.prototype._onGroupCollapseExpandIconClick = function (event) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
-    var iconNode = event.target.tagName == "I" ? event.target : event.target.children[0];
+    var iconNode = event.target.tagName == "SPAN" ? event.target : event.target.children[0];
     this._collapseExpandGroup(null, null, iconNode);
 }
 /**
  * Collapses, expands a data grouping by either providing the groupLevel and groupKey or directly the icon element of the data grouping button.
  */
 jasonGridUIHelper.prototype._collapseExpandGroup = function (groupLevel, groupKey, groupButtonElement) {
-    var groupRow = groupButtonElement == void 0 ? jw.common.getElementsByAttributes(this.gridDataTableBody, [jasonWidgets.DOM.attributes.JW_DATA_GROUPING_LEVEL_ATTR, jasonWidgets.DOM.attributes.JW_DATA_GROUPING_KEY_ATTR], [groupLevel, groupKey],"tr." + JW_GRID_JW_TABLE_GROUP_ROW_CLASS)[0] :
+    var groupRow = groupButtonElement == void 0 ? jw.common.getElementsByAttributes(this.gridDataTableBody, [jasonWidgets.DOM.attributes.JW_DATA_GROUPING_LEVEL_ATTR, jasonWidgets.DOM.attributes.JW_DATA_GROUPING_KEY_ATTR], [groupLevel, groupKey], "tr." + jw.DOM.classes.JW_GRID_JW_TABLE_GROUP_ROW_CLASS)[0] :
                                         jw.common.getParentElement("TR", groupButtonElement);
-    groupButtonElement = groupButtonElement == void 0 ? groupRow.getElementsByTagName("i")[0] : groupButtonElement.tagName == "I" ?  groupButtonElement : groupButtonElement.getElementsByTagName("i")[0];
+    groupButtonElement = groupButtonElement == void 0 ? groupRow.getElementsByTagName("SPAN")[0] : groupButtonElement.tagName == "SPAN" ?  groupButtonElement : groupButtonElement.getElementsByTagName("SPAN")[0];
     if (groupButtonElement.className.indexOf(jw.DOM.icons.CIRCLE_ARROW_UP) >= 0) {
         groupButtonElement.className = jw.DOM.icons.CIRCLE_ARROW_DOWN;
         groupRow.setAttribute(jasonWidgets.DOM.attributes.JW_DATA_GROUP_EXPANDED_ATTR, "false");
@@ -684,7 +649,10 @@ jasonGridUIHelper.prototype._isGroupExpanded = function(groupLevel,groupKey,grou
 /**
  * Called when a column gets dropped on the grouping container.
  */
-jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
+jasonGridUIHelper.prototype._onColumnDrop = function (sender, columnDropData) {
+    this._makeGridSelectable();
+    var event = columnDropData.event;
+    var htmlElement = columnDropData.column;
     if (this.widget.readonly || !this.widget.enabled)
         return;
 
@@ -712,19 +680,6 @@ jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
             var columnFieldFromPoint = parentElementFromPoint.getAttribute(jw.DOM.attributes.JW_GRID_COLUMN_FIELD_ATTR);
             var columnFromPoint = this.widget._columnByField(columnFieldFromPoint);
             if (columnFromPoint.index != droppedColumn.index) {
-                //jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
-
-                //var droppedIndex = droppedColumn.index;
-                //droppedColumn.index = columnFromPoint.index;
-                //columnFromPoint.index = droppedIndex;
-
-
-
-                //this.renderUI();
-                //this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: columnFromPoint.index, toIndex: droppedColumn.index });
                 this.moveColumn(droppedColumn, columnFromPoint.index);
             }
         }
@@ -741,18 +696,19 @@ jasonGridUIHelper.prototype._onMoveResizeStart = function (event, htmlElement) {
  * Moves column to a new position.
  */
 jasonGridUIHelper.prototype.moveColumn = function (column, newIndex) {
-    jw.common.swapItemsInArray(this.options.columns, column.index, newIndex);
-    jw.common.swapDomElements(this.gridHeaderTableRow, column.index, newIndex);
-    jw.common.swapDomElements(this.headerTableColGroup, column.index, newIndex);
-    jw.common.swapDomElements(this.dataTableColGroup, column.index, newIndex);
+    /**
+     * We are adding the grouping length to the indexes, to account for the dynamically created
+     * TH and COL elements created for each grouping level. 
+     * Column indexes stay the same regardless of the grouping level, that's why we need to do this.
+     */
+    var groupingLength = this.widget.dataSource.grouping.length;
+    jw.common.moveItemsInArray(this.options.columns, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.gridHeaderTableRow, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.headerTableColGroup, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.dataTableColGroup, column.index + groupingLength, newIndex + groupingLength);
 
-    var droppedIndex = column.index;
-    //swapping index values between column that is moved and column that was there.
-    this.options.columns[newIndex].index = newIndex;
-    this.options.columns[droppedIndex].index = droppedIndex;
-
-    this.renderUI();
-    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index, toIndex: newIndex });
+    this._refreshCurrentView();
+    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index + groupingLength, toIndex: newIndex + groupingLength });
 }
 /**
  * Called when a column resize is ends.
@@ -782,13 +738,7 @@ jasonGridUIHelper.prototype._onGroupColumnRemoveClick = function (event) {
  * Renders grid UI. Header,body,footer,pager,filter.
  */
 jasonGridUIHelper.prototype.renderUI = function (recordStart,recordStop) {
-    //rendering all grid container elements. Header,data,footer and grouping container
-    //this._renderGridContainers();
-    //this.widget._initializeColumns();
     this._calculatePageCount(this.widget.dataSource.data);
-
-    /*render the grid thead and sticky headers*/
-//    this._renderHeader();
 
     var fromRecord = recordStart ? recordStart : 0;
     var toRecord = recordStop ? recordStop : 0;
@@ -850,43 +800,54 @@ jasonGridUIHelper.prototype._renderGridContainers = function () {
     }
 }
 /**
+ * Makes the whole grid unselectable.
+ */
+jasonGridUIHelper.prototype._makeGridUnselectable = function () {
+    this.htmlElement.classList.add(jw.DOM.classes.JW_GRID_UNSELECTABLE);
+}
+/**
+ * Makes the whole grid selectable.
+ */
+jasonGridUIHelper.prototype._makeGridSelectable = function () {
+    this.htmlElement.classList.remove(jw.DOM.classes.JW_GRID_UNSELECTABLE);
+}
+/**
  * Enables move/resize on grid columns based on the configuration options.
  */
 jasonGridUIHelper.prototype._enableColumnDragResize = function () {
     if (this.options.reordering || this.options.grouping || this.options.resizing) {
-        for (var i = 0; i <= this.gridHeaderTableRow.children.length - 1; i++) {
-            var headerElement = this.gridHeaderTableRow.children[i];
-            var columnDragResize = jw.common.getData(headerElement, "jwColumnDragResize");
-            if (headerElement.tagName == "TH" & !columnDragResize && !headerElement.getAttribute(jw.DOM.attributes.JW_GRID_GROUP_FIELD)) {
-                columnDragResize = new jasonDragResize(headerElement, {
-                    minWidth: 50,
-                    useGhostPanel:true,
-                    allowResize: { top: false, left: false, bottom:false, right:true },
-                    allowDrag:this.options.reordering,
-                    dependantElements: [this.headerTableColGroup.children[i], this.dataTableColGroup.children[i]],
-                    onMoveStart:this._onMoveResizeStart,
-                    onMoveEnd: this._onColumnDrop,
-                    onResizeStart:this._onMoveResizeStart,
-                    onResizeEnd:this._onColumnResizeEnd,
-                    ghostPanelCSS: jw.DOM.classes.JW_DRAG_IMAGE,
-                    ghostPanelContents: headerElement.querySelectorAll("." + jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)[0].innerHTML,
-                    gridMode:true
-                },this.options.columns[i].fieldName);
-                //columnReorder = new jasonGridColumnReorder(this, headerElement);
-                jw.common.setData(headerElement, "jwColumnDragResize", columnDragResize);
-            } else {
-                if (columnDragResize) {
-                    columnDragResize.options.allowDrag.draggable = this.options.reordering;
-                    columnDragResize.options.allowResize = this.options.resizing ? { top: false, left: false, bottom: false, right: true } : { top: false, left: false, bottom: false, right: false };
+        this._gridResizer = new jasonGridResizer(this.widget, {
+            events: [
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING,
+                    listener: this._makeGridUnselectable.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED,
+                    listener: this._makeGridSelectable.bind(this)
                 }
-            }
-        }
+            ]
+        });
+        this._gridColumnDragger = new jasonGridColumnDragger(this.widget, {
+            events: [
+                {
+                    eventName: jw.DOM.events.DRAG_START_EVENT,
+                    listener: this._makeGridUnselectable.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.DRAG_OVER_EVENT,
+                    listener: this._onColumnDrop
+                }
+            ],changeCursor:false
+        });
     } else {
-        for (var i = 0; i <= this.gridHeaderTableRow.children.length - 1; i++) {
-            var headerElement = this.gridHeaderTableRow.children[i];
-            var columnDragResize = jw.common.getData(headerElement, "jwColumnDragResize");
-            if (columnDragResize)
-                columnDragResize.destroy();
+        if (this._gridResizer) {
+            this._gridResizer.destroy();
+            this._gridResizer = null;
+        }
+        if (this._gridColumnDragger) {
+            this._gridColumnDragger.destroy();
+            this._gridColumnDragger = null;
         }
     }
 }
@@ -1066,7 +1027,15 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
             dropDownList: true,
             placeholder: this.options.localization.search.searchPlaceHolder
         });
-        this.logicalOperatorCombobox = new jasonCombobox(this.filterLogicalOperator, { data: this.filterLogicalOperators, displayFields: ['title'], displayFormat: '{0}', keyFieldName: 'Key', readonly: true, placeHolder: this.options.localization.search.searchPlaceHolder });
+        this.logicalOperatorCombobox = new jasonCombobox(this.filterLogicalOperator,
+            { data: this.filterLogicalOperators, 
+            displayFields: ['title'],
+            displayFormat: '{0}', 
+            keyFieldName: 'Key', 
+            readonly: true, 
+            placeHolder: this.options.localization.search.searchPlaceHolder,
+            dropDownList:true
+            });
 
         /*creating input elements*/
         this.firstFilterInputContainer = this.createElement("div");
@@ -1107,6 +1076,7 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
 
         this.filterBtnApply = jw.htmlFactory.createJWButton(this.options.localization.grid.filtering.applyButtonText, jw.DOM.icons.CIRCLE_CHOOSE);//this.createElement("a");
         this.filterBtnApply.classList.add(jw.DOM.classes.JW_JW_GRID_FILTER_BUTTON_APPLY);
+        this.filterBtnApply.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.eventManager.addEventListener(this.filterBtnApply, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
             self._applyFilter();
@@ -1115,6 +1085,7 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
 
         this.filterBtnClear = jw.htmlFactory.createJWButton(this.options.localization.grid.filtering.clearButtonText, jw.DOM.icons.CLOSE);//this.createElement("a");
         this.filterBtnClear.classList.add(jw.DOM.classes.JW_JW_GRID_FILTER_BUTTON_CLEAR);
+        this.filterBtnClear.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.eventManager.addEventListener(this.filterBtnClear, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
             self._clearFilterControls();
@@ -1323,12 +1294,26 @@ jasonGridUIHelper.prototype._columnVisible = function (column, visible) {
         for (var i = 0; i <= groupCells.length - 1; i++) {
             groupCells[i].setAttribute(jasonWidgets.DOM.attributes.COLSPAN_ATTR, colSpanValue);
         }
-        //this._renderHeader();
-        //this.renderUI(this._currentPage, this._pageCount);
         return true;
     }
     else
         return false;
+}
+/**
+ * Re-renders current data view taking into account paging.
+ */
+jasonGridUIHelper.prototype._refreshCurrentView = function () {
+    var dataToRender = this.widget.dataSource.currentDataView;
+    this._calculatePageCount(this.widget.dataSource.currentDataView);
+    var pageSize = this.options.paging ? this.options.paging.pagesize : dataToRender.length;
+    var recordStart = (this._currentPage - 1) * pageSize;
+    var recordStop = recordStart + pageSize - 1;
+    if (recordStop > dataToRender.length)
+        recordStop = dataToRender.length - 1;
+    dataToRender = this.widget.dataSource.range(recordStart, recordStop);
+    this._recordPosition.recordStart = recordStart;
+    this._recordPosition.recordStop = recordStop;
+    this._renderRows(0, dataToRender.length - 1, dataToRender);
 }
 //#endregion
 
@@ -1349,7 +1334,7 @@ jasonGridUIHelper.prototype._renderHeader = function () {
         this.gridDataTableBody = this.gridDataTable.appendChild(this.createElement("tbody"));
         this.gridHeaderTableRow = headerTHead.appendChild(this.createElement("tr"));
         //this.gridHeaderTable.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, jw.common.getNextTabIndex());
-        //by setting the tabindex attribute, the table element can receive keyboard events.
+        //by setting the tab-index attribute, the table element can receive keyboard events.
         this.gridDataTable.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, -1);
         this.eventManager.addEventListener(this.gridDataTable, jw.DOM.events.KEY_DOWN_EVENT, this._onGridCellKeyDown, true);
         this.eventManager.addEventListener(this.gridDataTable, jw.DOM.events.FOCUS_EVENT, this._onGridFocus, true);
@@ -1417,6 +1402,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                 headerElement.setAttribute(jasonWidgets.DOM.attributes.TITLE_ATTR, tooltip);
                 var captionElement = headerCellCaptionContainer.appendChild(jw.htmlFactory.createJWLinkLabel(gridColumn.caption));
                 captionElement.setAttribute(jw.DOM.attributes.HREF_ATTR, "javascript:void(0)");
+                captionElement.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
                 if (gridColumn.headerTemplate)
                     captionElement.innerHTML = gridColumn.headerTemplate;
                 
@@ -1431,7 +1417,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                     self._onGridColumnCaptionClick(touchEvent);
                 }, true);
             }
-            /*Creating grid colum menu*/
+            /*Creating grid column menu*/
             if (this.options.columnMenu == true && !gridColumn.groupColumn) {
                 var gridColumnMenuIconAnchor = jw.htmlFactory.createJWButton(null, jw.DOM.icons.LIST);
                 gridColumnMenuIconAnchor.setAttribute(jw.DOM.attributes.JW_GRID_COLUMN_ID_ATTR, columnIndex);
@@ -1496,7 +1482,7 @@ jasonGridUIHelper.prototype.updateVisible = function (visible) {
     jasonBaseWidgetUIHelper.prototype.updateVisible.call(this, visible);
 }
 /**
- * Updates UI when readonly state is changed.
+ * Updates UI when read-only state is changed.
  * @abstract
  */
 jasonGridUIHelper.prototype.updateReadOnly = function (readonly) {
@@ -1545,7 +1531,8 @@ jasonGridUIHelper.prototype._renderRows = function (fromRecord, toRecord, source
     this._focusedCell = null;
 
     if (this.widget.dataSource.grouping.length > 0) {
-        this._renderGroupedData(source);
+        //this._renderGroupedData(source);
+        this._initiliazeRenderingGroupedData();
     } else {
         var newRow = null;
         var newCell = null;
@@ -1667,6 +1654,7 @@ jasonGridUIHelper.prototype._createGrouppingRow = function (groupNode) {
     var anchorNode = jw.htmlFactory.createJWButton(null, jw.DOM.icons.CIRCLE_ARROW_UP);
     var groupKeyCaption = this.createElement("span");
     groupKeyCaption.appendChild(this.createTextNode(groupNode.key));
+    groupKeyCaption.classList.add(jw.DOM.classes.JW_GRID_GROUP_KEY_CAPTION);
     var self = this;
     this.eventManager.addEventListener(anchorNode, jw.DOM.events.CLICK_EVENT, this._onGroupCollapseExpandIconClick, true);
     this.eventManager.addEventListener(anchorNode, jw.DOM.events.KEY_DOWN_EVENT, function (keyDownEvent) {
@@ -1814,19 +1802,10 @@ jasonGridUIHelper.prototype._goToPage = function (pageNumber, forceAction, event
             pageNumber = 0;
         if (pageNumber > this._pageCount)
             pageNumber = this._pageCount;
-        var dataToRender = this.widget.dataSource.currentDataView;
-        this._calculatePageCount(this.widget.dataSource.currentDataView);
-        var pageSize = this.options.paging ? this.options.paging.pagesize : dataToRender.length;
-        var recordStart = (pageNumber - 1) * pageSize;
-        var recordStop = recordStart + pageSize - 1;
-        if (recordStop > dataToRender.length)
-            recordStop = dataToRender.length - 1;
-        dataToRender = this.widget.dataSource.range(recordStart, recordStop);
-
-        this._renderRows(0, dataToRender.length - 1, dataToRender);
+        this._currentPage = pageNumber;
+        this._refreshCurrentView();
         if (this.options.paging) {
-            this._updatePagerInfo(recordStart, recordStop + 1, this.widget.dataSource.currentDataView.length);
-            this._currentPage = pageNumber;
+            this._updatePagerInfo(this._recordPosition.recordStart, this._recordPosition.recordStop + 1, this.widget.dataSource.currentDataView.length);
             this.pagerInput.value = this._currentPage;
             this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_PAGE_CHANGE, pageNumber);
         }
@@ -1909,8 +1888,8 @@ jasonGridUIHelper.prototype._expandGroup = function (groupRow) {
  */
 jasonGridUIHelper.prototype._initiliazeRenderingGroupedData = function () {
     //this._renderHeader();
-    var recordStart = this.options.paging ? this._currentPage: 0;
-    var recordStop = this.options.paging ? this.options.paging.pagesize : this.widget.dataSource.data.length;
+    var recordStart = this.options.paging ? (this._currentPage - 1) * this.options.paging.pagesize : 0;
+    var recordStop = this.options.paging ? recordStart + this.options.paging.pagesize -1 : this.widget.dataSource.data.length;
     this._renderGroupedData(this.widget.dataSource.range(recordStart, recordStop));
 }
 /**
@@ -1925,7 +1904,7 @@ jasonGridUIHelper.prototype._renderGroupRow = function (groupNode) {
  * Renders grouped data
  */
 jasonGridUIHelper.prototype._renderGroupData = function (groupNode) {
-    /*adding the groupping row*/
+    /*adding the grouping row*/
     this._renderGroupRow(groupNode);
 
     //if we are at the last grouping node render the actual data.
@@ -1999,7 +1978,6 @@ jasonGridUIHelper.prototype._groupByField = function (column) {
         this.gridHeaderTableRow.insertBefore(headerTH, this.gridHeaderTableRow.firstChild);
 
         this._initiliazeRenderingGroupedData();
-        this._enableColumnDragResize();
         this._sizeColumns();
     }
 }
@@ -2035,8 +2013,6 @@ jasonGridUIHelper.prototype._removeGroupByField = function (fieldName) {
     } else {
         this._initiliazeRenderingGroupedData();
     }
-    this._enableColumnDragResize();
-    this._sizeColumns();
 }
 //#endregion grouping data - end*/
 

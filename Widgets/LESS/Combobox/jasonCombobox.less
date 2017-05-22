@@ -3,17 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @import "../jasonLessVariables";
-.jw-combobox{
-    color:@jwFontColor;
-    height:32px;
+.jw-combobox {
+    color: @jwFontColor;
+    height: @jwInputLineBorderedHeight;
     /*border:1px solid @jwBorderColor;
     border-radius:@jwBorderRadius;*/
-    .jw-text-input{
-        width:calc(~"100%" - @jwButtonHeight);
-        width:-webkit-calc(~"100%" - @jwButtonHeight);
+    .jw-text-input {
+        width: calc(~"100%" - @jwInputLineHeight);
+        width: -webkit-calc(~"100%" - @jwInputLineHeight);
     }
-    .jw-button{
-        width:32px;
+
+    .jw-button {
+        width: @jwButtonWidth;
     }
 }
 

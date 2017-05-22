@@ -83,6 +83,8 @@ jasonTabControlUIHelper.prototype.constructor = jasonTabControlUIHelper;
 function jasonTabControlUIHelper(widget, htmlElement) {
     this.tabContents = [];
     this.setActiveTab = this.setActiveTab.bind(this);
+    this.onTabClick = this.onTabClick.bind(this);
+    this.onTabTouchStart = this.onTabTouchStart.bind(this);
     jasonBaseWidgetUIHelper.call(this, widget, htmlElement);
 }
 /**
@@ -99,15 +101,8 @@ jasonTabControlUIHelper.prototype.renderUI = function () {
             liItem.classList.add(jw.DOM.classes.JW_TAB_PAGE_CLASS);
             liItem.setAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR, i);
             liItem.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, jasonWidgets.common.getNextTabIndex());
-            this.eventManager.addEventListener(liItem, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
-                if (self.widget.readonly || !self.widget.enabled)
-                    return;
-                var parentNode = clickEvent.target;
-                while (parentNode.tagName != "LI") {
-                    parentNode = parentNode.parentNode;
-                }
-                self.widget.tabIndex = parseInt(parentNode.getAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR));// setActiveTab(parentNode);
-            }, true);
+            this.eventManager.addEventListener(liItem, jw.DOM.events.CLICK_EVENT, this.onTabClick, true);
+            this.eventManager.addEventListener(liItem, jw.DOM.events.TOUCH_START_EVENT, this.onTabTouchStart, true);
         }
         var divElements = [];
         for (var i = 0 ; i <= this.htmlElement.children.length - 1  ; i++) {
@@ -135,8 +130,24 @@ jasonTabControlUIHelper.prototype.renderUI = function () {
         }
     }
 }
-
-
+/**
+ * 
+ */
+jasonTabControlUIHelper.prototype.onTabClick = function (event) {
+    if (this.widget.readonly || !this.widget.enabled)
+        return;
+    var parentNode = event.target;
+    while (parentNode.tagName != "LI") {
+        parentNode = parentNode.parentNode;
+    }
+    this.widget.tabIndex = parseInt(parentNode.getAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR));// setActiveTab(parentNode);
+}
+/**
+ * 
+ */
+jasonTabControlUIHelper.prototype.onTabTouchStart = function (event) {
+    this.onTabClick(event);
+}
 /**
  * Sets the active tab.
  * @param {object} tabElement - HTMLElement

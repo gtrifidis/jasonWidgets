@@ -20,6 +20,7 @@
 .jw-dialog-container .jw-dialog-header .title-container {
   width: calc(100% - 32px);
   display: inline-block;
+  height: 100%;
 }
 .jw-dialog-container .jw-dialog-header .jw-label {
   text-indent: 10px;
@@ -29,12 +30,15 @@
 .jw-dialog-container .jw-dialog-header .header-button-container {
   float: right;
   display: inline-block;
+  width: 24px;
+  height: 100%;
 }
 .jw-dialog-container .jw-dialog-header .header-button-container .jw-button {
   border-top-left-radius: 0;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  width: 100%;
 }
 .jw-dialog-container .jw-dialog-body {
   height: calc(100% - 72px);
@@ -67,4 +71,10 @@
 }
 .jw-dialog-container .jw-dialog-footer .jw-label {
   width: 100%;
+}
+.jasonWidget.jw-dialog-container.unselectable * {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }

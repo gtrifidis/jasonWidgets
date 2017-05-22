@@ -4,8 +4,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+.jw-numeric-textbox {
+  height: 30px;
+}
 .jw-numeric-textbox .jw-text-input {
-  width: calc(100% - 70px);
+  /*24px is each button + 2px are the borders*/
+  width: calc(100% - 52px);
   min-width: 32px;
   border-right: 0 !important;
   border-top-right-radius: 0 !important;
@@ -14,6 +18,8 @@
 .jw-numeric-textbox .jw-button {
   border: 1px #e0e0e0 solid;
   border-radius: 0;
+  width: 24px;
+  vertical-align: middle;
 }
 .jw-numeric-textbox .jw-button:last-child {
   border-left: 0;

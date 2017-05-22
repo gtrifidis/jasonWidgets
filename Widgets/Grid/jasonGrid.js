@@ -182,7 +182,7 @@ jasonGrid.prototype.constructor = jasonGrid;
  * @fires Grids.jasonGrid#event:onColumnPositionChange
  * @fires Grids.jasonGrid#event:onColumnResize
  */
-function jasonGrid(htmlElement, options) {
+function jasonGrid(htmlElement, options,uiHelper) {
     if (htmlElement.tagName != "DIV")
         throw new Error("Grid container element must be a div");
     this.defaultOptions = {
@@ -208,13 +208,12 @@ function jasonGrid(htmlElement, options) {
     //creating the datasource first before constructing the UI helper, so we can create columns if no columns are defined, to be available to the helper.
     this.dataSource = new jasonDataSource({ data: typeof options.data == 'function' ? options.data() : options.data, onChange: this._onDataChanged.bind(this) });
     this._initializeColumns(options);
-    jasonBaseWidget.call(this, "jasonGrid", htmlElement, options, jasonGridUIHelper);
-    this.initialize();
+    jasonBaseWidget.call(this, "jasonGrid", htmlElement, options, uiHelper == undefined ? jasonGridUIHelper : uiHelper);
+    //this.initialize();
     //this.ui.renderUI();
     this.ui._createColumnMenu();
     this.ui._initializeEvents();
     this.ui.localizeStrings(this.options.localization);
-    this.ui.monitorChanges();
 }
 
 //#region  private members*/

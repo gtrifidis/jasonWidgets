@@ -1,0 +1,46 @@
+﻿v2.1.0 2017 1st Release
+New widgets
+
+New features
+	Use of font-awesome icons.
+Updates
+	Improved menu touch behavior.
+	Improved grid column resizing.
+	Improved grid column reordering.
+Fixes
+	Fixed bug with grid column reordering, where instead of a reorder a column swap was happening.
+	Fixed bug with grid column grouping, where grouping always started from record position 0 (page 1).
+	Fixed bug with navigating to prior/next grid page while there is a grouping applied. Grid kept rendering the same page.
+	Fixed bug with Menu and vertical orientation.
+======================================================================
+v2.0.0 2016 2nd Release
+New widgets:
+	Text box
+	ButtonTextbox
+	NumericTextbox
+	DropDownListButton
+	Dialog
+	Popover
+	DateTimePicker
+	Button
+New features:
+	New validation framework support in all widgets.
+	Angular JS basic integration.
+	Knockout JS basic integration.
+Updates
+	Keyboard navigation support improved across all widgets.
+	Data type based editors in the data grid filter.
+Fixes
+	Bug fixes.
+======================================================================
+v1.0.0 2016 1st Release
+New widgets:
+	DataGrid
+	Combobox
+	DropDownList
+	Menu
+	Context Menu
+	Calendar
+	Date Picker
+	Time Picker
+======================================================================

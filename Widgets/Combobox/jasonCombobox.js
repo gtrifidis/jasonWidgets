@@ -296,6 +296,7 @@ jasonComboboxUIHelper.prototype.renderUI = function () {
         });
         this.dropDownListButton = new jasonDropDownListButton(this.button, dropDownButtonOptions);
         this.button.classList.remove(jw.DOM.classes.JW_BORDERED);
+        this.button.classList.remove(jw.DOM.classes.JW_BUTTON_STANDALONE);
         //this.initializeEvents();
         if (this.options.dropDownList)
             this.inputControl.setAttribute(jw.DOM.attributes.READONLY_ATTR, true);

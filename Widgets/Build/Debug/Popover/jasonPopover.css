@@ -15,6 +15,7 @@
 .jw-popover .jw-popover-header {
   height: 32px;
   padding-left: 5px;
+  line-height: 28px;
 }
 .jw-popover .jw-popover-header .jw-label.has-icon {
   /*plus the 5 padding pixels*/
@@ -23,6 +24,7 @@
 }
 .jw-popover .jw-popover-header .jw-button {
   float: right;
+  width: 24px;
 }
 .jw-popover .jw-popover-body {
   height: calc(100% - 32px);

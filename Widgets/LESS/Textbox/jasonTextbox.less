@@ -3,15 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @import "../jasonLessVariables";
-.jw-textbox{
-    color:@jwFontColor;
-    height:32px;
-    input[type=text]{
-        border:1px solid @jwBorderColor;
-        border-radius:@jwBorderRadius;
+.jw-textbox {
+    color: @jwFontColor;
+    height: @jwInputLineBorderedHeight;
+    input[type=text] {
+        border: 1px solid @jwBorderColor;
+        border-radius: @jwBorderRadius;
+        vertical-align: middle;
     }
-    .jw-text-input{
-        width:100%;
+
+    .jw-text-input {
+        width: 100%;
     }
-    
 }

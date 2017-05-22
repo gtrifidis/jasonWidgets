@@ -61,6 +61,7 @@ function jasonButtonUIHelper(widget, htmlElement) {
 jasonButtonUIHelper.prototype.renderUI = function () {
     jw.htmlFactory.createJWButton(this.options.caption, this.options.icon, this.htmlElement);
     this.htmlElement.classList.add(jw.DOM.classes.JW_BORDERED);
+    this.htmlElement.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 }
 /**
  * Initialize Events

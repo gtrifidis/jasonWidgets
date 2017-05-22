@@ -1,27 +1,33 @@
 ﻿@import "../jasonLessVariables";
-.jw-menu-container{
+.jw-menu-container {
     /*position:absolute;*/
-    text-align:left;
+    text-align: left;
+
     .jw-menu {
         list-style-type: none;
         padding: 0;
         margin: 0;
         /*outline: 1px solid red;*/
-        background-color:@jwMenuItemBgColor;
+        background-color: @jwMenuItemBgColor;
         box-shadow: 10px 10px 5px #888;
+        height: 100%;
         /*li{
             margin-right:10px;
         }*/
         ul {
-
             margin: 0;
-            padding:0;
+            padding: 0;
             list-style-type: none;
+
             li {
-                white-space:nowrap;
+                white-space: nowrap;
             }
         }
     }
+}
+
+.jw-menu-container.horizontal{
+    height:40px;
 }
 
 
@@ -54,59 +60,90 @@
     }
 }
 
+.jw-menu.vertical {
+    white-space: nowrap;
+
+    > li {
+        width: auto;
+        > .jw-menu-item-container {
+            .jw-menu-item-caption {
+                width: auto !important;
+            }
+
+            .jw-menu-item-icon {
+                padding-left: 5px;
+            }
+        }
+    }
+}
+
 .jw-menu-item {
     padding: 5px;
-    background-color:@jwMenuItemBgColor;
-    color:@jwFontColor;
-    cursor:default;
-    min-width:80px;
-    .jw-menu-item-caption{
-        display:inline-block;
-        vertical-align:middle;
-        a{
-            max-width:300px;
-            /*text-decoration:none;
-            color:@jwFontColor;*/
+    background-color: @jwMenuItemBgColor;
+    color: @jwFontColor;
+    cursor: default;
+    min-width: 80px;
+    line-height: @jwInputLineHeight;
+    height: @jwInputLineBorderedHeight;
+    box-sizing:content-box;
+    .jw-menu-item-caption {
+        height: 100%;
+        float: left;
+
+        .jw-label {
+            vertical-align: middle;
         }
-        /*a:focus,
-        a:hover{
-            text-decoration:underline;
-            outline:0;
-        }*/
+
+        a {
+            max-width: 300px;
+        }
     }
-    .jw-menu-item-caption.just-caption{
+
+    .jw-menu-item-caption.just-caption {
         /*line-height:@jwInputHeight;*/
     }
-    .jw-menu-item-caption.has-icon{
-        width:calc(~"100%" - @jwIconWidth);
+
+    .jw-menu-item-caption.has-icon {
+        width: calc(~"100%" - @jwButtonWidth);
     }
-    .jw-menu-item-caption.has-checkbox{
-        width:calc(~"100%" - @jwIconWidth);
+
+    .jw-menu-item-caption.has-checkbox {
+        width: calc(~"100%" - @jwButtonWidth);
     }
-    .jw-menu-item-caption.has-arrow{
-        width:calc(~"100%" - @jwIconWidth);
+
+    .jw-menu-item-caption.has-arrow {
+        width: calc(~"100%" - @jwButtonWidth);
     }
-    .jw-menu-item-caption.has-icon.has-arrow{
-        width:calc(~"100%" - (@jwIconWidth * 2));
+
+    .jw-menu-item-caption.has-icon.has-arrow {
+        width: calc(~"100%" - (@jwButtonWidth * 2));
     }
-    .jw-menu-item-caption.has-icon.has-arrow.has-checkbox{
-        width:calc(~"100%" - (@jwIconWidth * 3));
+
+    .jw-menu-item-caption.has-icon.has-arrow.has-checkbox {
+        width: calc(~"100%" - (@jwButtonWidth * 3));
     }
+
     .jw-menu-item-icon {
-        display:inline-block;
-        width:@jwIconWidth;
-        vertical-align:middle;
+        width: @jwButtonWidth;
+        height: 100%;
+        float: left;
     }
+
     .jw-menu-item-checkbox {
-        display:inline-block;
-        vertical-align:middle;
-        width:@jwIconWidth;
-        line-height:@jwButtonHeight;
+        width: @jwButtonWidth;
+        line-height: @jwInputLineHeight;
+        height: 100%;
+        float: left;
+
+        input[type='checkbox'] {
+            vertical-align: middle;
+        }
     }
+
     .jw-menu-item-arrow {
-        display:inline-block;
-        width:@jwIconWidth;
-        vertical-align:middle;
+        width: @jwButtonWidth;
+        float: left;
+        height: 100%;
     }
 }
 .jw-menu-item.clickable{
@@ -117,6 +154,7 @@
 }
 .jw-menu-item.divider{
     padding: 2px 0 2px 2px;
+    height:initial;
     hr{
         margin:0;
     }
@@ -142,9 +180,9 @@
     > .jw-menu-item-arrow{
         .jw-button{
             background-color:@jwDefault600;
-            i:hover{
+            /*i:hover{
                 background-image:url("../Sprites/thinline-sprites.png");
-            }
+            }*/
         }
 
     }

@@ -201,7 +201,7 @@ function jasonHTMLFactory() {
             if (textNode != void 0) {
                 menuCaption = document.createElement("div");
                 menuCaption.classList.add(jw.DOM.classes.JW_MENU_ITEM_CAPTION);
-                menuCaption.appendChild(jw.htmlFactory.createJWLinkLabel(textNode.textContent));
+                menuCaption.appendChild(jw.htmlFactory.createJWLinkLabel(textNode.textContent.trim()));
                 menuCaption.classList.add(jw.DOM.classes.JW_TEXT_OVERFLOW);
                 menuCaption.classList.add(jw.DOM.classes.JW_MENU_ITEM_CAPTION_ONLY);
                 liElement.replaceChild(menuCaption, textNode);
@@ -238,7 +238,14 @@ function jasonHTMLFactory() {
             }
             var hasSubItems = liElement.getElementsByTagName("UL").length > 0;
             if (hasSubItems) {
-                var arrowElement = jw.htmlFactory.createJWButton(null, orientation == "horizontal" ? jw.DOM.icons.CHEVRON_RIGHT : jw.DOM.icons.CHEVRON_DOWN);
+                var arrowIcon = "";
+                if (orientation == "horizontal") {
+                    arrowIcon = menuItem.level > 0 ? jw.DOM.icons.CHEVRON_RIGHT : jw.DOM.icons.CHEVRON_DOWN;
+                }
+                if (orientation == "vertical") {
+                    arrowIcon = jw.DOM.icons.CHEVRON_RIGHT;
+                }
+                var arrowElement = jw.htmlFactory.createJWButton(null, arrowIcon);
                 var arrowWrapper = document.createElement("div");
                 jw.common.setData(arrowElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY, menuItem);
                    ////var arrowElement = document.createElement("i");
@@ -256,6 +263,19 @@ function jasonHTMLFactory() {
     jasonHTMLFactory.prototype.createClearFloat = function () {
         var result = document.createElement("div");
         result.classList.add(jw.DOM.classes.JW_CLEAR_FLOAT_CLASS);
+        return result;
+    }
+
+    /**
+     * Creates the HTML for a jwLabel.
+     * @param {string=} caption - Caption.
+     */
+    jasonHTMLFactory.prototype.createJWSpan = function (caption) {
+        var result = document.createElement("span");
+        if (caption != void 0 && caption.trim().length > 0) {
+            result.setAttribute(jw.DOM.attributes.TITLE_ATTR, caption);
+            result.appendChild(document.createTextNode(caption));
+        }
         return result;
     }
 }

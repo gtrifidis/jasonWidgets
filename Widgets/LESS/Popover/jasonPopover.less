@@ -12,8 +12,9 @@
     position:absolute;
     background:@jwBackgroundColor;
     .jw-popover-header{
-        height:32px;
+        height:@jwGenericHeaderHeight;
         padding-left:5px;
+        line-height:@jwInputLineHeight;
         .jw-label.has-icon{
             /*plus the 5 padding pixels*/
             width:calc(~"100%" - 37px);
@@ -21,10 +22,11 @@
         }
         .jw-button{
             float:right;
+            width:@jwButtonWidth;
         }
     }
     .jw-popover-body{
-        height:calc(~"100%" - 32px);
+        height:calc(~"100%" - @jwGenericHeaderHeight);
         padding:5px;
         overflow:auto;
     }

@@ -3,13 +3,14 @@
     position: absolute;
     border: 1px solid @jwBorderColor;
     border-radius: @jwBorderRadius;
-    .jw-block-element{
-        top:-1px !important;
-        left:-1px !important;
+
+    .jw-block-element {
+        top: -1px !important;
+        left: -1px !important;
     }
     /*padding:10px;*/
     .jw-dialog-header {
-        height: 32px;
+        height: @jwGenericHeaderHeight;
         background-color: @jwDefault200;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
@@ -17,6 +18,7 @@
         .title-container {
             width: calc(~"100%" - 32px);
             display: inline-block;
+            height: 100%;
         }
 
         .jw-label {
@@ -28,11 +30,15 @@
         .header-button-container {
             float: right;
             display: inline-block;
-            .jw-button{
-                border-top-left-radius:0;
-                border-top-right-radius:2px;
-                border-bottom-right-radius:0;
-                border-bottom-left-radius:0;
+            width: @jwButtonWidth;
+            height: 100%;
+
+            .jw-button {
+                border-top-left-radius: 0;
+                border-top-right-radius: 2px;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                width: 100%;
             }
         }
     }
@@ -54,7 +60,7 @@
 
         .jw-dialog-buttons {
             margin-top: 5px;
-            float:right;
+            float: right;
         }
 
         .jw-button {
@@ -62,15 +68,25 @@
             width: 70px;
             float: left;
             margin-right: 15px;
-            padding-left:5px;
-            padding-right:5px;
-            .jw-label{
-                text-indent:0;
+            padding-left: 5px;
+            padding-right: 5px;
+
+            .jw-label {
+                text-indent: 0;
             }
         }
 
         .jw-label {
             width: 100%;
         }
+    }
+}
+
+.jasonWidget.jw-dialog-container.unselectable{
+    *{
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
     }
 }

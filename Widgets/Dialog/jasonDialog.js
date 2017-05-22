@@ -177,6 +177,7 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogContainer.style.display = "none";
         this.dialogContainer.classList.add(jw.DOM.classes.JW_DIALOG_CONTAINER);
         this.dialogContainer.jasonWidgetsData = [].concat(this.htmlElement.jasonWidgetsData);
+        this.dialogContainer.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
         this.htmlElement.parentNode.removeChild(this.htmlElement);
         this.blockUI = new jasonBlockUI(this.dialogContainer,{opacity:'0.5'});
 
@@ -191,6 +192,7 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogHeader.appendChild(this.dialogHeaderButtonContainer);
         if (this.options.customization.headerTemplate == void 0) {
             this.dialogTitle = jw.htmlFactory.createJWLinkLabel(this.options.title);
+            this.dialogTitle.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
             this.dialogTitleContainer.appendChild(this.dialogTitle);
 
             if (this.options.closeButton) {
@@ -225,14 +227,24 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogContainer.appendChild(this.dialogBody);
         this.dialogContainer.appendChild(this.dialogFooter);
         this.dialogContainer.appendChild(jw.htmlFactory.createClearFloat());
-        this.dragResize = new jasonDragResize(this.dialogContainer, {
+        //we need to disable the dialogDragger when dialog is resizing.
+        this.dialogResizer = new jasonElementResizer(this.dialogContainer, {
             allowResize: this.options.resizeable ? { top: true, left: true, bottom: true, right: true } : false,
-            allowDrag: {draggable:this.options.draggable,element:this.dialogHeader},
             minHeight: this.options.minHeight,
             minWidth: this.options.minWidth,
-            changeDragCursor: false,
+            events: [
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING,
+                    listener: function () { this.dialogDragger.enabled = false; this.dialogContainer.classList.add(jw.DOM.classes.JW_GRID_UNSELECTABLE); }.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED,
+                    listener: function () { this.dialogDragger.enabled = true; this.dialogContainer.classList.remove(jw.DOM.classes.JW_GRID_UNSELECTABLE); }.bind(this)
+                }
+            ]
             
-        },"jasonDialogDragResize");
+        }, "jasonDialogDragResize");
+        this.dialogDragger = new jasonElementDragger(this.dialogContainer,{changeCursor:false});
     }
 }
 /**

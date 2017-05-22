@@ -6,11 +6,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 .jw-textbox {
   color: #212121;
-  height: 32px;
+  height: 30px;
 }
 .jw-textbox input[type=text] {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
+  vertical-align: middle;
 }
 .jw-textbox .jw-text-input {
   width: 100%;

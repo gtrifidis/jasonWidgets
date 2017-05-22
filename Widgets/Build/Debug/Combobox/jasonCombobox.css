@@ -6,14 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 .jw-combobox {
   color: #212121;
-  height: 32px;
+  height: 30px;
   /*border:1px solid @jwBorderColor;
     border-radius:@jwBorderRadius;*/
 }
 .jw-combobox .jw-text-input {
-  width: calc(100% - 32px);
-  width: -webkit-calc(100% - 32px);
+  width: calc(100% - 28px);
+  width: -webkit-calc(100% - 28px);
 }
 .jw-combobox .jw-button {
-  width: 32px;
+  width: 24px;
 }

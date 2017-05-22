@@ -38,7 +38,9 @@ function jasonDragResize(htmlElement, options, nameSpace) {
         ghostPanelCSS: null,
         ghostPanelContents: null,
         changeDragCursor: true,
-        gridMode:false
+        gridMode: false,
+        gridHeaderTable: null,
+        gridDataTable:null
     };
 
     jasonBaseWidget.call(this, nameSpace, htmlElement, options, null);
@@ -128,8 +130,8 @@ function jasonDragResize(htmlElement, options, nameSpace) {
     this.onTouchStart = function (touchEvent) {
         //if(self.htmlElement == touchEvent.target)
         self.onDown(touchEvent.touches[0]);
-        touchEvent.preventDefault();
-        touchEvent.stopPropagation();
+        //touchEvent.preventDefault();
+        //touchEvent.stopPropagation();
     }
 
     this.onTouchMove = function (touchEvent) {
@@ -197,11 +199,18 @@ function jasonDragResize(htmlElement, options, nameSpace) {
 
         if (self.clickActionInfo && self.clickActionInfo.isResizing) {
             if (self.clickActionInfo.onRightEdge && self.options.allowResize.right) {
+                var widthDifference = self.mouseMoveEvent.clientX - self.clickActionInfo.clientX;
                 if (!self.options.gridMode) {
-                    var currentWidth = Math.max(self.clickActionInfo.width + (self.mouseMoveEvent.clientX - self.clickActionInfo.clientX), self.options.minWidth);
+                    var currentWidth = Math.max(self.clickActionInfo.width + (widthDifference), self.options.minWidth);
                     if (currentWidth > self.options.minWidth) {
                         self.htmlElement.style.width = currentWidth + "px";
                     }
+                }
+                else {
+                    if (self.options.gridHeaderTable)
+                        self.options.gridHeaderTable.style.width = self.options.gridHeaderTable.clientWidth + (widthDifference) + "px";
+                    if (self.options.gridDataTable)
+                        self.options.gridDataTable.style.width = self.options.gridDataTable.clientWidth + (widthDifference) + "px";
                 }
                 if (self.options.dependantElements) {
                     for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {

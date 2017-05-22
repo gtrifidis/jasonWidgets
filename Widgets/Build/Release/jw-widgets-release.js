@@ -496,8 +496,33 @@ function jasonCommon() {
         }
     }
     /**
-     * Swap dom elements places.
+     * Moves items in an array from one position to another.
      * @param {any[]} array - Array that contains items.
+     * @param {number} indexToMove - Current index of the item to move.
+     * @param {number} newIndex - New index to move the item to.
+     */
+    jasonCommon.prototype.moveItemsInArray = function (array, indexToMove, newIndex) {
+        array.splice(newIndex, 0, array.splice(indexToMove, 1)[0]);
+    }
+    /**
+     * Moves DOM elements in an HTMLCollection from one position to another.
+     * @param {HTMLElement} container - Element that has children.
+     * @param {number} indexToMove - Current index of the item to move.
+     * @param {number} newIndex - New index to move the item to.
+     */
+    jasonCommon.prototype.moveDomElements = function (container, indexToMove, newIndex) {
+        var tempArray = Array.prototype.slice.call(container.children);
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        jw.common.moveItemsInArray(tempArray, indexToMove, newIndex);
+        tempArray.forEach(function (element, index) {
+            container.appendChild(element);
+        });
+    }
+    /**
+     * Swap dom elements places.
+     * @param {HTMLElement} container - Element that has children.
      * @param {number} indexToMove - Current index of the item to move.
      * @param {number} newIndex - New index to move the item to.
      */
@@ -1878,7 +1903,9 @@ jasonWidgets.DOM.events = {
     JW_EVENT_ON_JW_TAB_ENTER: "onTabEnter",
     JW_EVENT_ON_UNGROUP_FIELD: 'onUnGroupField',
     JW_EVENT_ON_SHOW: "onShow",
-    JW_EVENT_ON_HIDE:"onHide",
+    JW_EVENT_ON_HIDE: "onHide",
+    JW_EVENT_ON_ELEMENT_RESIZING:"onElementResizing",
+    JW_EVENT_ON_ELEMENT_RESIZED: "onElementResized",
     KEY_DOWN_EVENT: "keydown",
     KEY_PRESS_EVENT: "keypress",
     KEY_UP_EVENT: "keyup",
@@ -1909,7 +1936,20 @@ jw.DOM.eventCodes = {
  * @description CSS class names, used by JasonWidgets.
  */
 jw.DOM.classes = {
-    JW_BUTTON : "jw-button",
+    grids:{
+        GRID: "jw-grid-non-tabular",
+        GRID_HEADER: "jw-grid-header",
+        GRID_BODY: "jw-grid-body",
+        GRID_FOOTER:"jw-grid-footer",
+        GRID_COLUMN: "jw-grid-column",
+        GRID_COLUMN_CAPTION: "jw-grid-column-caption",
+        GRID_COLUMN_BUTTON: "jw-grid-column-button",
+        GRID_FILTER:"jw-grid-filter",
+        GRID_GROUPING_CONTAINER: "jw-grid-grouping",
+        GRID_GROUPING_MESSAGE: "jw-grouping-message"
+    },
+    JW_BUTTON: "jw-button",
+    JW_BUTTON_STANDALONE:"standalone",
     JW_BUTTON_ELEMENT: "jw-button-element",
     JW_BLOCK_ELEMENT: "jw-block-element",
     JW_CALENDAR : "jw-calendar",
@@ -1961,13 +2001,14 @@ jw.DOM.classes = {
     JW_GRID_FOOTER_CONTAINER : "jw-grid-footer-container",
     JW_GRID_GROUPING_CONTAINER_CLASS : "jw-grid-group-container",
     JW_GRID_GROUP_CELL: "group-cell",
+    JW_GRID_GROUP_KEY_CAPTION:"group-key-caption",
     JW_GRID_GROUPING_MESSAGE:"jw-grouping-message",
     JW_GRID_HEADER : "jw-grid-header",
     JW_GRID_HEADER_CELL_CAPTION_CONTAINER : "jw-header-cell-caption",
     JW_GRID_HEADER_CELL_ICON_CONTAINER : "jw-header-cell-icon",
     JW_GRID_HEADER_CONTAINER : "jw-grid-header-container",
     JW_GRID_HEADER_CONTAINER_NO_GROUPING : "no-grouping",
-    JW_GRID_HEADER_JW_TABLE_CONTAINER : "jw-grid-header-table-container",
+    JW_GRID_HEADER_JW_TABLE_CONTAINER: "jw-grid-header-table-container",
     JW_GRID_JW_TABLE_ALT_ROW_CLASS : "row-alt",
     JW_GRID_JW_TABLE_CELL_CLASS : "jw-grid-cell",
     JW_GRID_JW_TABLE_CELL_CONTENT_CONTAINER_CLASS : "jw-grid-cell-content",
@@ -1977,6 +2018,7 @@ jw.DOM.classes = {
     JW_GRID_SELECTED_CELL_CLASS : "cell-selected",
     JW_GRID_SELECTED_ROW_CLASS: "row-selected",
     JW_GRID_REMOVE_GROUP_BUTTON: "jw-grid-remove-grouping",
+    JW_GRID_UNSELECTABLE:"unselectable",
     JW_HAS_ARROW: "has-arrow",
     JW_HAS_CHECKBOX: "has-checkbox",
     JW_HAS_ICON: "has-icon",
@@ -1986,7 +2028,8 @@ jw.DOM.classes = {
     JW_INVALID :"jw-invalid",
     JW_MENU_CLASS : "jw-menu",
     JW_MENU_CONTAINER_CLASS : "jw-menu-container",
-    JW_MENU_HORIZONTAL : "horizontal",
+    JW_MENU_HORIZONTAL: "horizontal",
+    JW_MENU_VERTICAL: "vertical",
     JW_MENU_ITEM : "jw-menu-item",
     JW_MENU_ITEMS_CONTAINER_CLASS : "jw-menu-items-container",
     JW_MENU_ITEM_ARROW : "jw-menu-item-arrow",
@@ -2046,7 +2089,7 @@ jw.DOM.attributeValues = {
     JW_MENU_ITEM_DATA_KEY: "jasonMenuItem"
 }
 var
-    JW_ICON = "jw-icon ";
+    JW_ICON = "jw-icon fa fa-fw ";
 /**
  * @readonly
  * @enum {string}
@@ -2054,34 +2097,34 @@ var
  * @description Icon class names, used by JasonWidgets.
  */
 jw.DOM.icons = {
-    CALENDAR: JW_ICON + "calendar32x32",
-    CHEVRON_DOWN: JW_ICON + "chevron_down32x32",
-    CHEVRON_UP: JW_ICON + "chevron_up32x32",
-    CHEVRON_LEFT: JW_ICON + "chevron_left32x32",
-    CHEVRON_RIGHT: JW_ICON + "chevron_right32x32",
-    CIRCLE_ARROW_DOWN: JW_ICON + "circle_arrow_down32x32",
-    CIRCLE_ARROW_UP: JW_ICON + "circle_arrow_up32x32",
-    CIRCLE_ARROW_LEFT: JW_ICON + "circle_arrow_left32x32",
-    CIRCLE_ARROW_RIGHT: JW_ICON + "circle_arrow_right32x32",
-    CIRCLE_CHOOSE: JW_ICON + "circle_choose32x32",
-    CIRCLE_MINUS: JW_ICON + "circle_minus32x32",
-    CIRCLE_PLUS: JW_ICON + "circle_plus32x32",
-    CLOCK : JW_ICON + "clock32x32",
-    CLOSE: JW_ICON + "close32x32",
-    CLOSE_24x24:JW_ICON + "close24x24",
-    FILTER: JW_ICON + "filter32x32",
-    LIST: JW_ICON + "list32x32",
-    MINUS: JW_ICON + "minus32x32",
-    PLUS: JW_ICON + "plus32x32",
-    REMOVE_SORT: JW_ICON + "remove-sorting32x32",
-    REMOVE_FILTER: JW_ICON + "remove-filter32x32",
-    SEARCH: JW_ICON + "search32x32",
-    SETTINGS : JW_ICON + "settings32x32",
-    SIGNAL: JW_ICON + "singal32x32",
-    SORT_ASC: JW_ICON + "sort_asc32x32",
-    SORT_DESC: JW_ICON + "sort_desc32x32",
-    CHEVRON_DOWN16x16: JW_ICON + "chevron_down16x16",
-    CHEVRON_UP16x16: JW_ICON + "chevron_up16x16",
+    CALENDAR: JW_ICON + "fa-calendar",
+    CHEVRON_DOWN: JW_ICON + "fa-chevron-down",
+    CHEVRON_UP: JW_ICON + "fa-chevron-up",
+    CHEVRON_LEFT: JW_ICON + "fa-chevron-left",
+    CHEVRON_RIGHT: JW_ICON + "fa-chevron-right",
+    CIRCLE_ARROW_DOWN: JW_ICON + "fa-chevron-circle-down",
+    CIRCLE_ARROW_UP: JW_ICON + "fa-chevron-circle-up",
+    CIRCLE_ARROW_LEFT: JW_ICON + "fa-chevron-circle-left",
+    CIRCLE_ARROW_RIGHT: JW_ICON + "fa-chevron-circle-right",
+    CIRCLE_CHOOSE: JW_ICON + "fa-check-circle",
+    CIRCLE_MINUS: JW_ICON + "fa-minus-circle",
+    CIRCLE_PLUS: JW_ICON + "fa-plus-circle",
+    CLOCK : JW_ICON + "fa-clock-o",
+    CLOSE: JW_ICON + "fa-close",
+    CLOSE_24x24: JW_ICON + "fa-close",
+    FILTER: JW_ICON + "fa-filter",
+    LIST: JW_ICON + "fa-list",
+    MINUS: JW_ICON + "fa-minus",
+    PLUS: JW_ICON + "fa-plus",
+    REMOVE_SORT: JW_ICON + "fa-trash",
+    REMOVE_FILTER: JW_ICON + "fa-trash",
+    SEARCH: JW_ICON + "fa-search",
+    SETTINGS : JW_ICON + "fa-cog",
+    SIGNAL: JW_ICON + "fa-signal",
+    SORT_ASC: JW_ICON + "fa-sort-amount-asc",
+    SORT_DESC: JW_ICON + "fa-sort-amount-desc",
+    CHEVRON_DOWN16x16: JW_ICON + "fa-chevron-down",
+    CHEVRON_UP16x16: JW_ICON + "fa-chevron-up",
 }
 
 jasonWidgets.keycodes = {
@@ -2390,7 +2433,7 @@ function jasonHTMLFactory() {
             if (textNode != void 0) {
                 menuCaption = document.createElement("div");
                 menuCaption.classList.add(jw.DOM.classes.JW_MENU_ITEM_CAPTION);
-                menuCaption.appendChild(jw.htmlFactory.createJWLinkLabel(textNode.textContent));
+                menuCaption.appendChild(jw.htmlFactory.createJWLinkLabel(textNode.textContent.trim()));
                 menuCaption.classList.add(jw.DOM.classes.JW_TEXT_OVERFLOW);
                 menuCaption.classList.add(jw.DOM.classes.JW_MENU_ITEM_CAPTION_ONLY);
                 liElement.replaceChild(menuCaption, textNode);
@@ -2427,7 +2470,14 @@ function jasonHTMLFactory() {
             }
             var hasSubItems = liElement.getElementsByTagName("UL").length > 0;
             if (hasSubItems) {
-                var arrowElement = jw.htmlFactory.createJWButton(null, orientation == "horizontal" ? jw.DOM.icons.CHEVRON_RIGHT : jw.DOM.icons.CHEVRON_DOWN);
+                var arrowIcon = "";
+                if (orientation == "horizontal") {
+                    arrowIcon = menuItem.level > 0 ? jw.DOM.icons.CHEVRON_RIGHT : jw.DOM.icons.CHEVRON_DOWN;
+                }
+                if (orientation == "vertical") {
+                    arrowIcon = jw.DOM.icons.CHEVRON_RIGHT;
+                }
+                var arrowElement = jw.htmlFactory.createJWButton(null, arrowIcon);
                 var arrowWrapper = document.createElement("div");
                 jw.common.setData(arrowElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY, menuItem);
                    ////var arrowElement = document.createElement("i");
@@ -2445,6 +2495,19 @@ function jasonHTMLFactory() {
     jasonHTMLFactory.prototype.createClearFloat = function () {
         var result = document.createElement("div");
         result.classList.add(jw.DOM.classes.JW_CLEAR_FLOAT_CLASS);
+        return result;
+    }
+
+    /**
+     * Creates the HTML for a jwLabel.
+     * @param {string=} caption - Caption.
+     */
+    jasonHTMLFactory.prototype.createJWSpan = function (caption) {
+        var result = document.createElement("span");
+        if (caption != void 0 && caption.trim().length > 0) {
+            result.setAttribute(jw.DOM.attributes.TITLE_ATTR, caption);
+            result.appendChild(document.createTextNode(caption));
+        }
         return result;
     }
 }
@@ -3615,6 +3678,7 @@ jasonDataSource.prototype.groupData = function (data) {
     if (!this.grouperDataSource)
         this.grouperDataSource = new jasonDataSource({ data: dataToGroup });
     this.grouperDataSource.clearSorting();
+    this.grouperDataSource.setData(dataToGroup);
     for (var i = 0; i <= this.grouping.length - 1; i++) {
         var grouping = this.grouping[i];
         this.grouperDataSource.addSorting({ name: grouping.field, reverse: false }, false);
@@ -4276,353 +4340,401 @@ jasonWidgets.localizationManager = new jasonLocalizationManager();
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-jasonDragResize.prototype = Object.create(jasonBaseWidget.prototype);
-jasonDragResize.prototype.constructor = jasonDragResize;
+
+jasonElementResizer.prototype = Object.create(jasonBaseWidget.prototype);
+jasonElementResizer.prototype.constructor = jasonElementResizer;
+
 
 /**
- * @class
- * @ignore
- * @name jasonDragResizeOptions
- * @description Configuration options for the drag resize manager.
- * @memberOf Common
- * @property {boolean}  allowDrag - Allows element to be dragged. Default is true.
- * @property {boolean}  allowResize - Allows element to be resized. Default is true.
- * @property {boolean}  allowResize.vertical - Allows element to be resized on the horizontal axis. Default is true.
- * @property {boolean}  allowResize.horizontal - Allows element to be resized on the vertical axis. Default is true.
+ * @event Common.jasonElementResizer#onElementResized
+ * @type {object}
+ * @property {Common.jasonElementResizer} sender - The jasonElementResizer instance.
+ * @property {HTMLElement} value - The resized element.
  */
 
 /**
- * jasonWidgets Drag Resize Manager
- * @ignore
+ * jasonWidgets resize manager
  * @constructor
- * @description Auxilary class, that manages drag/resize for HTMLElements.
+ * @description Auxiliary class, that manages resizing for HTMLElements.
  * @memberOf Common
  */
-function jasonDragResize(htmlElement, options, nameSpace) {
+function jasonElementResizer(htmlElement, options, nameSpace) {
     this.defaultOptions = {
-        allowDrag: true,
         allowResize: { top: true, left: true, bottom: true, right: true },
         minHeight: 60,
         minWidth: 40,
-        dependantElements: [],
-        onMoveStart: null,
-        onMoveEnd: null,
-        onResizeEnd: null,
-        onResizeStart:null,
-        ghostPanelCSS: null,
-        ghostPanelContents: null,
-        changeDragCursor: true,
-        gridMode:false
+        margins:5
     };
-
     jasonBaseWidget.call(this, nameSpace, htmlElement, options, null);
 
-    var self = this;
-    this.eventManager = new jasonEventManager();
-    this.htmlElement = htmlElement;
-    this.margins = 4;
-    this.fullScreenMargins = -10;
-    this.redraw = false;
-
-    this.boundingClientRect = null;
-    this.left = null;
-    this.top = null;
-    this.onTopEdge = null;
-    this.onLeftEdge = null;
-    this.onRightEdge = null;
-    this.onBottomEdge = null;
-    this.rightScreenEdge = null;
-    this.bottomScreenEdge = null;
-    this.clickActionInfo = null;
-    this.mouseMoveEvent = null;
-    this.preSnapped = null;
-    this.ghostPanel = document.createElement("div");
-    this.ghostPanel.style.display = "none";
-    if (typeof this.options.allowDrag == "boolean")
-        this.options.allowDrag = { draggable: this.options.allowDrag, element: htmlElement };
-    document.body.appendChild(self.ghostPanel);
-    if (this.options.ghostPanelCSS)
-        this.ghostPanel.classList.add(this.options.ghostPanelCSS);
-    if (this.options.ghostPanelContents)
-        this.ghostPanel.innerHTML = this.options.ghostPanelContents;
-
-    this.setBounds = function (element, left, top, width, height) {
-        element.style.left = left + 'px';
-        element.style.top = top + 'px';
-        element.style.width = width + 'px';
-        element.style.height = height + 'px';
+    this._mousePositionInfo = {
+        onTopEdge: false,
+        onLeftEdge: false,
+        onRightEdge: false,
+        onBottomEdge: false,
+        mousePixelsDifferenceLeft: null,
+        mousePixelsDifferenceTop: null,
+        mousePixelsDifferenceBottom: null,
+        mousePixelsDifferenceRight: null,
+        elementRect: null,
+        canResize: false
     }
 
-    this.hideGhostPanel = function () {
-        self.setBounds(self.ghostPanel, self.boundingClientRect.left, self.boundingClientRect.top, self.boundingClientRect.width, self.boundingClientRect.height);
-        self.ghostPanel.style.display = "none";
+    this._onElementMouseDown = this._onElementMouseDown.bind(this);
+    this._onElementMouseMove = this._onElementMouseMove.bind(this);
+    this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseUp = this._onMouseUp.bind(this);
+    this._resizeElement = this._resizeElement.bind(this);
+    this._resizing = false;
+    this._redrawing = null;
+    this._updatingMouseInfo = false;
+    this._startX = null;
+    this._startY = null;
+    this._mouseMoveTimer = null;
+    this._mouseMoving = true;
+    this._initializeEvents();
+}
+
+/**
+ * Allows resizing to happen, if mouse is over in one of the 4 sides of the htmlElement.
+ */
+jasonElementResizer.prototype._startResize = function () {
+    this._resizing = this._mousePositionInfo.canResize;
+    this.triggerEvent(jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING, this.htmlElement);
+}
+
+/**
+ * Stops resizing.
+ */
+jasonElementResizer.prototype._stopResize = function () {
+    if (this._resizing) {
+        this._resizing = false;
+        this.triggerEvent(jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED, this.htmlElement);
     }
+}
 
-
-    this.calculateAction = function (event) {
-        self.boundingClientRect = self.htmlElement.getBoundingClientRect();
-        self.dragBoundingClientRect = self.options.allowDrag.element.getBoundingClientRect();
-        self.left = event.clientX - self.boundingClientRect.left;
-        self.top = event.clientY - self.boundingClientRect.top;
-        self.onTopEdge = self.top < self.margins;
-        self.onBottomEdge = self.top >= self.boundingClientRect.height - self.margins;
-        self.onLeftEdge = self.left < self.margins;
-        self.onRightEdge = self.left >= self.boundingClientRect.width - self.margins;
-        self.rightScreenEdge = window.innerWidth - self.margins;
-        self.bottomScreenEdge = window.innerHeight - self.margins;
+/**
+ * Mouse move event.
+ */
+jasonElementResizer.prototype._onMouseMove = function (event) {
+    this._mouseMoveEvent = event;
+    this._mouseMoving = true;
+    clearTimeout(this._mouseMoveTimer);
+    //if mouse stops moving after 50ms, then stop resizing the column
+    this._mouseMoveTimer = setTimeout(function () { this._mouseMoving = false; }.bind(this), 50);
+    setTimeout(function () { this._redrawing = true; }.bind(this));
+}
+/**
+ * 
+ */
+jasonElementResizer.prototype._onElementMouseMove = function (event) {
+    if (!this._resizing) {
+        this._updateCursor(event);
     }
-
-    this.onDown = function (event) {
-        self.calculateAction(event);
-        var isResizing = !self.options.allowResize ? false : (self.onRightEdge || self.onLeftEdge || self.onTopEdge || self.onBottomEdge);
-        self.clickActionInfo = {
-            left: self.left,
-            top: self.top,
-            clientX: event.clientX,
-            clientY: event.clientY,
-            width: self.boundingClientRect.width,
-            height: self.boundingClientRect.height,
-            isResizing: isResizing,
-            isMoving: !isResizing && self.canMove(),
-            onTopEdge: self.onTopEdge,
-            onLeftEdge: self.onLeftEdge,
-            onRightEdge: self.onRightEdge,
-            onBottomEdge: self.onBottomEdge
-        };
+}
+/**
+ * Mouse down event.
+ */
+jasonElementResizer.prototype._onElementMouseDown = function (event) {
+    if (this._mousePositionInfo.canResize) {
+        this._startX = event.clientX;
+        this._startY = event.clientY;
+        this._startResize();
+        this._resizeElement();
     }
+}
+/**
+ * Mouse up event.
+ */
+jasonElementResizer.prototype._onMouseUp = function (event) {
+    this._stopResize();
+}
 
-    this.canMove = function () {
-        if (self.options.allowDrag.draggable) {
-            return self.left > 0 && self.left < self.dragBoundingClientRect.width &&
-                self.top > 0 && self.top < self.dragBoundingClientRect.height;
-        }
-        return false;
-    }
+/**
+ * Touch start event, equivalent to the mouse down.
+ */
+jasonElementResizer.prototype._onTouchStart = function (event) {
+    this._startResize();
+}
 
-    this.onTouchStart = function (touchEvent) {
-        //if(self.htmlElement == touchEvent.target)
-        self.onDown(touchEvent.touches[0]);
-        touchEvent.preventDefault();
-        touchEvent.stopPropagation();
-    }
+/**
+ * Touch move event, equivalent to the mouse move event.
+ */
+jasonElementResizer.prototype._onTouchMove = function (event) {
+    this._mouseMoveEvent = event.touches[0];
+}
 
-    this.onTouchMove = function (touchEvent) {
-        self.onMouseMove(touchEvent.touches[0])
-        self.redraw = true;
-        self.animateMove();
-    }
+/**
+ * Touch end event, equivalent to the mouse up event.
+ */
+jasonElementResizer.prototype._onTouchEnd = function (event) {
+    if (event.touches.length == 0)
+        this._stopResize();
+}
 
-    this.onTouchEnd = function (touchEvent) {
-        if (touchEvent.touches.length == 0)
-            self.onMouseUp(touchEvent.changedTouches[0]);
-    }
+/**
+ * Update element dimensions for the horizontal axis, starting from right.
+ */
+jasonElementResizer.prototype._updateElementRight = function (newWidth, widthDifference) {
+    this.htmlElement.style.width = newWidth + "px";
+}
 
-    this.onMouseDown = function (mouseEvent) {
-        self.onDown(mouseEvent);
-        mouseEvent.preventDefault();
-        mouseEvent.stopPropagation();
-        if (self.clickActionInfo && self.clickActionInfo.isMoving) {
-            self.hideGhostPanel();
-            if (self.options.onMoveStart)
-                self.options.onMoveStart(mouseEvent, self.htmlElement);
-        }
-        if (self.clickActionInfo && self.clickActionInfo.isResizing) {
-            if (self.options.onResizeStart)
-                self.options.onResizeStart(mouseEvent, self.htmlElement);
-        }
-    }
+/**
+ * Update element dimensions for the vertical axis, starting from bottom.
+ */
+jasonElementResizer.prototype._updateElementHeight = function (newHeight) {
+    this.htmlElement.style.height = newHeight + "px";
+}
 
-    this.onMouseMove = function (mouseEvent) {
-        self.calculateAction(mouseEvent);
-        self.mouseMoveEvent = mouseEvent;
-        self.redraw = true;
-    }
+/**
+ * Update element dimensions for the horizontal axis, starting from left.
+ */
+jasonElementResizer.prototype._updateElementLeft = function (newLeft, newWidth) {
+    this.htmlElement.style.width = newWidth + "px";
+    this.htmlElement.style.left = newLeft + "px";
+}
 
-    this.onMouseUp = function (mouseEvent) {
-        //if (self.ghostPanel.parentElement)
-        //    self.ghostPanel.parentElement.remove(self.ghostPanel);
-        self.calculateAction(mouseEvent);
-        if (self.clickActionInfo && self.clickActionInfo.isMoving) {
-            self.hideGhostPanel();
-            if (self.options.onMoveEnd)
-                self.options.onMoveEnd(mouseEvent, self.htmlElement);
-        }
-        if (self.clickActionInfo && self.clickActionInfo.isResizing) {
-            if (self.options.onResizeEnd)
-                self.options.onResizeEnd(mouseEvent, self.htmlElement);
-        }
-        self.clickActionInfo = null;
-    }
+/**
+ * Update element dimensions for the vertical axis, starting from top.
+ */
+jasonElementResizer.prototype._updateElementTop = function (newTop, newHeight) {
+    this.htmlElement.style.height = newHeight + "px";
+    this.htmlElement.style.top = newTop + "px";
+}
 
-    this.animateMove = function () {
-        window.requestAnimationFrame(self.animateMove);
-        var exit = false;
-        //if the mouse move event does not have a button property it's a touchevent.
-        //if it is a mouse event only accept first button.
-        if (self.mouseMoveEvent && self.mouseMoveEvent.button != void 0)
-            exit = self.mouseMoveEvent.button != 0;
-        //if it is a right click then exit.
-        if (exit === true)
-            return;
-        //if we are already in a redraw cycle, exit.
-        if (self.redraw === false)
-            return;
-        self.redraw = false;
-
-        if (self.clickActionInfo && self.clickActionInfo.isResizing) {
-            if (self.clickActionInfo.onRightEdge && self.options.allowResize.right) {
-                if (!self.options.gridMode) {
-                    var currentWidth = Math.max(self.clickActionInfo.width + (self.mouseMoveEvent.clientX - self.clickActionInfo.clientX), self.options.minWidth);
-                    if (currentWidth > self.options.minWidth) {
-                        self.htmlElement.style.width = currentWidth + "px";
-                    }
-                }
-                if (self.options.dependantElements) {
-                    for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {
-                        self.options.dependantElements[i].style.width = Math.max(self.left, self.options.minWidth) + "px";
-                    }
-                }
+/**
+ * Function running within a requestAnimationFrame, to improve performance and reduce flickering while resizing.
+ */
+jasonElementResizer.prototype._resizeElement = function (timeStamp) {
+    if (this._resizing)
+        window.requestAnimationFrame(this._resizeElement);
+    //if the resizer is disabled, do nothing.
+    if (!this.enabled)
+        return;
+    if (this._resizing && this._mouseMoving) {
+        var newWidthDifference = 0;
+        var newHeightDifference = 0;
+        var newWidth = 0;
+        var newLeft = 0;
+        var newTop = 0;
+        var newHeight = 0;
+        if (this._mousePositionInfo.onRightEdge && this.options.allowResize.right) {
+            //clientX is where the mouse is at the moment and _startX is where the resizing started.
+            newWidthDifference = (this._mouseMoveEvent.clientX - this._startX);
+            newWidth = this._mousePositionInfo.elementRect.width + newWidthDifference;
+            if (newWidth >= this.options.minWidth) {
+                this._updateElementRight(newWidth, newWidthDifference);
             }
-
-
-            if (self.clickActionInfo.onBottomEdge && self.options.allowResize.bottom) {
-                if (!self.options.gridMode) {
-                    var currentHeight = Math.max(self.clickActionInfo.height + (self.mouseMoveEvent.clientY - self.clickActionInfo.clientY), self.options.minHeight);
-                    if (currentHeight > self.options.minHeight) {
-                        self.htmlElement.style.height = currentHeight + "px";
-                    }
-                }
-                if (self.options.dependantElements) {
-                    for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {
-                        self.options.dependantElements[i].style.height = Math.max(self.top, self.options.minHeight) + "px";
-                    }
-                }
+        }
+        if (this._mousePositionInfo.onLeftEdge && this.options.allowResize.left) {
+            //clientX is where the mouse is at the moment and _startX is where the resizing started.
+            newWidthDifference = (this._mouseMoveEvent.clientX - this._startX);
+            newWidth = this._mousePositionInfo.elementRect.width - newWidthDifference;
+            newLeft = this._mousePositionInfo.elementRect.left + newWidthDifference;
+            if (newWidth >= this.options.minWidth) {
+                this._updateElementLeft(newLeft, newWidth);
             }
-
-            if (self.clickActionInfo.onLeftEdge && self.options.allowResize.left) {
-
-                if (!self.options.gridMode) {
-                    var currentWidth = Math.max(self.clickActionInfo.clientX - self.mouseMoveEvent.clientX + self.clickActionInfo.width, self.options.minWidth);
-                    if (currentWidth > self.options.minWidth) {
-                        self.htmlElement.style.width = currentWidth + "px";
-                        self.htmlElement.style.left = self.mouseMoveEvent.clientX + "px";
-                    }
-                }
-                if (self.options.dependantElements) {
-                    for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {
-                        self.options.dependantElements[i].style.width = currentWidth;
-                    }
-                }
-            }
-
-            if (self.clickActionInfo.onTopEdge && self.options.allowResize.top) {
-                if (!self.options.gridMode) {
-                    var currentHeight = Math.max(self.clickActionInfo.clientY - self.mouseMoveEvent.clientY + self.clickActionInfo.height, self.options.minHeight);
-                    if (currentHeight > self.options.minHeight) {
-                        self.htmlElement.style.height = currentHeight + "px";
-                        self.htmlElement.style.top = self.mouseMoveEvent.clientY + "px";
-                    }
-                }
-                if (self.options.dependantElements) {
-                    for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {
-                        self.options.dependantElements[i].style.height = currentHeight;
-                    }
-                }
-            }
-
-            return;
         }
 
-        if (self.clickActionInfo && self.clickActionInfo.isMoving) {
-            var opacity = 0.2;
-            var hide = true;
-            self.ghostPanel.style.display = "";
-            if (self.boundingClientRect.top < self.fullScreenMargins || self.boundingClientRect.left < self.fullScreenMargins ||
-                self.boundingClientRect.right > window.innerWidth - self.fullScreenMargins ||
-                self.boundingClientRect.bottom > window.innerHeight - self.fullScreenMargins) {
-
-                self.setBounds(self.ghostPanel, 0, 0, window.innerWidth, window.innerHeight);
-                hide = false;
-            }
-
-            if (self.boundingClientRect.top < self.margins) {
-                self.setBounds(self.ghostPanel, 0, 0, window.innerWidth, window.innerHeight / 2);
-                hide = false;
-            }
-
-            if (self.boundingClientRect.left < self.margins) {
-                self.setBounds(self.ghostPanel, 0, 0, window.innerWidth / 2, window.innerHeight);
-                hide = false;
-            }
-
-            if (self.boundingClientRect.right > self.rightScreenEdge) {
-                self.setBounds(self.ghostPanel, window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
-                hide = false;
-            }
-
-            if (self.boundingClientRect.bottom > self.bottomScreenEdge) {
-                self.setBounds(self.ghostPanel, 0, window.innerHeight / 2, window.innerWidth, window.innerWidth / 2);
-                hide = false;
-            }
-            if (!hide)
-                self.ghostPanel.style.opacity = opacity;
-            if (hide)
-                self.hideGhostPanel();
-            if (self.options.gridMode) {
-                self.ghostPanel.style.display = "";
-                self.ghostPanel.style.top = (self.mouseMoveEvent.clientY - self.clickActionInfo.top) + 'px';
-                self.ghostPanel.style.left = (self.mouseMoveEvent.clientX - self.clickActionInfo.left) + 'px';
-            } else {
-                self.htmlElement.style.top = (self.mouseMoveEvent.clientY - self.clickActionInfo.top) + 'px';
-                self.htmlElement.style.left = (self.mouseMoveEvent.clientX - self.clickActionInfo.left) + 'px';
-            }
-            if (self.options.dependantElements) {
-                for (var i = 0; i <= self.options.dependantElements.length - 1; i++) {
-                    self.options.dependantElements[i].style.top = (self.mouseMoveEvent.clientY - self.clickActionInfo.top) + 'px';
-                    self.options.dependantElements[i].style.left = (self.mouseMoveEvent.clientX - self.clickActionInfo.left) + 'px';
+        if (this._mousePositionInfo.onTopEdge && this.options.allowResize.top) {
+            //clientY is where the mouse is at the moment and _startY is where the resizing started.
+            newHeightDifference = (this._mouseMoveEvent.clientY - this._startY);
+            //if (Math.abs(newHeightDifference) > this.options.margins) {
+                newHeight = this._mousePositionInfo.elementRect.height - newHeightDifference;
+                newTop = this._mousePositionInfo.elementRect.top + newHeightDifference;
+                if (newHeight >= this.options.minHeight) {
+                    this._updateElementTop(newTop, newHeight);
                 }
-            }
-            return;
+            //}
         }
 
+        if (this._mousePositionInfo.onBottomEdge && this.options.allowResize.bottom) {
+            //clientY is where the mouse is at the moment and _startY is where the resizing started.
+            newHeightDifference = (this._mouseMoveEvent.clientY - this._startY);
+            //if (Math.abs(newHeightDifference) > this.options.margins) {
+                newHeight = this._mousePositionInfo.elementRect.height + newHeightDifference;
+                if (newHeight >= this.options.minHeight) {
+                    this._updateElementHeight(newHeight);
+                }
+            //}
+        }
+    }
+}
 
+/**
+ * Updates the mouse cursor, when mouse touches one of the 4 sides of the element.
+ */
+jasonElementResizer.prototype._updateCursor = function (event) {
+    if (event) {
+        this.update_mousePositionInfo(event);
         var cursor = "default";
-        if (self.canMove() && self.options.changeDragCursor)
-            cursor = "move";
-        if (self.options.allowResize.left && self.onLeftEdge)
+        if (this._mousePositionInfo.onLeftEdge || this._mousePositionInfo.onRightEdge) {
             cursor = "ew-resize";
-        if (self.options.allowResize.right && self.onRightEdge)
-            cursor = "ew-resize";
-        if (self.options.allowResize.top && self.onTopEdge)
+        }
+        if (this._mousePositionInfo.onTopEdge || this._mousePositionInfo.onBottomEdge) {
             cursor = "ns-resize";
-        if (self.options.allowResize.bottom && self.onBottomEdge)
-            cursor = "ns-resize";
-
-        self.htmlElement.style.cursor = cursor;
+        }
+        this.htmlElement.style.cursor = cursor;
     }
+}
 
-    this.destroy = function () {
-        self.thElement.removeEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this.onMouseDown);
-        self.thElement.removeEventListener(jw.DOM.events.TOUCH_START_EVENT, this.onTouchStart);
+/**
+ * Calculates mouse position information, relative to the htmlElement.
+ */
+jasonElementResizer.prototype.update_mousePositionInfo = function (event) {
+    var elementRect = this.htmlElement.getBoundingClientRect();
+    this._mousePositionInfo.elementRect = elementRect;
+    this._mousePositionInfo.mousePixelsDifferenceLeft = Math.abs(event.clientX - elementRect.left);
+    this._mousePositionInfo.mousePixelsDifferenceTop = Math.abs(event.clientY - elementRect.top);
+    this._mousePositionInfo.mousePixelsDifferenceBottom = Math.abs(event.clientY - elementRect.bottom);
+    this._mousePositionInfo.mousePixelsDifferenceRight = Math.abs(event.clientX - elementRect.right);
 
-        jwDocumentEventManager.removeDocumentEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this.onMouseMove);
-        jwDocumentEventManager.removeDocumentEventListener(jw.DOM.events.MOUSE_UP_EVENT, this.onMouseUp);
+    this._mousePositionInfo.onTopEdge = (this._mousePositionInfo.mousePixelsDifferenceTop <= this.options.margins) && this.options.allowResize.top;
+    this._mousePositionInfo.onLeftEdge = (this._mousePositionInfo.mousePixelsDifferenceLeft <= this.options.margins) && this.options.allowResize.left;
 
-        jwDocumentEventManager.removeDocumentEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this.onTouchMove);
-        jwDocumentEventManager.removeDocumentEventListener(Tjw.DOM.events.OUCH_END_EVENT, this.onTouchEnd);
+    this._mousePositionInfo.onBottomEdge = (this._mousePositionInfo.mousePixelsDifferenceBottom <= this.options.margins) && this.options.allowResize.bottom;
+    this._mousePositionInfo.onRightEdge = (this._mousePositionInfo.mousePixelsDifferenceRight <= this.options.margins) && this.options.allowResize.right;
+    this._mousePositionInfo.canResize = this._mousePositionInfo.onTopEdge || this._mousePositionInfo.onLeftEdge || this._mousePositionInfo.onBottomEdge || this._mousePositionInfo.onRightEdge;
+}
+
+/**
+ * Initializes mouse and touch events.
+ */
+jasonElementResizer.prototype._initializeEvents = function () {
+    this.htmlElement.addEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onElementMouseMove);
+    this.htmlElement.addEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onElementMouseDown);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove);
+
+    //this.htmlElement.addEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //this.htmlElement.addEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+
+/**
+ * Removes all event listeners.
+ */
+jasonElementResizer.prototype.destroy = function () {
+    
+    this.htmlElement.removeEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onElementMouseMove);
+    this.htmlElement.removeEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onElementMouseDown);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove);
+
+    //this.htmlElement.removeEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //this.htmlElement.removeEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    //jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+jasonElementDragger.prototype = Object.create(jasonBaseWidget.prototype);
+jasonElementDragger.prototype.constructor = jasonElementDragger;
+
+
+/**
+ * jasonWidgets resize manager
+ * @constructor
+ * @description Auxiliary class, that manages drag and drop for HTMLElements.
+ * @memberOf Common
+ */
+function jasonElementDragger(htmlElement, options, nameSpace) {
+    this.defaultOptions = {
+        changeCursor: true
+    };
+    jasonBaseWidget.call(this, nameSpace, htmlElement, options, null);
+    this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseDown = this._onMouseDown.bind(this);
+    this._onMouseUp = this._onMouseUp.bind(this);
+    this._onWindowMouseMove = this._onWindowMouseMove.bind(this);
+    this._dragElement = this._dragElement.bind(this);
+    this._mouseMoveEvent = null;
+    this._dragging = false;
+    this._initializeEvents();
+    this._startX = null;
+    this._startY = null;
+    this._elementRect = null;
+    this._dragElement();
+}
+/**
+ * Event initialization.
+ */
+jasonElementDragger.prototype._initializeEvents = function () {
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onWindowMouseMove);
+    this.htmlElement.addEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onMouseDown);
+    this.htmlElement.addEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove);
+}
+/**
+ * Keeping track of the mouse move event.
+ */
+jasonElementDragger.prototype._onWindowMouseMove = function (event) {
+    this._mouseMoveEvent = event;
+}
+/**
+ * Mouse move event over the htmlElement, to change cursor if needed.
+ */
+jasonElementDragger.prototype._onMouseMove = function (event) {
+    if(this.options.changeCursor)
+        this.htmlElement.style.cursor = "move";
+}
+/**
+ * Mouse down event on the htmlElement. It initiates the dragging.
+ */
+jasonElementDragger.prototype._onMouseDown = function (event) {
+    if (event.button == 0) {
+        this._elementRect = this.htmlElement.getBoundingClientRect();
+        this._dragging = true;
+        this._startX = event.clientX;
+        this._startY = event.clientY;
+        this._mouseMoveEvent = event;
+        this._dragElement();
     }
+}
+/**
+ * On window mouse up, stop dragging
+ */
+jasonElementDragger.prototype._onMouseUp = function (event) {
+    if (this._dragging) {
+        this._dragging = false;
+        event.preventDefault();
+        event.stopPropagation();
+        this.triggerEvent(jw.DOM.events.DRAG_OVER_EVENT, event);
+    }
+}
+/**
+ * On window touch end, stop dragging
+ */
+jasonElementDragger.prototype._onTouchEnd = function (event) {
+    this._onMouseUp(event);
+}
+/**
+ * On destroy, remove all event listeners.
+ */
+jasonElementDragger.prototype.destroy = function () {
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onWindowMouseMove);
+    this.htmlElement.removeEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onMouseDown);
+    this.htmlElement.removeEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove);
+}
+/**
+ * Where actually the dragging takes place.
+ */
+jasonElementDragger.prototype._dragElement = function () {
+    if (this._dragging && this.enabled) {
+        window.requestAnimationFrame(this._dragElement);
+        var newLeft = this._elementRect.left + (this._mouseMoveEvent.clientX - this._startX);
+        var newTop = this._elementRect.top + (this._mouseMoveEvent.clientY - this._startY);
 
-    this.htmlElement.addEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this.onMouseDown);
-    this.htmlElement.addEventListener(jw.DOM.events.TOUCH_START_EVENT, this.onTouchStart);
-
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this.onMouseMove);
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.MOUSE_UP_EVENT, this.onMouseUp);
-
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this.onTouchMove);
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_END_EVENT, this.onTouchEnd);
-
-    this.animateMove();
-
+        this.htmlElement.style.left = newLeft + "px";
+        this.htmlElement.style.top = newTop + "px";
+    }
 }
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -5693,8 +5805,8 @@ jasonButtonTextboxUIHelper.prototype.renderUI = function () {
         this.button = jw.htmlFactory.createJWButton(null, this.options.icon);
         this.button.setAttribute(jw.DOM.attributes.TITLE_ATTR, this.options.title == void 0 ? "" : this.options.title);
         this.htmlElement.appendChild(this.button);
-        /*32px is the icon and 3px are the added borders. */
-        var buttonWidth = this.options.icon ? 35 : 0;
+        /*24px is the icon and 1px are the added borders. */
+        var buttonWidth = this.options.icon ? 27 : 0;
         this.inputControl.style.width = "calc(100% - " + (buttonWidth) + "px)";
         if (this.inputControl.style.width == "")
             this.inputControl.style.width = "-webkit-calc(100% - " + (buttonWidth) + "px)";
@@ -6059,6 +6171,7 @@ jasonComboboxUIHelper.prototype.renderUI = function () {
         });
         this.dropDownListButton = new jasonDropDownListButton(this.button, dropDownButtonOptions);
         this.button.classList.remove(jw.DOM.classes.JW_BORDERED);
+        this.button.classList.remove(jw.DOM.classes.JW_BUTTON_STANDALONE);
         //this.initializeEvents();
         if (this.options.dropDownList)
             this.inputControl.setAttribute(jw.DOM.attributes.READONLY_ATTR, true);
@@ -6338,7 +6451,7 @@ jasonMenu.prototype.constructor = jasonMenu;
 function jasonMenu(htmlElement, options, uiHelper) {
     this.items = [];
     /*Default menu options*/
-    this.defaultOptions = { orientation: 'vertical', animation: { delay: 9 }, expandMenuOnHover: true, invokable: false };
+    this.defaultOptions = { orientation: 'vertical', animation: { delay: 9 }, expandMenuOnHover: true, invokable: false,autoHide:true };
     jasonBaseWidget.call(this, "jasonMenu", htmlElement, options, uiHelper);
 }
 
@@ -6521,6 +6634,24 @@ jasonMenuWidgetParser.prototype.mustAddArrowIcon = function (liElement) {
         result = false;
     return result;
 }
+/**
+ * Sets event handlers for the newly created menu item.
+ * @param {object} liElement - HTMLElement.
+ */
+jasonMenuWidgetParser.prototype.setMenuItemEvents = function (liElement, menuItem) {
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
+    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
+    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
+    if (arrowElement) {
+        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+    }
+    if (menuItem.hasCheckBox && menuItem.checkBoxElement) {
+        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
+    }
+}
 
 
 
@@ -6539,7 +6670,7 @@ function jasonMenuWidgetDOMParser(menuUI) {
  */
 jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
     var result = new jasonMenuItem(liElement,null,null);
-    var menuItemLevel = liElement.getAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTEJW_MENU_ITEM_LEVEL_ATTRIBUTE);
+    var menuItemLevel = liElement.getAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTE);
     if (menuItemLevel)
         result.level = parseInt(menuItemLevel);
 
@@ -6547,24 +6678,24 @@ jasonMenuWidgetDOMParser.prototype.createMenuItem = function (liElement) {
     jasonWidgets.common.setData(liElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY, result);
     return result;
 }
-/**
- * Sets event handlers for the newly created menu item.
- * @param {object} liElement - HTMLElement.
- */
-jasonMenuWidgetDOMParser.prototype.setMenuItemEvents = function (liElement,menuItem) {
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
-    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
-    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
-    if (arrowElement) {
-        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
-    }
-    if (menuItem.hasCheckBox) {
-        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
-    }
-}
+///**
+// * Sets event handlers for the newly created menu item.
+// * @param {object} liElement - HTMLElement.
+// */
+//jasonMenuWidgetDOMParser.prototype.setMenuItemEvents = function (liElement,menuItem) {
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.TOUCH_START_EVENT, this.menuUI.onItemTouch, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave, true);
+//    this.menuUI.eventManager.addEventListener(liElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown, true);
+//    var arrowElement = liElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
+//    if (arrowElement) {
+//        this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+//    }
+//    if (menuItem.hasCheckBox) {
+//        this.menuUI.eventManager.addEventListener(menuItem.checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
+//    }
+//}
 /**
  * Creates json representation of the UL element structure.
  * @param {object} ulElementMenu - HTMLElement.
@@ -6590,6 +6721,7 @@ jasonMenuWidgetDOMParser.prototype.populateMenu = function (ulElementMenu) {
                 for (var x = 0; x <= subItemsUL.children.length - 1; x++) {
                     var subMenuItemElement = subItemsUL.children[x];
                     var subMenuItem = self.createMenuItem(subMenuItemElement);
+                    subMenuItem.level = parentMenuItem.level + 1;
                     jw.htmlFactory.convertToJWMenuItem(self.menuUI.options.orientation, subMenuItemElement, subMenuItem);
                     self.setMenuItemEvents(subMenuItemElement,subMenuItem);
                     parentMenuItem.items.push(subMenuItem);
@@ -6613,7 +6745,8 @@ jasonMenuWidgetDOMParser.prototype.populateMenu = function (ulElementMenu) {
         var rootMenuElement = ulElementMenu.children[i];
         rootMenuElement.setAttribute(jw.DOM.attributes.JW_MENU_ITEM_LEVEL_ATTRIBUTE, 0);
         var rootMenuItem = this.createMenuItem(rootMenuElement);
-        jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation == "horizontal" ? "vertical" : "horizontal", rootMenuElement, rootMenuItem);
+        //jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation == "horizontal" ? "vertical" : "horizontal", rootMenuElement, rootMenuItem);
+        jw.htmlFactory.convertToJWMenuItem(this.menuUI.options.orientation, rootMenuElement, rootMenuItem);
         this.setMenuItemEvents(rootMenuElement, rootMenuItem);
         rootMenuItem.level = 0;
         menu.items.push(rootMenuItem);
@@ -6732,22 +6865,14 @@ jasonMenuWidgetJSONParser.prototype.createMenuElementFromItem = function (menuIt
             menuItemElement.classList.add(jw.DOM.classes.JW_MENU_ITEM_DIVIDER);
             menuItemElement.setAttribute(jw.DOM.attributeValues.JW_MENU_ITEM_NO_HIGHLIGHT_ATTR, "true");
         }
-        if (menuItem.hasCheckBox) {
-            var checkBoxElement = jw.common.getElementsByAttribute(menuItemElement, "type", "checkbox")[0];
-            if (checkBoxElement != void 0) {
-                menuItem.checkBoxElement = checkBoxElement;
-                this.menuUI.eventManager.addEventListener(checkBoxElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onCheckboxClick);
-            }
-        }
         if (!menuItem.isDivider) {
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemClick, true);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.MOUSE_ENTER_EVENT, this.menuUI.onItemMouseEnter);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.MOUSE_LEAVE_EVENT, this.menuUI.onItemMouseLeave);
-            this.menuUI.eventManager.addEventListener(menuItemElement, jw.DOM.events.KEY_DOWN_EVENT, this.menuUI.onItemKeyDown,true);
-            var arrowElement = menuItemElement.querySelectorAll(".jw-menu-item-arrow .jw-button")[0];
-            if (arrowElement) {
-                this.menuUI.eventManager.addEventListener(arrowElement, jw.DOM.events.CLICK_EVENT, this.menuUI.onItemArrowClick, true);
+            if (menuItem.hasCheckBox) {
+                var checkBoxElement = jw.common.getElementsByAttribute(menuItemElement, "type", "checkbox")[0];
+                if (checkBoxElement != void 0) {
+                    menuItem.checkBoxElement = checkBoxElement;
+                }
             }
+            this.setMenuItemEvents(menuItemElement, menuItem);
         }
     }
     if (menuElement == void 0)
@@ -6782,6 +6907,11 @@ function jasonMenuUIHelper(widget, htmlElement) {
     this.menuContainer = this.createElement("div");
     this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_CONTAINER_CLASS);
 
+    if (this.options.orientation == jw.DOM.classes.JW_MENU_HORIZONTAL)
+        this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_HORIZONTAL);
+
+    if (this.options.orientation == jw.DOM.classes.JW_MENU_VERTICAL)
+        this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_VERTICAL);
 
     this.ulMenuElement.classList.add(jw.DOM.classes.JW_MENU_CLASS);
 
@@ -6818,24 +6948,27 @@ function jasonMenuUIHelper(widget, htmlElement) {
         jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, function (mouseDownEvent) {
             if (self.menuContainer.style.display != "none") {
                 var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, mouseDownEvent)
-                if (isOutOfContainer && self.canHideMenu)
+                if (isOutOfContainer && self.canHideMenu && self.options.invokable)
                     self.hideMenu();
+            }
+        });
+
+        jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_END_EVENT, function (touchEndEvent) {
+            if (self.menuContainer.style.display != "none") {
+                var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, touchEndEvent.changedTouches[0]);
+                if (isOutOfContainer && self.previousShowMenuItem) {
+                    //if (self.options.invokable && self.previousShowMenuItem.items.length == 0)
+                    //    self.hideMenu();
+                    var parent = self.previousShowMenuItem;
+                    while (parent) {
+                        self.hideMenuItemContents(parent);
+                        parent = parent.parent;
+                    }
+                }
             }
         });
     }
 
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_END_EVENT, function (touchEndEvent) {
-        if (self.menuContainer.style.display != "none") {
-            var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, touchEndEvent.changedTouches[0]);
-            if (isOutOfContainer && self.previousShowMenuItem) {
-                var parent = self.previousShowMenuItem;
-                while (parent) {
-                    self.hideMenuItemContents(parent);
-                    parent = parent.parent;
-                }
-            }
-        }
-    });
 
     /*Finally creating the menu*/
     this.menu = this.createMenu();
@@ -6864,8 +6997,10 @@ jasonMenuUIHelper.prototype.showMenu = function (invokableElement,left,top) {
         this.menuContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_SHOW);
         var firstFocusable = jw.common.getFirstFocusableElement(this.menuContainer);
-        if (firstFocusable)
+        if (firstFocusable) {
             firstFocusable.focus();
+            this.previousShowMenuItem = this.getMenuItemFromElement(firstFocusable);
+        }
     }
 }
 /**
@@ -6955,6 +7090,11 @@ jasonMenuUIHelper.prototype.getMenuItemFromEvent = function (event) {
     return jasonWidgets.common.getData(menuElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY);
 }
 
+jasonMenuUIHelper.prototype.getMenuItemFromElement = function (element) {
+    var menuElement = element.tagName == "LI" ? event.target : jasonWidgets.common.getParentElement("LI", element);
+    return jasonWidgets.common.getData(menuElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY);
+}
+
 jasonMenuUIHelper.prototype.onCheckboxClick = function (clickEvent) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
@@ -6992,8 +7132,16 @@ jasonMenuUIHelper.prototype.onItemClick = function (clickEvent) {
             this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CLICKED, { event: clickEvent, item: menuItem, uiHelper: this });
             //if disableMouseEvents = true, it means that the user clicked outside the main UL menu element, but inside the contents of a menu item
             //which means we should not hide the menu.
-            if (this.widget.options.autoHide && !this.disableMouseEvents)
-                this.hideMenu();
+            if (this.widget.options.autoHide && !this.disableMouseEvents) {
+                //if this is an invokable menu, then hide it all
+                if(this.widget.options.invokable)
+                    this.hideMenu();
+                else
+                {
+                    //if it is a "static" menu, then hide all sub items up to the root item.
+                    this.hideMenuItemsUpToRootItem(menuItem);
+                }
+            }
         }
     }
     clickEvent.stopPropagation();
@@ -7031,9 +7179,25 @@ jasonMenuUIHelper.prototype.onItemArrowClick = function (clickEvent) {
 jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
-    touchEvent.preventDefault();
-    touchEvent.stopPropagation();
+    //touchEvent.preventDefault();
+    //touchEvent.stopPropagation();
     var menuItem = this.getMenuItemFromEvent(touchEvent);
+    //if the menu item is associated with an element.
+    if (menuItem.htmlElement) {
+        var clickListener = menuItem.htmlElement._jasonWidgetsEventListeners_.filter(function (evntListener) { return evntListener.eventName == jw.DOM.events.CLICK_EVENT })[0];
+        if (clickListener)
+            clickListener.enabled = false;
+    }
+    //if the menuitem has a content element that is visible do nothing.
+    if (menuItem.content && menuItem.content.style.display == "")
+        return;
+    //if it is an invokable menu, then we need to hide it.
+    if (this.widget.options.invokable) {
+        var shouldHide = (menuItem.items.length == 0 && !menuItem.content) || (menuItem.content && menuItem.content.display == "none");
+        if (shouldHide) {
+            this.hideMenu();
+        }
+    }
     if (this.previousShowMenuItem) {
         //hide all previously shown items, up to the level of the currently touched item.
         if (menuItem.level <= this.previousShowMenuItem.level) {
@@ -7044,8 +7208,17 @@ jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
             }
         }
     }
-    this.previousShowMenuItem = menuItem;
+    //showing the menu item contents, will make the menu item active, even if it does not have any children.
     this.showMenuItemContents(menuItem);
+    //if autohide is enabled and the menu item has no children, then hide all the items up to the root level.
+    if (this.widget.options.autoHide && menuItem.items.length == 0) {
+        //run it in a time, so the user will be able to see his selection before it disappears.
+        setTimeout(function () {
+            this.hideMenuItemsUpToRootItem(menuItem);
+        }.bind(this), 250);
+    }
+    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CLICKED, { event: touchEvent, item: menuItem, uiHelper: this });
+    this.previousShowMenuItem = menuItem;
 }
 /**
  * 
@@ -7090,7 +7263,7 @@ jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
         var renderSubMenuContainer = (!menuElement._jasonMenuItemsContainer && menuItem.enabled) || (menuItem.enabled && menuElement._jasonMenuItemsContainer.style.display == "none");
         if (renderSubMenuContainer) {
             var orientantion = menuElement.parentNode == this.ulMenuElement ? this.options.orientation.toLowerCase() : null;
-            this.placeMenuItemsContainer(menuElement._jasonMenuItemsContainer, menuElement, orientantion);
+            this.placeMenuItemsContainer(menuElement._jasonMenuItemsContainer, menuElement, orientantion,menuItem);
             menuItem.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CONTENT_SHOW);
             this.previousShowMenuItem = menuItem;
         }
@@ -7111,6 +7284,19 @@ jasonMenuUIHelper.prototype.hideMenuItemContents = function (menuItem,forceHide)
         }
         if (menuItem.enabled)
             menuElement.classList.remove(jw.DOM.classes.JW_MENU_ITEM_CLASS_ACTIVE);
+    }
+}
+/**
+ * @param {Menus.jasonMenuItem} menuItem
+ */
+jasonMenuUIHelper.prototype.hideMenuItemsUpToRootItem = function (menuItem) {
+    var parent = menuItem;
+    while (parent) {
+        this.hideMenuItemContents(parent);
+        if (parent.level > 0)
+            parent = parent.parent;
+        else
+            parent = null;
     }
 }
 /**
@@ -7135,7 +7321,7 @@ jasonMenuUIHelper.prototype.onItemMouseLeave = function (itemMouseLeaveEvent) {
  * @param {object} mouseEvent - HTMLEvent.
  * @param {object} orientantion - HTMLEvent. {@link jasonMenuWidgetDefaultOptions}
  */
-jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContainer, menuElement, orientantion) {
+jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContainer, menuElement, orientantion,menuItem) {
     if (menuItemsContainer) {
         menuItemsContainer.style.position = "absolute";
         var containerTop = orientantion == "horizontal" ? (menuElement.offsetTop + menuElement.offsetHeight) + "px" : (menuElement.offsetTop - (menuElement.offsetHeight / 5.5)) + "px";
@@ -7160,9 +7346,13 @@ jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContain
         var coordinates = jasonWidgets.common.getOffsetCoordinates(menuElement);
         var width = window.innerWidth
         || document.documentElement.clientWidth
-        || document.body.clientWidth;
-        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+            || document.body.clientWidth;
+        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+        //ugly patch/hack. Adding coordinates.left when menu orientation is vertical. TODO: Remove this and fix it properly!!!
+        if (orientantion == "vertical" && menuItem.level == 0 && !this.options.invokable)
+            leftPosition += coordinates.left;
         menuItemsContainer.style.left = leftPosition + "px";
+        //menuItemsContainer.style.left = orientantion == "vertical" ? (leftPosition + coordinates.left) + "px" : leftPosition + "px";
         if (menuItemsContainer.style.zIndex == "") {
             menuItemsContainer.style.zIndex = jw.common.getNextZIndex();
         } else {
@@ -8442,6 +8632,8 @@ jasonTabControlUIHelper.prototype.constructor = jasonTabControlUIHelper;
 function jasonTabControlUIHelper(widget, htmlElement) {
     this.tabContents = [];
     this.setActiveTab = this.setActiveTab.bind(this);
+    this.onTabClick = this.onTabClick.bind(this);
+    this.onTabTouchStart = this.onTabTouchStart.bind(this);
     jasonBaseWidgetUIHelper.call(this, widget, htmlElement);
 }
 /**
@@ -8458,15 +8650,8 @@ jasonTabControlUIHelper.prototype.renderUI = function () {
             liItem.classList.add(jw.DOM.classes.JW_TAB_PAGE_CLASS);
             liItem.setAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR, i);
             liItem.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, jasonWidgets.common.getNextTabIndex());
-            this.eventManager.addEventListener(liItem, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
-                if (self.widget.readonly || !self.widget.enabled)
-                    return;
-                var parentNode = clickEvent.target;
-                while (parentNode.tagName != "LI") {
-                    parentNode = parentNode.parentNode;
-                }
-                self.widget.tabIndex = parseInt(parentNode.getAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR));// setActiveTab(parentNode);
-            }, true);
+            this.eventManager.addEventListener(liItem, jw.DOM.events.CLICK_EVENT, this.onTabClick, true);
+            this.eventManager.addEventListener(liItem, jw.DOM.events.TOUCH_START_EVENT, this.onTabTouchStart, true);
         }
         var divElements = [];
         for (var i = 0 ; i <= this.htmlElement.children.length - 1  ; i++) {
@@ -8494,8 +8679,24 @@ jasonTabControlUIHelper.prototype.renderUI = function () {
         }
     }
 }
-
-
+/**
+ * 
+ */
+jasonTabControlUIHelper.prototype.onTabClick = function (event) {
+    if (this.widget.readonly || !this.widget.enabled)
+        return;
+    var parentNode = event.target;
+    while (parentNode.tagName != "LI") {
+        parentNode = parentNode.parentNode;
+    }
+    this.widget.tabIndex = parseInt(parentNode.getAttribute(jasonWidgets.DOM.attributes.JW_DATA_JW_ITEM_INDEX_ATTR));// setActiveTab(parentNode);
+}
+/**
+ * 
+ */
+jasonTabControlUIHelper.prototype.onTabTouchStart = function (event) {
+    this.onTabClick(event);
+}
 /**
  * Sets the active tab.
  * @param {object} tabElement - HTMLElement
@@ -8876,16 +9077,12 @@ function jasonGridUIHelper(widget, htmlElement) {
     this._currentFilterColumn = null;
     this._currentTHElement = null;
     this._firstRun = true;
-
-    //initializing grid columns.
-    //this.widget._initializeColumns();
-
-
+    this._gridResizer = null;
+    this._gridColumnDragger = null;
     this.isReRendering = false;
     this.isColumnMoveResize = false;
-    this.monitorChanges = this.monitorChanges.bind(this);
+    this._recordPosition = { recordStart: null, recordStop: null };
     jasonBaseWidgetUIHelper.call(this, widget, htmlElement);
-    //jwWindowEventManager.addWindowEventListener(jw.DOM.events.RESIZE_EVENT, this.monitorChanges);
 }
 /**
  * Customization template initialization.
@@ -8938,18 +9135,6 @@ jasonGridUIHelper.prototype.initialize = function () {
     this._enableColumnDragResize();
     jasonBaseWidgetUIHelper.prototype.initialize.call(this);
 }
-
-jasonGridUIHelper.prototype.monitorChanges = function () {
-    window.requestAnimationFrame(this.monitorChanges);
-    if (this.isColumnMoveResize || this.isReRendering)
-        return;
-    if (this.gridHeaderTable.clientWidth != this.gridDataTable.clientWidth) {
-        this.isReRendering = true;
-        this._sizeColumns();
-        this.isReRendering = false;
-    }
-}
-
 //#region Object properties
 
 //#endregion
@@ -9058,13 +9243,6 @@ jasonGridUIHelper.prototype._onColumnMenuItemChecked = function (sender,eventDat
  * @param {object} menuItem - jasonMenuItem that was clicked.
  */
 jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventData) {
-    /*first try to find the corresponding column*/
-    //var columnIndex = eventData.uiHelper.invokableElement.getAttribute(JW_GRID_COLUMN_ID_ATTR);
-    //if (!columnIndex)
-    //    columnIndex = jw.common.getElementsByAttribute(eventData.uiHelper.invokableElement, JW_GRID_COLUMN_ID_ATTR, "*")[0];
-    //if (columnIndex)
-    //    columnIndex = parseInt(columnIndex);
-    //var column = this.options.columns[columnIndex];
     var column = this._currentFilterColumn;
     switch (eventData.item.name) {
         case "mnuSortAsc": {
@@ -9091,7 +9269,6 @@ jasonGridUIHelper.prototype._onColumnMenuItemClicked = function (sender, eventDa
             }
             this._clearFilterControls();
             this._goToPage(this._currentPage, true);
-            this._sizeColumns();
             this.columnMenu.ui.hideMenu();
         }
     }
@@ -9109,7 +9286,7 @@ jasonGridUIHelper.prototype._onColumnMenuHidden = function () {
 jasonGridUIHelper.prototype._manageCellSelection = function (cellElement,ctrlKey) {
     var selectedCell = this.gridSelectedCells[this.gridSelectedCells.indexOf(cellElement)];
 
-    // if cell multi select is on and ctrl key is NOT pressed OR if the cell multi select is off, clear all previous selections.
+    // if cell multi select is on and control key is NOT pressed OR if the cell multi select is off, clear all previous selections.
     if ((this.options.cellMultiSelect == true && ctrlKey == false) || !this.options.cellMultiSelect) {
         this.gridSelectedCells.forEach(function (cellSelected) {
             cellSelected.children[0].classList.remove(jw.DOM.classes.JW_GRID_SELECTED_CELL_CLASS);
@@ -9121,9 +9298,6 @@ jasonGridUIHelper.prototype._manageCellSelection = function (cellElement,ctrlKey
     }
     else
         cellElement.children[0].classList.add(jw.DOM.classes.JW_GRID_SELECTED_CELL_CLASS);
-    //if (!this.options.cellMultiSelect) {
-    //    this.gridSelectedCells = new Array();
-    //}
     this.gridSelectedCells.push(cellElement);
 }
 /**
@@ -9166,7 +9340,7 @@ jasonGridUIHelper.prototype._manageRowSelection = function (rowElement, ctrlKey)
     this.gridSelectedRows.push(rowElement);
 }
 /**
- * Mananing selected row(s) based on the configuration of the grid.
+ * Managing selected row(s) based on the configuration of the grid.
  * @ignore
  * @param {event} event - DOM event
  */
@@ -9276,7 +9450,7 @@ jasonGridUIHelper.prototype._keyboardNavigateToCell = function (direction,ctrlKe
         //if the current scroll position minus the new cell offset value is more than the grid container height, 
         //OR
         //if the difference of the grid container height minus the difference between the new cell offset position and the current scroll position is less than the cell height,
-        //it means that the new cell is not within the visible  are of the grid container and we need to scoll upwards 
+        //it means that the new cell is not within the visible  are of the grid container and we need to scroll upwards 
         var needsToScrollUp = Math.abs(currentVerticalScroll - cellVerticalOffsetValue) >= this.gridDataContainer.offsetHeight ||
             (this.gridDataContainer.offsetHeight - (Math.abs(cellVerticalOffsetValue - currentVerticalScroll)) <= newCellToBeSelected.offsetHeight);
 
@@ -9287,7 +9461,7 @@ jasonGridUIHelper.prototype._keyboardNavigateToCell = function (direction,ctrlKe
         //if the current scroll position minus the new cell offset value is more than the grid container width, 
         //OR
         //if the difference of the grid container width minus the difference between the new cell offset position and the current scroll position is less than the cell width,
-        //it means that the new cell is not within the visible  are of the grid container and we need to scoll upwards 
+        //it means that the new cell is not within the visible  are of the grid container and we need to scroll upwards 
         var needsToScrollLeft = Math.abs(currentHorizontalScroll - cellHorizontalOffsetValue) >= this.gridDataContainer.offsetWidth ||
             (this.gridDataContainer.offsetWidth - (Math.abs(cellHorizontalOffsetValue - currentHorizontalScroll)) <= newCellToBeSelected.offsetWidth);
 
@@ -9384,19 +9558,11 @@ jasonGridUIHelper.prototype._onGridColumnMenuIconClick = function (clickEvent) {
     }
 }
 /*
- * more performant way to handle resize event cals , taken from https://developer.mozilla.org/en-US/docs/Web/Events/resize
+ * more per-formant way to handle resize event calls , taken from https://developer.mozilla.org/en-US/docs/Web/Events/resize
  * upon a window resize we want to resize the sticky headers, so they always align with the data table.
  */
 jasonGridUIHelper.prototype._onResize = function (resizeEvent) {
     this._sizeColumns();
-    //var self = this;
-    //if (!this.resizeTimeout) {
-    //    this.resizeTimeout = setTimeout(function () {
-    //        self.resizeTimeout = null;
-    //        self._sizeColumns();
-    //        // The actualResizeHandler will execute at a rate of 15fps
-    //    }, 66);
-    //}
 }
 /**
  * Keeping in sync the data and header table scroll position.
@@ -9424,7 +9590,7 @@ jasonGridUIHelper.prototype._onGridColumnCaptionClick = function (event) {
     }
 }
 /**
- * Keyevents for grid columns.
+ * Key events for grid columns.
  * If the down arrow is pressed it gives focus to the cell below the current column in the first row.
  * If the tab button is pressed and its the last element of the last column then set focus to the data table.
  */
@@ -9458,7 +9624,7 @@ jasonGridUIHelper.prototype._onGridColumnKeyDown = function (keyDownEvent) {
     }
 }
 /**
- * When the grid footer receives a keydown event, managing the focus flow between the data table and the rest elements that are focusable or have tabindex attributes.
+ * When the grid footer receives a keydown event, managing the focus flow between the data table and the rest elements that are focusable or have tab-index attributes.
  */
 jasonGridUIHelper.prototype._onGridFooterKeyDown = function (keyDownEvent) {
     if (this.widget.readonly || !this.widget.enabled)
@@ -9477,7 +9643,7 @@ jasonGridUIHelper.prototype._onGridFooterKeyDown = function (keyDownEvent) {
     }
 }
 /**
- * When a grid column (TH) receives focus, make sure the scrolling position of the header and data table are in synch.
+ * When a grid column (TH) receives focus, make sure the scrolling position of the header and data table are in sync.
  */
 jasonGridUIHelper.prototype._onGridColumnFocus = function (focusEvent) {
     this.gridDataContainer.scrollLeft = this.gridHeaderTableContainer.scrollLeft;
@@ -9488,16 +9654,16 @@ jasonGridUIHelper.prototype._onGridColumnFocus = function (focusEvent) {
 jasonGridUIHelper.prototype._onGroupCollapseExpandIconClick = function (event) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
-    var iconNode = event.target.tagName == "I" ? event.target : event.target.children[0];
+    var iconNode = event.target.tagName == "SPAN" ? event.target : event.target.children[0];
     this._collapseExpandGroup(null, null, iconNode);
 }
 /**
  * Collapses, expands a data grouping by either providing the groupLevel and groupKey or directly the icon element of the data grouping button.
  */
 jasonGridUIHelper.prototype._collapseExpandGroup = function (groupLevel, groupKey, groupButtonElement) {
-    var groupRow = groupButtonElement == void 0 ? jw.common.getElementsByAttributes(this.gridDataTableBody, [jasonWidgets.DOM.attributes.JW_DATA_GROUPING_LEVEL_ATTR, jasonWidgets.DOM.attributes.JW_DATA_GROUPING_KEY_ATTR], [groupLevel, groupKey],"tr." + JW_GRID_JW_TABLE_GROUP_ROW_CLASS)[0] :
+    var groupRow = groupButtonElement == void 0 ? jw.common.getElementsByAttributes(this.gridDataTableBody, [jasonWidgets.DOM.attributes.JW_DATA_GROUPING_LEVEL_ATTR, jasonWidgets.DOM.attributes.JW_DATA_GROUPING_KEY_ATTR], [groupLevel, groupKey], "tr." + jw.DOM.classes.JW_GRID_JW_TABLE_GROUP_ROW_CLASS)[0] :
                                         jw.common.getParentElement("TR", groupButtonElement);
-    groupButtonElement = groupButtonElement == void 0 ? groupRow.getElementsByTagName("i")[0] : groupButtonElement.tagName == "I" ?  groupButtonElement : groupButtonElement.getElementsByTagName("i")[0];
+    groupButtonElement = groupButtonElement == void 0 ? groupRow.getElementsByTagName("SPAN")[0] : groupButtonElement.tagName == "SPAN" ?  groupButtonElement : groupButtonElement.getElementsByTagName("SPAN")[0];
     if (groupButtonElement.className.indexOf(jw.DOM.icons.CIRCLE_ARROW_UP) >= 0) {
         groupButtonElement.className = jw.DOM.icons.CIRCLE_ARROW_DOWN;
         groupRow.setAttribute(jasonWidgets.DOM.attributes.JW_DATA_GROUP_EXPANDED_ATTR, "false");
@@ -9527,7 +9693,10 @@ jasonGridUIHelper.prototype._isGroupExpanded = function(groupLevel,groupKey,grou
 /**
  * Called when a column gets dropped on the grouping container.
  */
-jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
+jasonGridUIHelper.prototype._onColumnDrop = function (sender, columnDropData) {
+    this._makeGridSelectable();
+    var event = columnDropData.event;
+    var htmlElement = columnDropData.column;
     if (this.widget.readonly || !this.widget.enabled)
         return;
 
@@ -9555,19 +9724,6 @@ jasonGridUIHelper.prototype._onColumnDrop = function (event, htmlElement) {
             var columnFieldFromPoint = parentElementFromPoint.getAttribute(jw.DOM.attributes.JW_GRID_COLUMN_FIELD_ATTR);
             var columnFromPoint = this.widget._columnByField(columnFieldFromPoint);
             if (columnFromPoint.index != droppedColumn.index) {
-                //jw.common.swapItemsInArray(this.options.columns, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.gridHeaderTableRow, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.headerTableColGroup, droppedColumn.index, columnFromPoint.index);
-                //jw.common.swapDomElements(this.dataTableColGroup, droppedColumn.index, columnFromPoint.index);
-
-                //var droppedIndex = droppedColumn.index;
-                //droppedColumn.index = columnFromPoint.index;
-                //columnFromPoint.index = droppedIndex;
-
-
-
-                //this.renderUI();
-                //this.widget.triggerEvent(JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: droppedColumn, fromIndex: columnFromPoint.index, toIndex: droppedColumn.index });
                 this.moveColumn(droppedColumn, columnFromPoint.index);
             }
         }
@@ -9584,18 +9740,19 @@ jasonGridUIHelper.prototype._onMoveResizeStart = function (event, htmlElement) {
  * Moves column to a new position.
  */
 jasonGridUIHelper.prototype.moveColumn = function (column, newIndex) {
-    jw.common.swapItemsInArray(this.options.columns, column.index, newIndex);
-    jw.common.swapDomElements(this.gridHeaderTableRow, column.index, newIndex);
-    jw.common.swapDomElements(this.headerTableColGroup, column.index, newIndex);
-    jw.common.swapDomElements(this.dataTableColGroup, column.index, newIndex);
+    /**
+     * We are adding the grouping length to the indexes, to account for the dynamically created
+     * TH and COL elements created for each grouping level. 
+     * Column indexes stay the same regardless of the grouping level, that's why we need to do this.
+     */
+    var groupingLength = this.widget.dataSource.grouping.length;
+    jw.common.moveItemsInArray(this.options.columns, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.gridHeaderTableRow, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.headerTableColGroup, column.index + groupingLength, newIndex + groupingLength);
+    jw.common.moveDomElements(this.dataTableColGroup, column.index + groupingLength, newIndex + groupingLength);
 
-    var droppedIndex = column.index;
-    //swapping index values between column that is moved and column that was there.
-    this.options.columns[newIndex].index = newIndex;
-    this.options.columns[droppedIndex].index = droppedIndex;
-
-    this.renderUI();
-    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index, toIndex: newIndex });
+    this._refreshCurrentView();
+    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_COLUMN_POSITION_CHANGE, { column: column, fromIndex: column.index + groupingLength, toIndex: newIndex + groupingLength });
 }
 /**
  * Called when a column resize is ends.
@@ -9625,13 +9782,7 @@ jasonGridUIHelper.prototype._onGroupColumnRemoveClick = function (event) {
  * Renders grid UI. Header,body,footer,pager,filter.
  */
 jasonGridUIHelper.prototype.renderUI = function (recordStart,recordStop) {
-    //rendering all grid container elements. Header,data,footer and grouping container
-    //this._renderGridContainers();
-    //this.widget._initializeColumns();
     this._calculatePageCount(this.widget.dataSource.data);
-
-    /*render the grid thead and sticky headers*/
-//    this._renderHeader();
 
     var fromRecord = recordStart ? recordStart : 0;
     var toRecord = recordStop ? recordStop : 0;
@@ -9693,43 +9844,54 @@ jasonGridUIHelper.prototype._renderGridContainers = function () {
     }
 }
 /**
+ * Makes the whole grid unselectable.
+ */
+jasonGridUIHelper.prototype._makeGridUnselectable = function () {
+    this.htmlElement.classList.add(jw.DOM.classes.JW_GRID_UNSELECTABLE);
+}
+/**
+ * Makes the whole grid selectable.
+ */
+jasonGridUIHelper.prototype._makeGridSelectable = function () {
+    this.htmlElement.classList.remove(jw.DOM.classes.JW_GRID_UNSELECTABLE);
+}
+/**
  * Enables move/resize on grid columns based on the configuration options.
  */
 jasonGridUIHelper.prototype._enableColumnDragResize = function () {
     if (this.options.reordering || this.options.grouping || this.options.resizing) {
-        for (var i = 0; i <= this.gridHeaderTableRow.children.length - 1; i++) {
-            var headerElement = this.gridHeaderTableRow.children[i];
-            var columnDragResize = jw.common.getData(headerElement, "jwColumnDragResize");
-            if (headerElement.tagName == "TH" & !columnDragResize && !headerElement.getAttribute(jw.DOM.attributes.JW_GRID_GROUP_FIELD)) {
-                columnDragResize = new jasonDragResize(headerElement, {
-                    minWidth: 50,
-                    useGhostPanel:true,
-                    allowResize: { top: false, left: false, bottom:false, right:true },
-                    allowDrag:this.options.reordering,
-                    dependantElements: [this.headerTableColGroup.children[i], this.dataTableColGroup.children[i]],
-                    onMoveStart:this._onMoveResizeStart,
-                    onMoveEnd: this._onColumnDrop,
-                    onResizeStart:this._onMoveResizeStart,
-                    onResizeEnd:this._onColumnResizeEnd,
-                    ghostPanelCSS: jw.DOM.classes.JW_DRAG_IMAGE,
-                    ghostPanelContents: headerElement.querySelectorAll("." + jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)[0].innerHTML,
-                    gridMode:true
-                },this.options.columns[i].fieldName);
-                //columnReorder = new jasonGridColumnReorder(this, headerElement);
-                jw.common.setData(headerElement, "jwColumnDragResize", columnDragResize);
-            } else {
-                if (columnDragResize) {
-                    columnDragResize.options.allowDrag.draggable = this.options.reordering;
-                    columnDragResize.options.allowResize = this.options.resizing ? { top: false, left: false, bottom: false, right: true } : { top: false, left: false, bottom: false, right: false };
+        this._gridResizer = new jasonGridResizer(this.widget, {
+            events: [
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING,
+                    listener: this._makeGridUnselectable.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED,
+                    listener: this._makeGridSelectable.bind(this)
                 }
-            }
-        }
+            ]
+        });
+        this._gridColumnDragger = new jasonGridColumnDragger(this.widget, {
+            events: [
+                {
+                    eventName: jw.DOM.events.DRAG_START_EVENT,
+                    listener: this._makeGridUnselectable.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.DRAG_OVER_EVENT,
+                    listener: this._onColumnDrop
+                }
+            ],changeCursor:false
+        });
     } else {
-        for (var i = 0; i <= this.gridHeaderTableRow.children.length - 1; i++) {
-            var headerElement = this.gridHeaderTableRow.children[i];
-            var columnDragResize = jw.common.getData(headerElement, "jwColumnDragResize");
-            if (columnDragResize)
-                columnDragResize.destroy();
+        if (this._gridResizer) {
+            this._gridResizer.destroy();
+            this._gridResizer = null;
+        }
+        if (this._gridColumnDragger) {
+            this._gridColumnDragger.destroy();
+            this._gridColumnDragger = null;
         }
     }
 }
@@ -9909,7 +10071,15 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
             dropDownList: true,
             placeholder: this.options.localization.search.searchPlaceHolder
         });
-        this.logicalOperatorCombobox = new jasonCombobox(this.filterLogicalOperator, { data: this.filterLogicalOperators, displayFields: ['title'], displayFormat: '{0}', keyFieldName: 'Key', readonly: true, placeHolder: this.options.localization.search.searchPlaceHolder });
+        this.logicalOperatorCombobox = new jasonCombobox(this.filterLogicalOperator,
+            { data: this.filterLogicalOperators, 
+            displayFields: ['title'],
+            displayFormat: '{0}', 
+            keyFieldName: 'Key', 
+            readonly: true, 
+            placeHolder: this.options.localization.search.searchPlaceHolder,
+            dropDownList:true
+            });
 
         /*creating input elements*/
         this.firstFilterInputContainer = this.createElement("div");
@@ -9950,6 +10120,7 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
 
         this.filterBtnApply = jw.htmlFactory.createJWButton(this.options.localization.grid.filtering.applyButtonText, jw.DOM.icons.CIRCLE_CHOOSE);//this.createElement("a");
         this.filterBtnApply.classList.add(jw.DOM.classes.JW_JW_GRID_FILTER_BUTTON_APPLY);
+        this.filterBtnApply.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.eventManager.addEventListener(this.filterBtnApply, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
             self._applyFilter();
@@ -9958,6 +10129,7 @@ jasonGridUIHelper.prototype._renderFilterUI = function () {
 
         this.filterBtnClear = jw.htmlFactory.createJWButton(this.options.localization.grid.filtering.clearButtonText, jw.DOM.icons.CLOSE);//this.createElement("a");
         this.filterBtnClear.classList.add(jw.DOM.classes.JW_JW_GRID_FILTER_BUTTON_CLEAR);
+        this.filterBtnClear.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.eventManager.addEventListener(this.filterBtnClear, jw.DOM.events.CLICK_EVENT, function (clickEvent) {
             self._clearFilterControls();
@@ -10166,12 +10338,26 @@ jasonGridUIHelper.prototype._columnVisible = function (column, visible) {
         for (var i = 0; i <= groupCells.length - 1; i++) {
             groupCells[i].setAttribute(jasonWidgets.DOM.attributes.COLSPAN_ATTR, colSpanValue);
         }
-        //this._renderHeader();
-        //this.renderUI(this._currentPage, this._pageCount);
         return true;
     }
     else
         return false;
+}
+/**
+ * Re-renders current data view taking into account paging.
+ */
+jasonGridUIHelper.prototype._refreshCurrentView = function () {
+    var dataToRender = this.widget.dataSource.currentDataView;
+    this._calculatePageCount(this.widget.dataSource.currentDataView);
+    var pageSize = this.options.paging ? this.options.paging.pagesize : dataToRender.length;
+    var recordStart = (this._currentPage - 1) * pageSize;
+    var recordStop = recordStart + pageSize - 1;
+    if (recordStop > dataToRender.length)
+        recordStop = dataToRender.length - 1;
+    dataToRender = this.widget.dataSource.range(recordStart, recordStop);
+    this._recordPosition.recordStart = recordStart;
+    this._recordPosition.recordStop = recordStop;
+    this._renderRows(0, dataToRender.length - 1, dataToRender);
 }
 //#endregion
 
@@ -10192,7 +10378,7 @@ jasonGridUIHelper.prototype._renderHeader = function () {
         this.gridDataTableBody = this.gridDataTable.appendChild(this.createElement("tbody"));
         this.gridHeaderTableRow = headerTHead.appendChild(this.createElement("tr"));
         //this.gridHeaderTable.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, jw.common.getNextTabIndex());
-        //by setting the tabindex attribute, the table element can receive keyboard events.
+        //by setting the tab-index attribute, the table element can receive keyboard events.
         this.gridDataTable.setAttribute(jasonWidgets.DOM.attributes.TABINDEX_ATTR, -1);
         this.eventManager.addEventListener(this.gridDataTable, jw.DOM.events.KEY_DOWN_EVENT, this._onGridCellKeyDown, true);
         this.eventManager.addEventListener(this.gridDataTable, jw.DOM.events.FOCUS_EVENT, this._onGridFocus, true);
@@ -10260,6 +10446,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                 headerElement.setAttribute(jasonWidgets.DOM.attributes.TITLE_ATTR, tooltip);
                 var captionElement = headerCellCaptionContainer.appendChild(jw.htmlFactory.createJWLinkLabel(gridColumn.caption));
                 captionElement.setAttribute(jw.DOM.attributes.HREF_ATTR, "javascript:void(0)");
+                captionElement.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
                 if (gridColumn.headerTemplate)
                     captionElement.innerHTML = gridColumn.headerTemplate;
                 
@@ -10274,7 +10461,7 @@ jasonGridUIHelper.prototype._renderHeaderColumns = function (headerTableColGroup
                     self._onGridColumnCaptionClick(touchEvent);
                 }, true);
             }
-            /*Creating grid colum menu*/
+            /*Creating grid column menu*/
             if (this.options.columnMenu == true && !gridColumn.groupColumn) {
                 var gridColumnMenuIconAnchor = jw.htmlFactory.createJWButton(null, jw.DOM.icons.LIST);
                 gridColumnMenuIconAnchor.setAttribute(jw.DOM.attributes.JW_GRID_COLUMN_ID_ATTR, columnIndex);
@@ -10339,7 +10526,7 @@ jasonGridUIHelper.prototype.updateVisible = function (visible) {
     jasonBaseWidgetUIHelper.prototype.updateVisible.call(this, visible);
 }
 /**
- * Updates UI when readonly state is changed.
+ * Updates UI when read-only state is changed.
  * @abstract
  */
 jasonGridUIHelper.prototype.updateReadOnly = function (readonly) {
@@ -10388,7 +10575,8 @@ jasonGridUIHelper.prototype._renderRows = function (fromRecord, toRecord, source
     this._focusedCell = null;
 
     if (this.widget.dataSource.grouping.length > 0) {
-        this._renderGroupedData(source);
+        //this._renderGroupedData(source);
+        this._initiliazeRenderingGroupedData();
     } else {
         var newRow = null;
         var newCell = null;
@@ -10510,6 +10698,7 @@ jasonGridUIHelper.prototype._createGrouppingRow = function (groupNode) {
     var anchorNode = jw.htmlFactory.createJWButton(null, jw.DOM.icons.CIRCLE_ARROW_UP);
     var groupKeyCaption = this.createElement("span");
     groupKeyCaption.appendChild(this.createTextNode(groupNode.key));
+    groupKeyCaption.classList.add(jw.DOM.classes.JW_GRID_GROUP_KEY_CAPTION);
     var self = this;
     this.eventManager.addEventListener(anchorNode, jw.DOM.events.CLICK_EVENT, this._onGroupCollapseExpandIconClick, true);
     this.eventManager.addEventListener(anchorNode, jw.DOM.events.KEY_DOWN_EVENT, function (keyDownEvent) {
@@ -10657,19 +10846,10 @@ jasonGridUIHelper.prototype._goToPage = function (pageNumber, forceAction, event
             pageNumber = 0;
         if (pageNumber > this._pageCount)
             pageNumber = this._pageCount;
-        var dataToRender = this.widget.dataSource.currentDataView;
-        this._calculatePageCount(this.widget.dataSource.currentDataView);
-        var pageSize = this.options.paging ? this.options.paging.pagesize : dataToRender.length;
-        var recordStart = (pageNumber - 1) * pageSize;
-        var recordStop = recordStart + pageSize - 1;
-        if (recordStop > dataToRender.length)
-            recordStop = dataToRender.length - 1;
-        dataToRender = this.widget.dataSource.range(recordStart, recordStop);
-
-        this._renderRows(0, dataToRender.length - 1, dataToRender);
+        this._currentPage = pageNumber;
+        this._refreshCurrentView();
         if (this.options.paging) {
-            this._updatePagerInfo(recordStart, recordStop + 1, this.widget.dataSource.currentDataView.length);
-            this._currentPage = pageNumber;
+            this._updatePagerInfo(this._recordPosition.recordStart, this._recordPosition.recordStop + 1, this.widget.dataSource.currentDataView.length);
             this.pagerInput.value = this._currentPage;
             this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_PAGE_CHANGE, pageNumber);
         }
@@ -10752,8 +10932,8 @@ jasonGridUIHelper.prototype._expandGroup = function (groupRow) {
  */
 jasonGridUIHelper.prototype._initiliazeRenderingGroupedData = function () {
     //this._renderHeader();
-    var recordStart = this.options.paging ? this._currentPage: 0;
-    var recordStop = this.options.paging ? this.options.paging.pagesize : this.widget.dataSource.data.length;
+    var recordStart = this.options.paging ? (this._currentPage - 1) * this.options.paging.pagesize : 0;
+    var recordStop = this.options.paging ? recordStart + this.options.paging.pagesize -1 : this.widget.dataSource.data.length;
     this._renderGroupedData(this.widget.dataSource.range(recordStart, recordStop));
 }
 /**
@@ -10768,7 +10948,7 @@ jasonGridUIHelper.prototype._renderGroupRow = function (groupNode) {
  * Renders grouped data
  */
 jasonGridUIHelper.prototype._renderGroupData = function (groupNode) {
-    /*adding the groupping row*/
+    /*adding the grouping row*/
     this._renderGroupRow(groupNode);
 
     //if we are at the last grouping node render the actual data.
@@ -10842,7 +11022,6 @@ jasonGridUIHelper.prototype._groupByField = function (column) {
         this.gridHeaderTableRow.insertBefore(headerTH, this.gridHeaderTableRow.firstChild);
 
         this._initiliazeRenderingGroupedData();
-        this._enableColumnDragResize();
         this._sizeColumns();
     }
 }
@@ -10878,8 +11057,6 @@ jasonGridUIHelper.prototype._removeGroupByField = function (fieldName) {
     } else {
         this._initiliazeRenderingGroupedData();
     }
-    this._enableColumnDragResize();
-    this._sizeColumns();
 }
 //#endregion grouping data - end*/
 
@@ -11141,7 +11318,7 @@ jasonGrid.prototype.constructor = jasonGrid;
  * @fires Grids.jasonGrid#event:onColumnPositionChange
  * @fires Grids.jasonGrid#event:onColumnResize
  */
-function jasonGrid(htmlElement, options) {
+function jasonGrid(htmlElement, options,uiHelper) {
     if (htmlElement.tagName != "DIV")
         throw new Error("Grid container element must be a div");
     this.defaultOptions = {
@@ -11167,13 +11344,12 @@ function jasonGrid(htmlElement, options) {
     //creating the datasource first before constructing the UI helper, so we can create columns if no columns are defined, to be available to the helper.
     this.dataSource = new jasonDataSource({ data: typeof options.data == 'function' ? options.data() : options.data, onChange: this._onDataChanged.bind(this) });
     this._initializeColumns(options);
-    jasonBaseWidget.call(this, "jasonGrid", htmlElement, options, jasonGridUIHelper);
-    this.initialize();
+    jasonBaseWidget.call(this, "jasonGrid", htmlElement, options, uiHelper == undefined ? jasonGridUIHelper : uiHelper);
+    //this.initialize();
     //this.ui.renderUI();
     this.ui._createColumnMenu();
     this.ui._initializeEvents();
     this.ui.localizeStrings(this.options.localization);
-    this.ui.monitorChanges();
 }
 
 //#region  private members*/
@@ -11596,6 +11772,432 @@ jasonGrid.prototype.exportToExcel = function (fileName) {
 
 
 
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+jasonGridResizer.prototype = Object.create(jasonBaseWidget.prototype);
+jasonGridResizer.prototype.constructor = jasonGridResizer;
+
+
+/**
+ * jasonGridResizer resize manager
+ * @constructor
+ * @description Auxiliary class, that manages resizing for jasonGrids.
+ * @memberOf Grids
+ */
+function jasonGridResizer(gridInstance, options, nameSpace) {
+    this.defaultOptions = {
+        minHeight: 60,
+        minWidth: 40
+    };
+    //this needs to be set before calling the base constructor, so the gridInstance property will be available,
+    //in the functions called through it. For example "initialize"
+    this._gridInstance = gridInstance;
+    this._onColumnMouseMove = this._onColumnMouseMove.bind(this);
+    this._onColumnMouseDown = this._onColumnMouseDown.bind(this);
+    this._onDocumentMouseMove = this._onDocumentMouseMove.bind(this);
+    this._onDocumentMouseUp = this._onDocumentMouseUp.bind(this);
+    this._onTouchEnd = this._onTouchEnd.bind(this);
+    this._onTouchMove = this._onTouchMove.bind(this);
+    this._onTouchStart = this._onTouchStart.bind(this);
+
+    this._margins = 5;
+    this._headerTableColGroup = null;
+    this._dataTableColGroup = null;
+    this._currentColumn = null;
+    this._mouseMoveEvent = null;
+    this._mouseMoving = false;
+    this._mouseMoveTimer = null;
+    this._resizing = false;
+    this._redrawing = false;
+    this._tableOriginalWidth = null;
+    this._currentHeaderCol = null;
+    this._currentDataCol = null;
+    this._mousePositionInfo = {
+        onTopEdge: false,
+        onLeftEdge: false,
+        onRightEdge: false,
+        onBottomEdge: false,
+        mousePixelsDifferenceLeft: null,
+        mousePixelsDifferenceTop: null,
+        mousePixelsDifferenceBottom: null,
+        mousePixelsDifferenceRight: null,
+        elementRect: null,
+        canResize: false
+    }
+    jasonBaseWidget.call(this, nameSpace, gridInstance.htmlElement, options, null);
+    this._resizeColumn = this._resizeColumn.bind(this);
+}
+
+/**
+ * Gets references to key HTMLElements of the grid.
+ */
+jasonGridResizer.prototype.initialize = function () {
+    this._headerTableColGroup = this._gridInstance.ui.headerTableColGroup;
+    this._dataTableColGroup = this._gridInstance.ui.dataTableColGroup
+    this._initializeEvents();
+}
+/**
+ * Initialize events.
+ */
+jasonGridResizer.prototype._initializeEvents = function () {
+    for (var i = 0 ; i <= this._gridInstance.ui.gridHeaderTableRow.children.length - 1; i++) {
+        this._gridInstance.ui.gridHeaderTableRow.children[i].addEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onColumnMouseMove);
+        this._gridInstance.ui.gridHeaderTableRow.children[i].addEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onColumnMouseDown);
+        this._gridInstance.ui.gridHeaderTableRow.children[i].addEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    }
+
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onDocumentMouseMove);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onDocumentMouseUp);
+
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+/**
+ * 
+ */
+jasonGridResizer.prototype.destroy = function () {
+    jasonBaseWidget.prototype.destroy.call(this);
+    for (var i = 0 ; i <= this._gridInstance.ui.gridHeaderTableRow.children.length - 1; i++) {
+        this._gridInstance.ui.gridHeaderTableRow.children[i].removeEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onColumnMouseMove);
+        this._gridInstance.ui.gridHeaderTableRow.children[i].removeEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onColumnMouseDown);
+        this._gridInstance.ui.gridHeaderTableRow.children[i].removeEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    }
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onDocumentMouseMove);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onDocumentMouseUp);
+
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+/**
+ * Allows resizing to happen, if mouse is over in one of the 4 sides of the htmlElement.
+ */
+jasonGridResizer.prototype._startResize = function () {
+    this._resizing = this._mousePositionInfo.canResize && this.enabled;
+    this.triggerEvent(jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING, this.htmlElement);
+    document.body.style.cursor = "col-resize";
+}
+/**
+ * Stops resizing.
+ */
+jasonGridResizer.prototype._stopResize = function (event) {
+    if (this._resizing) {
+        this._resizing = false;
+        this.triggerEvent(jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED, this.htmlElement);
+    }
+    document.body.style.cursor = "default";
+}
+/**
+ * Updates the cursor for a column that can be resized.
+ */
+jasonGridResizer.prototype._updateCursor = function (targetElement) {
+    var cursor = "default";
+    if (this._mousePositionInfo.onLeftEdge || this._mousePositionInfo.onRightEdge) {
+        cursor = "col-resize";
+    }
+    targetElement.style.cursor = cursor;
+}
+/**
+ * 
+ */
+jasonGridResizer.prototype._onColumnMouseMove = function (event) {
+    if (!this._resizing) {
+        var targetElement = event.target.tagName == "TH" ? event.target : jw.common.getParentElement("TH", event.target);
+        this.update_mousePositionInfo(event, targetElement);
+        this._updateCursor(targetElement);
+    }
+}
+/**
+ * Document mouse down event.
+ */
+jasonGridResizer.prototype._onColumnMouseDown = function (event) {
+    if (this._mousePositionInfo.canResize) {
+        var targetElement = event.target.tagName == "TH" ? event.target : jw.common.getParentElement("TH", event.target);
+        this._startX = event.clientX;
+        this._startY = event.clientY;
+        var currentTableWidth = this._gridInstance.ui.gridHeaderTable.style.width.match(/[0-9]+/g);
+        if (currentTableWidth)
+            this._tableOriginalWidth = currentTableWidth = parseInt(currentTableWidth[0]);
+        this._currentColumn = targetElement;
+        this._currentHeaderCol = this._headerTableColGroup.children[this._currentColumn.cellIndex];
+        this._currentDataCol = this._dataTableColGroup.children[this._currentColumn.cellIndex];
+        this._startResize();
+        this._resizeColumn();
+    }
+}
+/**
+ * Document mouse move
+ */
+jasonGridResizer.prototype._onDocumentMouseMove = function (event) {
+    if (this._resizing) {
+        this._mouseMoveEvent = event;
+        this._mouseMoving = true;
+        clearTimeout(this._mouseMoveTimer);
+        //if mouse stops moving after 50ms, then stop resizing the column
+        this._mouseMoveTimer = setTimeout(function () { this._mouseMoving = false; }.bind(this), 50);
+    }
+}
+/**
+ * Document mouse up event.
+ */
+jasonGridResizer.prototype._onDocumentMouseUp = function (event) {
+    this._stopResize(event);
+}
+/**
+ * Touch start event, equivalent to the mouse down.
+ */
+jasonGridResizer.prototype._onTouchStart = function (event) {
+    this._startResize();
+}
+/**
+ * Touch move event, equivalent to the mouse move event.
+ */
+jasonGridResizer.prototype._onTouchMove = function (event) {
+    this._mouseMoveEvent = event.touches[0];
+}
+/**
+ * Touch end event, equivalent to the mouse up event.
+ */
+jasonGridResizer.prototype._onTouchEnd = function (event) {
+    if (event.touches.length == 0)
+        this._stopResize();
+}
+/**
+ * Calculates mouse position information, relative to the htmlElement.
+ */
+jasonGridResizer.prototype.update_mousePositionInfo = function (event, htmlElement) {
+    var elementRect = htmlElement.getBoundingClientRect();
+    this._mousePositionInfo.elementRect = elementRect;
+    this._mousePositionInfo.mousePixelsDifferenceLeft = Math.abs(event.clientX - elementRect.left);
+    this._mousePositionInfo.mousePixelsDifferenceTop = Math.abs(event.clientY - elementRect.top);
+    this._mousePositionInfo.mousePixelsDifferenceBottom = Math.abs(event.clientY - elementRect.bottom);
+    this._mousePositionInfo.mousePixelsDifferenceRight = Math.abs(event.clientX - elementRect.right);
+    this._mousePositionInfo.onRightEdge = (this._mousePositionInfo.mousePixelsDifferenceRight <= this._margins) && this.enabled;
+
+    this._mousePositionInfo.canResize = this._mousePositionInfo.onRightEdge;
+}
+/**
+ * Function running within a requestAnimationFrame, to improve performance and reduce flickering while resizing.
+ */
+jasonGridResizer.prototype._resizeColumn = function (timeStamp) {
+    //while resizing keep requesting the next animation frame.
+    //we need to do this only while a resize is happening for performance issues.
+    //calling .requestAnimationFrame has a rather high CPU impact.
+    if(this._resizing)
+        window.requestAnimationFrame(this._resizeColumn);
+    if (this._resizing && this._mouseMoving && this._currentColumn != null) {
+        var newWidthDifference = 0;
+        var newWidth = 0;
+        try{
+            if (this._mousePositionInfo.onRightEdge && this.enabled) {
+                //clientX is where the mouse is at the moment and _startX is where the resizing started.
+                newWidthDifference = (this._mouseMoveEvent.clientX - this._startX);
+                newWidth = this._mousePositionInfo.elementRect.width + newWidthDifference;
+                if (newWidth >= this.options.minWidth && newWidth != this._mousePositionInfo.elementRect.width) {
+                    this._currentHeaderCol.style.width = newWidth + "px";
+                    this._currentDataCol.style.width = newWidth + "px";
+                    this._gridInstance.ui.gridHeaderTable.style.width = (this._tableOriginalWidth + newWidthDifference) + "px";
+                    this._gridInstance.ui.gridDataTable.style.width = (this._tableOriginalWidth + newWidthDifference) + "px";
+                }
+            }
+        }
+        catch(error){
+            this.enabled = false;
+            jw.common.throwError(jw.errorTypes.referenceError, error.message);
+        }
+    }
+}
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+jasonGridColumnDragger.prototype = Object.create(jasonBaseWidget.prototype);
+jasonGridColumnDragger.prototype.constructor = jasonGridColumnDragger;
+
+
+/**
+ * jasonWidgets resize manager
+ * @constructor
+ * @description Auxiliary class, that manages drag and drop for HTMLElements.
+ * @memberOf Common
+ */
+function jasonGridColumnDragger(gridInstance, options, nameSpace) {
+    //this needs to be set before calling the base constructor, so the gridInstance property will be available,
+    //in the functions called through it. For example "initialize"
+    this.defaultOptions = {
+        changeCursor: true
+    };
+    this._gridInstance = gridInstance;
+    this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseDown = this._onMouseDown.bind(this);
+    this._onMouseUp = this._onMouseUp.bind(this);
+    this._onWindowMouseMove = this._onWindowMouseMove.bind(this);
+    this._dragColumn = this._dragColumn.bind(this);
+    this._onTouchEnd = this._onTouchEnd.bind(this);
+    this._onTouchMove = this._onTouchMove.bind(this);
+    this._onTouchStart = this._onTouchStart.bind(this);
+    this._mouseMoveEvent = null;
+    this._cloneNode = null;
+    this._currentColumn = null;
+    jasonBaseWidget.call(this, nameSpace, gridInstance.htmlElement, options, null);
+    //this._dragColumn();
+}
+
+/**
+ * Gets references to key HTMLElements of the grid.
+ */
+jasonGridColumnDragger.prototype.initialize = function () {
+    this._headerTableColGroup = this._gridInstance.ui.headerTableColGroup;
+    this._dataTableColGroup = this._gridInstance.ui.dataTableColGroup
+    this._initializeEvents();
+}
+/**
+ * Initializes events.
+ */
+jasonGridColumnDragger.prototype._initializeEvents = function () {
+
+    for (var i = 0 ; i <= this._gridInstance.ui.gridHeaderTableRow.children.length - 1; i++) {
+        var gridColumnCaption = this._gridInstance.ui.gridHeaderTableRow.children[i].getElementsByClassName(jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)[0];
+        gridColumnCaption.addEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove, true);
+        gridColumnCaption.addEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onMouseDown, true);
+        gridColumnCaption.addEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart, true);
+    }
+
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onWindowMouseMove);
+
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    //jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.addWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+/**
+ * Touch start event, equivalent to the mouse down.
+ */
+jasonGridColumnDragger.prototype._onTouchStart = function (event) {
+    var touchEvent = event.touches[0];
+    if(touchEvent){
+        touchEvent.button = 0;
+        this._onMouseDown(touchEvent);
+    }
+    //event.preventDefault();
+    //event.stopPropagation();
+}
+
+/**
+ * Touch move event, equivalent to the mouse move event.
+ */
+jasonGridColumnDragger.prototype._onTouchMove = function (event) {
+    this._mouseMoveEvent = event.touches[0];
+}
+
+/**
+ * Touch end event, equivalent to the mouse up event.
+ */
+jasonGridColumnDragger.prototype._onTouchEnd = function (event) {
+    if (event.touches.length == 0 && this._cloneNode) {
+        this._onMouseUp(event);
+        event.preventDefault();
+        event.stopPropagation();
+    }
+}
+/**
+ * Keeping reference to the mouse event.
+ */
+jasonGridColumnDragger.prototype._onWindowMouseMove = function (event) {
+    this._mouseMoveEvent = event;
+}
+/**
+ * Changes the element's cursor to indicate that a drag is possible.
+ */
+jasonGridColumnDragger.prototype._onMouseMove = function (event) {
+    if (this.enabled && this._cloneNode == null && this.options.changeCursor) {
+        event.target.style.cursor = "move";
+    }
+}
+/**
+ * Initiating the drag operation, by creating a clone node of the column to be dragged.
+ */
+jasonGridColumnDragger.prototype._onMouseDown = function (event) {
+    //dragging will initiate only if the element is the actual column caption container.
+    if (event.button == 0 && event.target.classList.contains(jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)) {
+        this._currentColumn = event.target.tagName == "TH" ? event.target : jw.common.getParentElement("TH", event.target);
+        var elementRect = this._currentColumn.getBoundingClientRect();
+        if (!this._cloneNode) {
+            this._cloneNode = this._currentColumn.getElementsByClassName(jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)[0].cloneNode(true);
+            this._cloneNode.style.left = elementRect.left + "px";
+            this._cloneNode.style.top = elementRect.top + "px";
+            this._cloneNode.style.height = elementRect.height + "px";
+            this._cloneNode.style.width = elementRect.width + "px";
+            this._cloneNode.removeAttribute(jw.DOM.attributes.ID_ATTR);
+            this._cloneNode.classList.add(jw.DOM.classes.JW_GRID_COLUMN_DRAG_IMAGE);
+            this._cloneNode.style.display = "none";
+            document.body.appendChild(this._cloneNode);
+        }
+        if (!this._mouseMoveEvent)
+            this._mouseMoveEvent = event;
+        this._dragColumn();
+        this.triggerEvent(jw.DOM.events.DRAG_START_EVENT, event);
+        //making sure that this is a mouse and not a touch event.
+        if (event.stopPropagation) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+}
+/**
+ * When mouse-up is triggered the drag operation has been completed.
+ */
+jasonGridColumnDragger.prototype._onMouseUp = function (event) {
+    if (this._cloneNode && this._cloneNode.parentElement) {
+        document.body.removeChild(this._cloneNode);
+        this._cloneNode = null;
+        //making sure that this is a mouse and not a touch event.
+        if (event.stopPropagation) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        //if the event is a touch event, it has no coordinates information,
+        //so we are using the coordinates of the last mouse/touch move event.
+        event.clientX = event.clientX ? event.clientX : this._mouseMoveEvent.clientX;
+        event.clientY = event.clientY ? event.clientY : this._mouseMoveEvent.clientY;
+        this.triggerEvent(jw.DOM.events.DRAG_OVER_EVENT, {event:event,column:this._currentColumn});
+    }
+}
+/**
+ * Removes event listeners.
+ */
+jasonGridColumnDragger.prototype.destroy = function () {
+    jasonBaseWidget.prototype.destroy.call(this);
+    for (var i = 0 ; i <= this._gridInstance.ui.gridHeaderTableRow.children.length - 1; i++) {
+        var gridColumnCaption = this._gridInstance.ui.gridHeaderTableRow.children[i].getElementsByClassName(jw.DOM.classes.JW_GRID_HEADER_CELL_CAPTION_CONTAINER)[0];
+        gridColumnCaption.removeEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onMouseMove);
+        gridColumnCaption.removeEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, this._onMouseDown);
+        gridColumnCaption.removeEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    }
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_UP_EVENT, this._onMouseUp);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.MOUSE_MOVE_EVENT, this._onWindowMouseMove);
+
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_MOVE_EVENT, this._onTouchMove);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_START_EVENT, this._onTouchStart);
+    jwWindowEventManager.removeWindowEventListener(jw.DOM.events.TOUCH_END_EVENT, this._onTouchEnd);
+}
+/**
+ * This is being executed within an animation frame request. Browsers perform better when animation/move operations
+ * are being executed in the animationFrame callback.
+ */
+jasonGridColumnDragger.prototype._dragColumn = function () {
+    if (this._cloneNode) {
+        window.requestAnimationFrame(this._dragColumn);
+        this._cloneNode.style.display = "";
+        this._cloneNode.style.left = this._mouseMoveEvent.clientX - this._cloneNode.offsetWidth / 2 + "px";
+        this._cloneNode.style.top = this._mouseMoveEvent.clientY - this._cloneNode.offsetHeight / 2 + "px";
+    }
+}
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -12306,6 +12908,7 @@ jasonDateTimePickerUIHelper.prototype.renderUI = function () {
 
         this.timeButton = new jasonDropDownListButton(jw.htmlFactory.createJWButton(null, jw.DOM.icons.CLOCK), timeOptions);
         this.timeButton.htmlElement.classList.remove(jw.DOM.classes.JW_BORDERED);
+        this.timeButton.htmlElement.classList.remove(jw.DOM.classes.JW_BUTTON_STANDALONE);
 
         this.timeButton.visible = this.options.mode == "date" ? false : true;
         this.button.style.display = this.options.mode == "time" ? "none" : "";
@@ -12600,6 +13203,7 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogContainer.style.display = "none";
         this.dialogContainer.classList.add(jw.DOM.classes.JW_DIALOG_CONTAINER);
         this.dialogContainer.jasonWidgetsData = [].concat(this.htmlElement.jasonWidgetsData);
+        this.dialogContainer.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
         this.htmlElement.parentNode.removeChild(this.htmlElement);
         this.blockUI = new jasonBlockUI(this.dialogContainer,{opacity:'0.5'});
 
@@ -12614,6 +13218,7 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogHeader.appendChild(this.dialogHeaderButtonContainer);
         if (this.options.customization.headerTemplate == void 0) {
             this.dialogTitle = jw.htmlFactory.createJWLinkLabel(this.options.title);
+            this.dialogTitle.setAttribute(jw.DOM.attributes.DRAGGABLE_ATTR, "false");
             this.dialogTitleContainer.appendChild(this.dialogTitle);
 
             if (this.options.closeButton) {
@@ -12648,14 +13253,24 @@ jasonDialogUIHelper.prototype.renderUI = function () {
         this.dialogContainer.appendChild(this.dialogBody);
         this.dialogContainer.appendChild(this.dialogFooter);
         this.dialogContainer.appendChild(jw.htmlFactory.createClearFloat());
-        this.dragResize = new jasonDragResize(this.dialogContainer, {
+        //we need to disable the dialogDragger when dialog is resizing.
+        this.dialogResizer = new jasonElementResizer(this.dialogContainer, {
             allowResize: this.options.resizeable ? { top: true, left: true, bottom: true, right: true } : false,
-            allowDrag: {draggable:this.options.draggable,element:this.dialogHeader},
             minHeight: this.options.minHeight,
             minWidth: this.options.minWidth,
-            changeDragCursor: false,
+            events: [
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZING,
+                    listener: function () { this.dialogDragger.enabled = false; this.dialogContainer.classList.add(jw.DOM.classes.JW_GRID_UNSELECTABLE); }.bind(this)
+                },
+                {
+                    eventName: jw.DOM.events.JW_EVENT_ON_ELEMENT_RESIZED,
+                    listener: function () { this.dialogDragger.enabled = true; this.dialogContainer.classList.remove(jw.DOM.classes.JW_GRID_UNSELECTABLE); }.bind(this)
+                }
+            ]
             
-        },"jasonDialogDragResize");
+        }, "jasonDialogDragResize");
+        this.dialogDragger = new jasonElementDragger(this.dialogContainer,{changeCursor:false});
     }
 }
 /**
@@ -12859,6 +13474,7 @@ function jasonButtonUIHelper(widget, htmlElement) {
 jasonButtonUIHelper.prototype.renderUI = function () {
     jw.htmlFactory.createJWButton(this.options.caption, this.options.icon, this.htmlElement);
     this.htmlElement.classList.add(jw.DOM.classes.JW_BORDERED);
+    this.htmlElement.classList.add(jw.DOM.classes.JW_BUTTON_STANDALONE);
 }
 /**
  * Initialize Events

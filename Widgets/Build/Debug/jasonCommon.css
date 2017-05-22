@@ -34,9 +34,8 @@ body .jasonWidget input:-moz-placeholder {
   clear: both;
 }
 .jw-label {
-  display: inline-block;
-  height: 100%;
-  line-height: 32px;
+  /*display: inline-block;    
+    height:100%;*/
   color: #212121;
   text-decoration: none;
 }
@@ -46,27 +45,36 @@ body .jasonWidget input:-moz-placeholder {
   -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+  display: inline-block;
 }
 .jw-button {
   height: 100%;
   display: inline-block;
-  vertical-align: middle;
+  line-height: 28px;
   border-radius: 4px;
   color: #212121;
   text-decoration: none;
   cursor: pointer;
+  text-align: center;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 .jw-button .jw-label {
-  width: calc(100% - 32px);
-  width: -webkit-calc(100% - 32px);
-  vertical-align: middle;
+  width: calc(100% - 18px);
+  width: -webkit-calc(100% - 18px);
   color: #212121;
-  line-height: 32px;
+  max-width: 150px;
   text-indent: 5px;
 }
-.jw-button .jw-icon {
+.jw-button.standalone {
+  height: 30px;
+}
+.jw-button.standalone .jw-label,
+.jw-button.standalone .jw-icon {
   vertical-align: middle;
+  padding-right: 5px;
+}
+.jw-button.standalone .jw-label {
+  width: auto;
 }
 .jw-button.jw-bordered {
   border: 1px solid #e0e0e0;
@@ -79,17 +87,15 @@ body .jasonWidget input:-moz-placeholder {
   background-color: #616161;
   border-color: #616161;
   text-decoration: underline;
+  /*.jw-icon{
+        background-image: url('Sprites/thinline-sprites_inverted.png');
+    }*/
 }
 .jw-button.jw-selected:not(.jw-disabled) .jw-label,
 .jw-button:hover:not(.jw-disabled) .jw-label,
 .jw-button:focus:not(.jw-disabled) .jw-label {
   color: #fafafa;
   text-decoration: none;
-}
-.jw-button.jw-selected:not(.jw-disabled) .jw-icon,
-.jw-button:hover:not(.jw-disabled) .jw-icon,
-.jw-button:focus:not(.jw-disabled) .jw-icon {
-  background-image: url('Sprites/thinline-sprites_inverted.png');
 }
 .jw-text-input {
   display: inline-block;
@@ -202,16 +208,18 @@ body .jasonWidget input:-moz-placeholder {
   cursor: pointer;
 }
 .jw-drop-down-list ul li input[type='checkbox'] {
-  margin-left: 0;
-  margin-top: 0;
+  /*margin-left:0;
+                margin-top:0;*/
   vertical-align: middle;
   display: inline-block;
+  margin: 0;
 }
 .jw-drop-down-list ul li label {
   overflow-y: hidden;
   margin-bottom: 0;
   font-weight: normal;
   vertical-align: middle;
+  margin-left: 3px;
 }
 .jw-drop-down-list ul li:hover {
   outline: 0;
@@ -249,7 +257,7 @@ body .jasonWidget input:-moz-placeholder {
 .jw-validation-container .jw-validation-message-container {
   max-width: 250px;
   overflow: auto;
-  line-height: 24px;
+  line-height: 28px;
 }
 .jw-validation-container .jw-validation-message-container .jw-validation-message {
   line-height: normal;

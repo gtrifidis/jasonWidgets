@@ -25,6 +25,11 @@ function jasonMenuUIHelper(widget, htmlElement) {
     this.menuContainer = this.createElement("div");
     this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_CONTAINER_CLASS);
 
+    if (this.options.orientation == jw.DOM.classes.JW_MENU_HORIZONTAL)
+        this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_HORIZONTAL);
+
+    if (this.options.orientation == jw.DOM.classes.JW_MENU_VERTICAL)
+        this.menuContainer.classList.add(jw.DOM.classes.JW_MENU_VERTICAL);
 
     this.ulMenuElement.classList.add(jw.DOM.classes.JW_MENU_CLASS);
 
@@ -61,24 +66,27 @@ function jasonMenuUIHelper(widget, htmlElement) {
         jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.MOUSE_DOWN_EVENT, function (mouseDownEvent) {
             if (self.menuContainer.style.display != "none") {
                 var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, mouseDownEvent)
-                if (isOutOfContainer && self.canHideMenu)
+                if (isOutOfContainer && self.canHideMenu && self.options.invokable)
                     self.hideMenu();
+            }
+        });
+
+        jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_END_EVENT, function (touchEndEvent) {
+            if (self.menuContainer.style.display != "none") {
+                var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, touchEndEvent.changedTouches[0]);
+                if (isOutOfContainer && self.previousShowMenuItem) {
+                    //if (self.options.invokable && self.previousShowMenuItem.items.length == 0)
+                    //    self.hideMenu();
+                    var parent = self.previousShowMenuItem;
+                    while (parent) {
+                        self.hideMenuItemContents(parent);
+                        parent = parent.parent;
+                    }
+                }
             }
         });
     }
 
-    jwDocumentEventManager.addDocumentEventListener(jw.DOM.events.TOUCH_END_EVENT, function (touchEndEvent) {
-        if (self.menuContainer.style.display != "none") {
-            var isOutOfContainer = jasonWidgets.common.isMouseEventOutOfContainerAndNotAChild(self.menuContainer, touchEndEvent.changedTouches[0]);
-            if (isOutOfContainer && self.previousShowMenuItem) {
-                var parent = self.previousShowMenuItem;
-                while (parent) {
-                    self.hideMenuItemContents(parent);
-                    parent = parent.parent;
-                }
-            }
-        }
-    });
 
     /*Finally creating the menu*/
     this.menu = this.createMenu();
@@ -107,8 +115,10 @@ jasonMenuUIHelper.prototype.showMenu = function (invokableElement,left,top) {
         this.menuContainer.style.zIndex = jw.common.getNextAttributeValue("z-index") + 1;
         this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_SHOW);
         var firstFocusable = jw.common.getFirstFocusableElement(this.menuContainer);
-        if (firstFocusable)
+        if (firstFocusable) {
             firstFocusable.focus();
+            this.previousShowMenuItem = this.getMenuItemFromElement(firstFocusable);
+        }
     }
 }
 /**
@@ -198,6 +208,11 @@ jasonMenuUIHelper.prototype.getMenuItemFromEvent = function (event) {
     return jasonWidgets.common.getData(menuElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY);
 }
 
+jasonMenuUIHelper.prototype.getMenuItemFromElement = function (element) {
+    var menuElement = element.tagName == "LI" ? event.target : jasonWidgets.common.getParentElement("LI", element);
+    return jasonWidgets.common.getData(menuElement, jw.DOM.attributeValues.JW_MENU_ITEM_DATA_KEY);
+}
+
 jasonMenuUIHelper.prototype.onCheckboxClick = function (clickEvent) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
@@ -235,8 +250,16 @@ jasonMenuUIHelper.prototype.onItemClick = function (clickEvent) {
             this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CLICKED, { event: clickEvent, item: menuItem, uiHelper: this });
             //if disableMouseEvents = true, it means that the user clicked outside the main UL menu element, but inside the contents of a menu item
             //which means we should not hide the menu.
-            if (this.widget.options.autoHide && !this.disableMouseEvents)
-                this.hideMenu();
+            if (this.widget.options.autoHide && !this.disableMouseEvents) {
+                //if this is an invokable menu, then hide it all
+                if(this.widget.options.invokable)
+                    this.hideMenu();
+                else
+                {
+                    //if it is a "static" menu, then hide all sub items up to the root item.
+                    this.hideMenuItemsUpToRootItem(menuItem);
+                }
+            }
         }
     }
     clickEvent.stopPropagation();
@@ -274,9 +297,25 @@ jasonMenuUIHelper.prototype.onItemArrowClick = function (clickEvent) {
 jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
     if (this.widget.readonly || !this.widget.enabled)
         return;
-    touchEvent.preventDefault();
-    touchEvent.stopPropagation();
+    //touchEvent.preventDefault();
+    //touchEvent.stopPropagation();
     var menuItem = this.getMenuItemFromEvent(touchEvent);
+    //if the menu item is associated with an element.
+    if (menuItem.htmlElement) {
+        var clickListener = menuItem.htmlElement._jasonWidgetsEventListeners_.filter(function (evntListener) { return evntListener.eventName == jw.DOM.events.CLICK_EVENT })[0];
+        if (clickListener)
+            clickListener.enabled = false;
+    }
+    //if the menuitem has a content element that is visible do nothing.
+    if (menuItem.content && menuItem.content.style.display == "")
+        return;
+    //if it is an invokable menu, then we need to hide it.
+    if (this.widget.options.invokable) {
+        var shouldHide = (menuItem.items.length == 0 && !menuItem.content) || (menuItem.content && menuItem.content.display == "none");
+        if (shouldHide) {
+            this.hideMenu();
+        }
+    }
     if (this.previousShowMenuItem) {
         //hide all previously shown items, up to the level of the currently touched item.
         if (menuItem.level <= this.previousShowMenuItem.level) {
@@ -287,8 +326,17 @@ jasonMenuUIHelper.prototype.onItemTouch = function (touchEvent) {
             }
         }
     }
-    this.previousShowMenuItem = menuItem;
+    //showing the menu item contents, will make the menu item active, even if it does not have any children.
     this.showMenuItemContents(menuItem);
+    //if autohide is enabled and the menu item has no children, then hide all the items up to the root level.
+    if (this.widget.options.autoHide && menuItem.items.length == 0) {
+        //run it in a time, so the user will be able to see his selection before it disappears.
+        setTimeout(function () {
+            this.hideMenuItemsUpToRootItem(menuItem);
+        }.bind(this), 250);
+    }
+    this.widget.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CLICKED, { event: touchEvent, item: menuItem, uiHelper: this });
+    this.previousShowMenuItem = menuItem;
 }
 /**
  * 
@@ -333,7 +381,7 @@ jasonMenuUIHelper.prototype.showMenuItemContents = function (menuItem) {
         var renderSubMenuContainer = (!menuElement._jasonMenuItemsContainer && menuItem.enabled) || (menuItem.enabled && menuElement._jasonMenuItemsContainer.style.display == "none");
         if (renderSubMenuContainer) {
             var orientantion = menuElement.parentNode == this.ulMenuElement ? this.options.orientation.toLowerCase() : null;
-            this.placeMenuItemsContainer(menuElement._jasonMenuItemsContainer, menuElement, orientantion);
+            this.placeMenuItemsContainer(menuElement._jasonMenuItemsContainer, menuElement, orientantion,menuItem);
             menuItem.triggerEvent(jw.DOM.events.JW_EVENT_ON_JW_MENU_ITEM_CONTENT_SHOW);
             this.previousShowMenuItem = menuItem;
         }
@@ -354,6 +402,19 @@ jasonMenuUIHelper.prototype.hideMenuItemContents = function (menuItem,forceHide)
         }
         if (menuItem.enabled)
             menuElement.classList.remove(jw.DOM.classes.JW_MENU_ITEM_CLASS_ACTIVE);
+    }
+}
+/**
+ * @param {Menus.jasonMenuItem} menuItem
+ */
+jasonMenuUIHelper.prototype.hideMenuItemsUpToRootItem = function (menuItem) {
+    var parent = menuItem;
+    while (parent) {
+        this.hideMenuItemContents(parent);
+        if (parent.level > 0)
+            parent = parent.parent;
+        else
+            parent = null;
     }
 }
 /**
@@ -378,7 +439,7 @@ jasonMenuUIHelper.prototype.onItemMouseLeave = function (itemMouseLeaveEvent) {
  * @param {object} mouseEvent - HTMLEvent.
  * @param {object} orientantion - HTMLEvent. {@link jasonMenuWidgetDefaultOptions}
  */
-jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContainer, menuElement, orientantion) {
+jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContainer, menuElement, orientantion,menuItem) {
     if (menuItemsContainer) {
         menuItemsContainer.style.position = "absolute";
         var containerTop = orientantion == "horizontal" ? (menuElement.offsetTop + menuElement.offsetHeight) + "px" : (menuElement.offsetTop - (menuElement.offsetHeight / 5.5)) + "px";
@@ -403,9 +464,13 @@ jasonMenuUIHelper.prototype.placeMenuItemsContainer = function (menuItemsContain
         var coordinates = jasonWidgets.common.getOffsetCoordinates(menuElement);
         var width = window.innerWidth
         || document.documentElement.clientWidth
-        || document.body.clientWidth;
-        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth  >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+            || document.body.clientWidth;
+        var leftPosition = menuItemsContainer.offsetWidth + coordinates.left + menuElement.offsetWidth >= width ? menuElement.offsetLeft - (menuItemsContainer.offsetWidth) : orientantion == "horizontal" ? menuElement.offsetLeft : menuElement.offsetWidth;
+        //ugly patch/hack. Adding coordinates.left when menu orientation is vertical. TODO: Remove this and fix it properly!!!
+        if (orientantion == "vertical" && menuItem.level == 0 && !this.options.invokable)
+            leftPosition += coordinates.left;
         menuItemsContainer.style.left = leftPosition + "px";
+        //menuItemsContainer.style.left = orientantion == "vertical" ? (leftPosition + coordinates.left) + "px" : leftPosition + "px";
         if (menuItemsContainer.style.zIndex == "") {
             menuItemsContainer.style.zIndex = jw.common.getNextZIndex();
         } else {

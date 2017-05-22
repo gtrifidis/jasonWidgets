@@ -89,7 +89,7 @@ jasonMenu.prototype.constructor = jasonMenu;
 function jasonMenu(htmlElement, options, uiHelper) {
     this.items = [];
     /*Default menu options*/
-    this.defaultOptions = { orientation: 'vertical', animation: { delay: 9 }, expandMenuOnHover: true, invokable: false };
+    this.defaultOptions = { orientation: 'vertical', animation: { delay: 9 }, expandMenuOnHover: true, invokable: false,autoHide:true };
     jasonBaseWidget.call(this, "jasonMenu", htmlElement, options, uiHelper);
 }
 
